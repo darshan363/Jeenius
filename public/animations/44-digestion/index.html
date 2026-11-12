@@ -1,0 +1,9 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>44-digestion</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [['Mouth', 'Teeth chew the food. Saliva has an enzyme that starts breaking starch into sugar.'],
+  ['Stomach', 'Acid and the enzyme pepsin start digesting proteins. Food becomes a thick liquid.'],
+  ['Small intestine', 'Bile and pancreatic juice finish digestion. Digested food is absorbed into the blood.'],
+  ['Large intestine', 'Water is absorbed. The remaining waste leaves the body.']]
+  return { title: 'Nutrition and Human Digestion',
+  ctrl: [{ k: 's', label: 'Follow the food', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => { let s = ''; D.forEach((d, i) => { const x = 20 + i * 92; s += R(x, 70, 80, 60, i == v.s ? '#ffd9a0' : '#eaf1fb') + T(x + 40, 105, d[0], 10, '#12305c', 'middle', i == v.s ? 700 : 400); if (i < 3) s += T(x + 86, 105, '➜', 14) })
+    return s + C(20 + v.s * 92 + 40, 50, 9, '#e08a1a') + T(200, 25, 'Food moves through the alimentary canal', 13) },
+  say: v => D[v.s][1] } })())</script></body></html>

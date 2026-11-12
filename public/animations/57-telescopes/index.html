@@ -1,0 +1,4 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>57-telescopes</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => ({ title: 'Telescopes: Collecting Light',
+  ctrl: [{ k: 'd', label: 'Diameter of mirror or lens', min: 5, max: 50, step: 5, val: 5, unit: ' cm' }],
+  draw: v => C(200, 100, v.d * 1.5 + 5, '#cfe6f7', '#2a6fa8') + T(200, 28, 'Light-collecting area', 13) + T(200, 190, 'Area compared with a 5 cm telescope: ' + Math.round(v.d * v.d / 25) + ' times', 13, '#12305c', 'middle', 700),
+  say: v => 'A ' + v.d + ' cm mirror or lens collects ' + Math.round(v.d * v.d / 25) + ' times the light of a 5 cm one, so fainter stars become visible. Radio telescopes use a large dish to collect radio waves from space.' }))())</script></body></html>

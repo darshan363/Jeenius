@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Newton's Third Law · Jeenius</title>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/lesson-theme.css"></head><body><script src="../_shared/physics-lab.js"></script><script>
+const PUSH0 = 0.9, PUSH = 0.5, GLIDE = 2.8, END = PUSH0 + PUSH + GLIDE;
+const NAMES = [['Skater A', 'Skater B'], ['Balloon', 'Air'], ['Swimmer', 'Wall + Earth']];
+function pair(S) {
+  if (S.scene === 0) return { F: S.F, mA: S.mA, mB: S.mB };
+  if (S.scene === 1) return { F: S.thrust, mA: S.bm, mB: 0.01 };
+  return { F: S.F2, mA: S.sm, mB: 1e6 };
+}
+function motion(S) {
+  const p = pair(S), aA = p.F / p.mA, aB = p.F / p.mB, vA = aA * PUSH, vB = aB * PUSH;
+  const dA = 0.5 * aA * PUSH * PUSH + vA * GLIDE, dB = 0.5 * aB * PUSH * PUSH + vB * GLIDE;
+  return { ...p, aA, aB, vA, vB, dA, dB };
+}
+function disp(a, v, t) { const tau = Math.max(0, t - PUSH0); return tau <= PUSH ? 0.5 * a * tau * tau : 0.5 * a * PUSH * PUSH + v * (tau - PUSH); }
+const fmtA = x => x < 0.001 ? '≈ 0' : x.toFixed(2);
+
+function person(c, h, x, y, dir, col, armsOut, sc = 1) {
+  const { L, C, N, INK } = h;
+  c.save(); c.translate(x, y); c.scale(sc, sc); c.translate(-x, -y);
+  L(c, x - 9, y, x - 2, y - 52, 11, INK); L(c, x + 9, y, x + 2, y - 52, 11, INK);
+  L(c, x, y - 50, x, y - 112, 24, col); C(c, x, y - 136, 19, '#f1c9a0', INK, 2.5);
+  if (armsOut) L(c, x, y - 100, x + dir * 46, y - 92, 9, '#f1c9a0'); else L(c, x, y - 100, x + dir * 8, y - 52, 9, '#f1c9a0');
+  c.restore();
+}
+PhysicsLab({
+  title: "Newton's Third Law", tag: 'JEENIUS · CLASS 8–9 · ACTION AND REACTION',
+  controls: [
+    { key: 'scene', scene: true, label: 'Example', options: ['Skaters', 'Balloon rocket', 'Swimmer + wall'], value: 0 },
+    { key: 'F', label: 'Push force', min: 20, max: 100, step: 10, value: 50, unit: ' N', show: S => S.scene === 0 },
+    { key: 'mA', label: 'Mass of skater A', min: 20, max: 80, step: 5, value: 30, unit: ' kg', show: S => S.scene === 0 },
+    { key: 'mB', label: 'Mass of skater B', min: 30, max: 100, step: 5, value: 60, unit: ' kg', show: S => S.scene === 0 },
+    { key: 'thrust', label: 'Air push (thrust)', min: 0.2, max: 1, step: 0.1, value: 0.5, unit: ' N', show: S => S.scene === 1 },
+    { key: 'bm', label: 'Balloon mass', min: 0.02, max: 0.1, step: 0.01, value: 0.05, unit: ' kg', show: S => S.scene === 1 },
+    { key: 'F2', label: 'Push on the wall', min: 50, max: 300, step: 10, value: 150, unit: ' N', show: S => S.scene === 2 },
+    { key: 'sm', label: 'Swimmer mass', min: 30, max: 90, step: 5, value: 50, unit: ' kg', show: S => S.scene === 2 },
+  ],
+  init(S, M) { M.t = 0; },
+  step(S, M, dt) { M.t += dt; if (M.t > END + 1.6) M.t = 0; },
+  draw(c, S, M, h) {
+    const { T, L, R, C, A, P, E, Tag, N, B, W, GREEN, RED, GOLD, INK, GREY } = h;
+    const m = motion(S), t = M.t, pushing = t >= PUSH0 && t < PUSH0 + PUSH, after = t >= PUSH0 + PUSH;
+    const tau = Math.max(0, t - PUSH0);
+    const vA = tau <= PUSH ? m.aA * tau : m.vA, vB = tau <= PUSH ? m.aB * tau : m.vB;
+    const k = S.scene === 1 ? Math.min(120, 230 / Math.max(m.dA, 1e-6)) : Math.min(120, 230 / Math.max(m.dA, m.dB, 1e-6));
+    const xa = disp(m.aA, m.vA, t) * k, xb = disp(m.aB, m.vB, t) * k;
+    const flen = 36 + (S.scene === 1 ? S.thrust * 70 : S.scene === 0 ? S.F * 0.7 : S.F2 * 0.25);
+    if (S.scene === 0) {
+      T(c, 'TWO SKATERS PUSH EACH OTHER', 28, 34, 17, 'left', 'Goldman');
+      R(c, 0, 340, 800, 110, '#e3f3fb', null); L(c, 0, 340, 800, 340, 4);
+      const ax = 446 + xa, bx = 354 - xb, sa = 0.9 + S.mA / 160, sb = 0.9 + S.mB / 160;
+      person(c, h, bx, 338, 1, '#d98a5f', !after, sb); person(c, h, ax, 338, -1, '#3f6fb5', !after, sa);
+      T(c, 'A', ax, 372, 17, 'center', 'Goldman'); T(c, 'B', bx, 372, 17, 'center', 'Goldman');
+      if (pushing) { A(c, 400, 238, 400 + flen, 238, 8, GREEN); A(c, 400, 238, 400 - flen, 238, 8, RED); Tag(c, 'force on A', 400 + flen, 218, GREEN, 'right'); Tag(c, 'force on B', 400 - flen, 218, RED, 'left'); Tag(c, 'equal and opposite', 400, 270, N); }
+      if (after) { A(c, ax, 130, ax + Math.min(240, vA * 80), 130, 8, GREEN); Tag(c, 'A: ' + vA.toFixed(2) + ' m/s', ax, 108, GREEN, 'left'); A(c, bx, 130, bx - Math.min(240, vB * 80), 130, 8, RED); Tag(c, 'B: ' + vB.toFixed(2) + ' m/s', bx, 108, RED, 'right'); }
+    } else if (S.scene === 1) {
+      T(c, 'BALLOON ROCKET', 28, 34, 17, 'left', 'Goldman');
+      L(c, 40, 216, 770, 216, 3, GREY, [8, 6]);
+      const bx = 410 + xa, by = 260;
+      R(c, bx - 22, 212, 44, 12, GOLD, N, 2);
+      E(c, bx, by, 62, 36, '#e86f6a', N, 3); P(c, [[bx - 60, by - 10], [bx - 84, by - 16], [bx - 84, by + 16], [bx - 60, by + 10]], '#e86f6a', N, 3);
+      for (let i = 0; i < 14; i++) { const te = PUSH0 + i * (PUSH / 14), ta = t - te; if (ta > 0 && ta < 1.7) { const ex = 410 + disp(m.aA, m.vA, te) * k - 86, x = ex - 250 * ta, y = by + Math.sin(i * 2.3) * 12 * ta; C(c, x, y, 7 + ta * 3, '#cfe8f5', '#7fb5d6', 1.5); } }
+      if (pushing) { A(c, bx - 20, by - 62, bx + flen - 20, by - 62, 8, GREEN); Tag(c, 'air pushes balloon', bx + flen - 20, by - 82, GREEN, 'left'); A(c, bx - 90, by + 56, bx - 90 - flen, by + 56, 8, RED); Tag(c, 'balloon pushes air', bx - 90, by + 90, RED, 'center'); }
+      if (after) Tag(c, 'balloon speed ' + vA.toFixed(1) + ' m/s', bx, by + 80, GREEN);
+    } else {
+      T(c, 'SWIMMER PUSHES THE WALL', 28, 34, 17, 'left', 'Goldman');
+      R(c, 0, 250, 800, 200, '#cfe8f5', null); L(c, 0, 250, 800, 250, 3, '#7fb5d6');
+      R(c, 70, 120, 44, 330, '#b9bec6', N, 3); for (let y = 140; y < 440; y += 26) L(c, 70, y + 18, 114, y, 2, GREY);
+      const sx = 160 + xa, sy = 342;
+      const ext = pushing || t < PUSH0 ? 1 : 0;
+      L(c, sx, sy, sx + 70, sy - 4, 22, '#3f6fb5'); C(c, sx + 96, sy - 6, 17, '#f1c9a0', INK, 2.5);
+      L(c, sx, sy + 4, sx - (ext ? 0 : 0) - 12 + (after ? 20 : 0), sy + 14, 10, INK); L(c, sx + 40, sy - 14, sx + 96, sy - 24, 8, '#f1c9a0');
+      if (pushing) { A(c, 120, 300, 120 + flen, 300, 8, GREEN); Tag(c, 'wall pushes swimmer', 120 + flen, 284, GREEN, 'left'); A(c, 160, 392, 160 - 34, 392, 8, RED); Tag(c, 'swimmer pushes wall', 164, 420, RED, 'left'); }
+      if (after) { A(c, sx + 40, 296, sx + 40 + Math.min(240, vA * 80), 296, 8, GREEN); Tag(c, 'swimmer ' + vA.toFixed(2) + ' m/s', sx + 40, 276, GREEN, 'left'); Tag(c, 'wall stays still', 92, 100, N, 'left'); }
+    }
+  },
+  readouts(S, M) {
+    const m = motion(S), n = NAMES[S.scene];
+    return [['Force on ' + n[0], '→ ' + m.F + ' N'], ['Force on ' + n[1], '← ' + m.F + ' N'], ['Acceleration of ' + n[0], fmtA(m.aA) + ' m/s²'], ['Acceleration of ' + n[1], fmtA(m.aB) + ' m/s²'], ['Speed of ' + n[0], m.vA.toFixed(2) + ' m/s'], ['Speed of ' + n[1], (m.vB < 0.001 ? '≈ 0' : m.vB.toFixed(2)) + ' m/s']];
+  },
+  formula(S) {
+    const m = motion(S), n = NAMES[S.scene];
+    return `Force on ${n[0]} = Force on ${n[1]} = ${m.F} N.   a(${n[0]}) = ${m.F} ÷ ${m.mA} = ${fmtA(m.aA)} m/s²;   a(${n[1]}) = ${S.scene === 2 ? 'F ÷ (huge mass) ≈ 0' : m.F + ' ÷ ' + m.mB + ' = ' + fmtA(m.aB) + ' m/s²'}`;
+  },
+  logic(S) {
+    return ['When A pushes B, B pushes A back with an equal force in the opposite direction. The forces are equal, but the lighter skater gets the larger acceleration and speed.',
+      'The balloon pushes air backward, so the air pushes the balloon forward. The two forces are equal and opposite. This is how rockets work.',
+      'You push the wall, the wall pushes you. The wall is fixed to the Earth, so its acceleration is almost zero and only the swimmer moves.'][S.scene];
+  },
+  results(S) { const m = motion(S), n = NAMES[S.scene]; return [['Speed of ' + n[0], m.vA.toFixed(2) + ' m/s'], ['Speed of ' + n[1], (m.vB < 0.001 ? '≈ 0' : m.vB.toFixed(2)) + ' m/s']]; },
+});
+</script></body></html>

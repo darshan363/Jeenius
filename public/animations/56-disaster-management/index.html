@@ -1,0 +1,7 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>56-disaster-management</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [['Earthquake', '🏚️', 'Drop, cover and hold under a strong table. Stay away from windows. Go to an open area once shaking stops.'],
+  ['Flood', '🌊', 'Move to higher ground. Do not walk or drive through flood water. Switch off electricity.'],
+  ['Cyclone', '🌀', 'Stay indoors. Keep a torch and radio ready. Follow official warnings.'], ['Lightning', '⚡', 'Stay indoors. Keep away from trees, open fields and water.']]
+  return { title: 'Disaster Management: Be Prepared',
+  ctrl: [{ k: 'd', label: 'Pick a disaster', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => T(200, 100, D[v.d][1], 56) + T(200, 160, D[v.d][0], 16, '#12305c', 'middle', 700),
+  say: v => D[v.d][2] } })())</script></body></html>

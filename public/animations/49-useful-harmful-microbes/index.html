@@ -1,0 +1,7 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>49-useful-harmful-microbes</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [['Lactobacillus', 1, 'Turns milk into curd and helps digestion.'], ['Yeast', 1, 'Makes bread and idli batter rise.'],
+  ['Rhizobium', 1, 'Lives in root nodules of pulse plants and adds nitrogen to the soil.'], ['Penicillium', 1, 'A fungus that gives penicillin, the first antibiotic.'],
+  ['Plasmodium', 0, 'A protozoan spread by the female Anopheles mosquito; causes malaria.'], ['Vibrio cholerae', 0, 'A bacterium in dirty water that causes cholera.']]
+  return { title: 'Useful and Harmful Microbes',
+  ctrl: [{ k: 'm', label: 'Pick a microbe', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => { const d = D[v.m]; return R(110, 40, 180, 110, d[1] ? '#c8ecd0' : '#f9d4d1', d[1] ? '#2c7a4b' : '#b03a33', 12) + T(200, 85, d[0], 18, '#12305c', 'middle', 700) + T(200, 120, d[1] ? 'USEFUL' : 'HARMFUL', 16, d[1] ? '#2c7a4b' : '#b03a33', 'middle', 700) },
+  say: v => D[v.m][2] } })())</script></body></html>

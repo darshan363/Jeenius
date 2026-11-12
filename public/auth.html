@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#eaf2ff" />
+<title>Jeenius | Login & Sign Up</title>
+<style>
+:root{--navy:#073568;--blue:#0b4c91;--link:#064dff;--line:#c8dcfa;--muted:#6584b0;--white:#fff;--panel:#eaf2ff}
+*{box-sizing:border-box}html{min-height:100%;}body{margin:0;min-height:100vh;font-family:Inter,"Segoe UI",Arial,sans-serif;color:#092f5d;background:#eaf2ff}
+.page{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr);gap:7px;padding:8px 10px;justify-items:center;align-items:center}
+.auth-panel{display:none;width:100%;max-width:760px;position:relative;overflow:hidden;isolation:isolate;border:1px solid #c7dcff;border-radius:20px;background:linear-gradient(135deg,#edf4ff 0%,#e5efff 54%,#edf5ff 100%);flex-direction:column;align-items:center;padding:38px 20px 24px;min-width:0}
+.auth-panel:before,.auth-panel:after{content:"";position:absolute;z-index:-1;border-radius:50%;pointer-events:none}
+.auth-panel:before{width:330px;height:330px;left:-205px;top:85px;background:rgba(139,181,255,.19);box-shadow:0 0 0 54px rgba(139,181,255,.055)}
+.auth-panel:after{width:400px;height:400px;right:-245px;bottom:-250px;background:rgba(126,174,255,.13);box-shadow:0 0 0 60px rgba(126,174,255,.06)}
+.auth-panel.active{display:flex}.orbit{position:absolute;z-index:-1;border:1px dashed rgba(109,164,247,.35);border-radius:50%;width:360px;height:210px;pointer-events:none}.orbit.one{left:-175px;top:255px;transform:rotate(22deg)}.orbit.two{right:-190px;bottom:170px;transform:rotate(-48deg)}
+.decor{position:absolute;z-index:-1;color:#77a7f2;opacity:.85;pointer-events:none}.star{font-size:24px}.dot{width:9px;height:9px;border-radius:50%;background:#80aff7}.atom{font-size:78px;font-weight:200;opacity:.5}.planet{width:78px;height:78px;border-radius:50%;background:linear-gradient(145deg,#c5dcff,#8eb5f6);opacity:.6;position:absolute;right:9%;top:14%}.planet:after{content:"";position:absolute;width:120px;height:30px;border:2px solid #a4c6ff;border-radius:50%;left:-20px;top:25px;transform:rotate(-25deg)}
+.brand{display:flex;align-items:center;justify-content:center;gap:12px;margin:4px 0 30px;color:#06366c;font-size:30px;font-weight:850;letter-spacing:-1.2px;flex-shrink:0}.brand-logo{display:block;width:38px;height:38px;object-fit:contain}.google-button-host{display:flex;justify-content:center;width:100%;min-height:40px;overflow:hidden}.google-button-host>div{max-width:100%}.google-config-note{display:block;padding:11px 8px;color:#6584b0;font-size:12px;text-align:center}
+.card{width:min(100%,510px);background:rgba(255,255,255,.94);border:1px solid #c9dcfb;border-radius:21px;padding:39px 35px 32px;box-shadow:0 10px 32px rgba(67,118,190,.06)}
+.card h1{margin:0 0 5px;text-align:center;font-size:29px;line-height:1.25;color:#073568;letter-spacing:-.7px}.subtitle{text-align:center;color:#5d7da9;font-size:14px;margin:0 0 35px;line-height:1.5}
+.form-group{margin:0 0 19px}.form-group label{display:block;font-size:13px;font-weight:650;margin-bottom:7px;color:#0a315d}.input-wrap{position:relative}.field-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#39679e;font-size:19px;pointer-events:none}.form-group input{width:100%;height:50px;border:1px solid #c9dcf7;border-radius:11px;background:#fff;padding:0 44px 0 51px;font:14px inherit;color:#143b68;outline:none;box-shadow:inset 0 1px 2px rgba(13,54,100,.025)}.form-group input::placeholder{color:#8199ba}.form-group input:focus{border-color:#6198e8;box-shadow:0 0 0 3px rgba(83,143,230,.13)}.toggle{position:absolute;right:13px;top:50%;transform:translateY(-50%);border:0;background:none;color:#39679e;cursor:pointer;font-size:18px;padding:3px}
+.options{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 24px;font-size:13px}.check-label{display:flex;align-items:center;gap:8px;color:#5476a4;cursor:pointer}.check-label input{width:17px;height:17px;accent-color:#073568;margin:0}.text-link{color:var(--link);font-weight:650;text-decoration:none}.text-link:hover{text-decoration:underline}
+.primary{width:100%;height:53px;border:0;border-radius:11px;color:#fff;background:linear-gradient(100deg,#073568,#00386d 72%,#0877a0);font-size:16px;font-weight:750;cursor:pointer;box-shadow:0 3px 0 rgba(3,43,86,.08);transition:filter .2s,transform .2s}.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}.primary:disabled{opacity:.65;cursor:wait}
+.divider{display:flex;align-items:center;gap:16px;color:#6686b1;font-size:12px;margin:29px 0 19px}.divider:before,.divider:after{content:"";height:1px;background:#b9d2f7;flex:1}
+.google{width:100%;height:51px;border:1px solid #c3d8f7;border-radius:11px;background:#fff;color:#0b2e58;font-size:14px;font-weight:650;display:flex;align-items:center;justify-content:center;gap:13px;cursor:pointer}.google:hover{background:#f8fbff;border-color:#8bb3ef}.google-g{font-family:Arial,sans-serif;font-weight:900;font-size:23px;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 48%,#fbbc05 48% 70%,#ea4335 70%);color:transparent;background-clip:text;-webkit-background-clip:text}
+.bottom{text-align:center;color:#587aa7;font-size:13px;margin:28px 0 0}.bottom a{margin-left:4px}.terms{display:flex;align-items:center;gap:7px;margin:20px 0 0;color:#5677a2;font-size:12px;line-height:1.5}.terms input{accent-color:#073568;width:17px;height:17px;flex-shrink:0}.message{display:none;border-radius:8px;padding:10px 12px;margin:0 0 14px;font-size:13px;line-height:1.45}.message.show{display:block}.message.error{color:#9d2634;background:#fff0f1;border:1px solid #ffd1d6}.message.success{color:#17653b;background:#ecf9f0;border:1px solid #c7ecd2}
+/* Sign-up card has tighter spacing to match the supplied reference */
+.signup-card{padding-top:29px;padding-bottom:24px}.signup-card .subtitle{margin-bottom:24px}.signup-card .form-group{margin-bottom:14px}.signup-card .form-group input{height:44px}.signup-card .primary{height:52px}.signup-card .divider{margin:18px 0 14px}.signup-card .bottom{margin-top:19px}.signup-card .terms{margin:5px 0 16px}
+@media(max-width:1050px){.page{grid-template-columns:1fr;gap:14px;padding:10px}.auth-panel{padding:26px 18px}.card{max-width:540px}.brand{margin-bottom:22px}.auth-panel:before{width:250px;height:250px}.signup-card{padding:30px 28px}.signup-card .subtitle{margin-bottom:25px}.signup-card .form-group{margin-bottom:17px}.signup-card .form-group input{height:48px}.signup-card .divider{margin:25px 0 17px}.signup-card .bottom{margin-top:22px}}
+@media(max-width:480px){.form-group input{font-size:16px}.page{padding:7px}.auth-panel{border-radius:15px;padding:20px 12px}.brand{font-size:26px;margin:4px 0 18px}.mascot{font-size:30px}.card{padding:29px 20px 25px;border-radius:16px}.card h1{font-size:24px}.subtitle{font-size:13px;margin-bottom:26px}.options{font-size:12px}.form-group input{height:48px}.signup-card{padding:25px 19px}.signup-card .form-group input{height:46px}.planet{transform:scale(.65);transform-origin:top right}}
+</style>
+</head>
+<body>
+<main class="page">
+  <!-- LOGIN PANEL -->
+  <section class="auth-panel" id="login-panel" aria-labelledby="login-title">
+    <span class="orbit one"></span><span class="orbit two"></span>
+    <span class="decor star" style="left:18%;top:13%">✦</span><span class="decor star" style="right:14%;top:27%">✦</span><span class="decor dot" style="left:13%;top:23%"></span><span class="decor atom" style="right:7%;top:5%">⚛</span>
+    <div class="brand"><img class="brand-logo" src="/brand/geini-happy.png" alt=""><span>Jeenius</span></div>
+    <div class="card">
+      <h1 id="login-title">Welcome back, Student!</h1>
+      <p class="subtitle">Continue your science journey with Jeenius</p>
+      <form id="login-form" novalidate>
+        <div class="form-group"><label for="login-email">Email address</label><div class="input-wrap"><span class="field-icon" aria-hidden="true">✉</span><input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div></div>
+        <div class="form-group"><label for="login-password">Password</label><div class="input-wrap"><span class="field-icon" aria-hidden="true">♙</span><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button class="toggle" type="button" data-toggle="login-password" aria-label="Show password">◉</button></div></div>
+        <div class="options"><label class="check-label"><input type="checkbox" id="remember-me" checked> Remember me</label><a class="text-link" href="#" id="forgot-password">Forgot password?</a></div>
+        <div class="message" id="login-message" role="status" aria-live="polite"></div>
+        <button class="primary" type="submit" id="login-submit">Log In&nbsp; →</button>
+      </form>
+      <div class="divider">or continue with</div>
+      <div class="google-button-host" id="google-login-button" aria-label="Continue with Google"></div>
+      <p class="bottom">New to Jeenius? <a class="text-link" href="/auth.html?mode=signup">Create an account</a></p>
+    </div>
+  </section>
+
+  <!-- SIGN-UP PANEL -->
+  <section class="auth-panel" id="signup-panel" aria-labelledby="signup-title">
+    <span class="orbit one"></span><span class="orbit two"></span><span class="planet"></span>
+    <span class="decor star" style="left:14%;top:35%">✦</span><span class="decor star" style="right:13%;top:48%">✦</span><span class="decor dot" style="left:6%;top:43%"></span><span class="decor atom" style="left:6%;bottom:7%">⚛</span>
+    <div class="brand"><img class="brand-logo" src="/brand/geini-happy.png" alt=""><span>Jeenius</span></div>
+    <div class="card signup-card">
+      <h1 id="signup-title">Join Jeenius</h1>
+      <p class="subtitle">Make learning science and maths more interactive</p>
+      <form id="signup-form" novalidate>
+        <div class="form-group"><label for="signup-name">Full name</label><div class="input-wrap"><span class="field-icon" aria-hidden="true">♙</span><input id="signup-name" name="name" type="text" autocomplete="name" placeholder="Your full name" required></div></div>
+        <div class="form-group"><label for="signup-email">Email address</label><div class="input-wrap"><span class="field-icon" aria-hidden="true">✉</span><input id="signup-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div></div>
+        <div class="form-group"><label for="signup-password">Password</label><div class="input-wrap"><span class="field-icon" aria-hidden="true">♙</span><input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="Create a password" minlength="8" required><button class="toggle" type="button" data-toggle="signup-password" aria-label="Show password">◉</button></div></div>
+        <div class="form-group"><label for="confirm-password">Confirm password</label><div class="input-wrap"><span class="field-icon" aria-hidden="true">♙</span><input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirm your password" minlength="8" required><button class="toggle" type="button" data-toggle="confirm-password" aria-label="Show password">◉</button></div></div>
+        <label class="terms"><input type="checkbox" id="agree-terms" required><span>I agree to the <a class="text-link" href="#terms">Terms of Service</a> and <a class="text-link" href="#privacy">Privacy Policy</a></span></label>
+        <div class="message" id="signup-message" role="status" aria-live="polite"></div>
+        <button class="primary" type="submit" id="signup-submit">Create Account&nbsp; →</button>
+      </form>
+      <div class="divider">or sign up with</div>
+      <div class="google-button-host" id="google-signup-button" aria-label="Sign up with Google"></div>
+      <p class="bottom">Already have an account? <a class="text-link" href="/auth.html?mode=login">Log in</a></p>
+    </div>
+  </section>
+</main>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+window.JEENIUS_GOOGLE_CLIENT_ID = "__GOOGLE_CLIENT_ID__";
+'use strict';
+const API = {
+  login: '/api/auth/login',
+  signup: '/api/auth/register',
+  google: '/api/auth/google',
+  forgot: '/api/auth/forgot'
+};
+function localPath(value, fallback='/') {
+  if (typeof value !== 'string' || !value.trim()) return fallback;
+  try {
+    const url = new URL(value, window.location.origin);
+    if (url.origin !== window.location.origin) return fallback;
+    return url.pathname + url.search + url.hash;
+  } catch (_) {
+    return fallback;
+  }
+}
+function getNextPath() {
+  return localPath(new URLSearchParams(window.location.search).get('next'), '/');
+}
+function getResponseRedirect(data) {
+  return localPath(data && data.redirect, getNextPath());
+}
+function messageFor(id, text, type='error') {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'message show ' + type;
+}
+function clearMessage(id) {
+  const el = document.getElementById(id);
+  el.textContent = '';
+  el.className = 'message';
+}
+const authError = new URLSearchParams(window.location.search).get('error');
+if (authError === 'account_conflict') {
+  messageFor('login-message', 'This email is already connected to a different Google account. Please sign in using the account method you originally registered with.');
+} else if (authError === 'google_failed') {
+  messageFor('login-message', 'Google sign-in could not be completed. Please try again or use email and password.');
+  messageFor('signup-message', 'Google sign-up could not be completed. Please try again or use email and password.');
+}
+document.querySelectorAll('[data-toggle]').forEach(button => {
+  button.addEventListener('click', () => {
+    const input = document.getElementById(button.dataset.toggle);
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    button.textContent = show ? '◎' : '◉';
+  });
+});
+function setBusy(button, busy, text) {
+  button.disabled = busy;
+  if (busy) { button.dataset.originalText = button.textContent; button.textContent = text; }
+  else if (button.dataset.originalText) { button.textContent = button.dataset.originalText; delete button.dataset.originalText; }
+}
+document.getElementById('login-form').addEventListener('submit', async event => {
+  event.preventDefault(); clearMessage('login-message');
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!email || !password) return messageFor('login-message', 'Please enter your email address and password.');
+  const button = document.getElementById('login-submit'); setBusy(button, true, 'Signing in…');
+  try {
+    const response = await fetch(API.login, {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({email,password,remember:document.getElementById('remember-me').checked,next:getNextPath()})});
+    const data = await response.json().catch(() => ({}));
+    if (data.code === 'email_verification_required') {
+      if (data.dev_code) sessionStorage.setItem('jeenius_dev_otp', data.dev_code);
+      sessionStorage.setItem('jeenius_notice', data.notice || 'Your email is not verified yet. Enter the code we just emailed you.');
+      window.location.replace(data.redirect || '/verify.html?email=' + encodeURIComponent(email)); return;
+    }
+    if (!response.ok) throw new Error(data.error || 'Email/password login is not configured on the server yet.');
+    if (data.success || data.user) { messageFor('login-message','Login successful. Redirecting…','success'); window.location.replace(getResponseRedirect(data)); }
+    else messageFor('login-message', data.error || 'Could not sign in.');
+  } catch (error) { messageFor('login-message', error.message || 'Could not connect to the Jeenius server.'); }
+  finally { setBusy(button, false); }
+});
+document.getElementById('signup-form').addEventListener('submit', async event => {
+  event.preventDefault(); clearMessage('signup-message');
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const confirm = document.getElementById('confirm-password').value;
+  if (!name || !email || !password || !confirm) return messageFor('signup-message','Please complete all fields.');
+  if (password.length < 8) return messageFor('signup-message','Use a password with at least 8 characters.');
+  if (password !== confirm) return messageFor('signup-message','Your passwords do not match.');
+  if (!document.getElementById('agree-terms').checked) return messageFor('signup-message','Please agree to the Terms of Service and Privacy Policy.');
+  const button = document.getElementById('signup-submit'); setBusy(button, true, 'Creating account…');
+  try {
+    const response = await fetch(API.signup, {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({name,email,password,next:getNextPath()})});
+    const data = await response.json().catch(() => ({}));
+    if (data.code === 'email_verification_required' && data.redirect) { if (data.dev_code) sessionStorage.setItem('jeenius_dev_otp', data.dev_code); sessionStorage.setItem('jeenius_notice', data.error); window.location.replace(data.redirect); return; }
+    if (data.account_created && data.redirect) { messageFor('signup-message', data.error || 'Account created. Continue to email verification.', 'success'); window.location.replace(data.redirect); return; }
+    if (!response.ok) throw new Error(data.error || 'Account registration is not configured on the server yet.');
+    if (data.success || data.user) { if (data.dev_code) sessionStorage.setItem('jeenius_dev_otp', data.dev_code); messageFor('signup-message', data.message || 'Account created. Redirecting to email verification…','success'); window.location.replace(data.redirect || '/verify.html?email=' + encodeURIComponent(email)); }
+    else messageFor('signup-message', data.error || 'Could not create account.');
+  } catch (error) { messageFor('signup-message', error.message || 'Could not connect to the Jeenius server.'); }
+  finally { setBusy(button, false); }
+});
+document.getElementById('forgot-password').addEventListener('click', async event => {
+  event.preventDefault(); clearMessage('login-message');
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) { window.location.href = '/verify.html?mode=reset'; return; }
+  messageFor('login-message', 'Sending a reset code…', 'success');
+  try {
+    const response = await fetch(API.forgot, {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({email})});
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Could not send a reset code.');
+    if (data.dev_code) sessionStorage.setItem('jeenius_dev_otp', data.dev_code);
+    window.location.href = '/verify.html?mode=reset&email=' + encodeURIComponent(email);
+  } catch (error) { messageFor('login-message', error.message || 'Could not reach the Jeenius server.'); }
+});
+let googleBusy = false;
+async function handleGoogleCredential(result) {
+  const boxId = AUTH_MODE === 'signup' ? 'signup-message' : 'login-message';
+  if (!result || !result.credential) { messageFor(boxId, 'Google did not return a credential. Please try again.'); return; }
+  if (googleBusy) return;
+  googleBusy = true;
+  messageFor(boxId, 'Signing you in with Google…', 'success');
+  try {
+    const response = await fetch(API.google, {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({credential: result.credential, next: getNextPath()})});
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) throw new Error(data.error || 'Google sign-in could not be completed. Please try again.');
+    messageFor(boxId, 'Signed in. Opening Jeenius…', 'success');
+    // The session cookie is already set, so go straight to the right page: no manual refresh needed.
+    window.location.replace(localPath(data.redirect, '/dashboard.html'));
+  } catch (error) {
+    googleBusy = false;
+    messageFor(boxId, error.message || 'Could not reach the Jeenius server.');
+  }
+}
+
+function initAuthMode() {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode') === 'signup' ? 'signup' : 'login';
+  document.getElementById('login-panel')?.classList.toggle('active', mode === 'login');
+  document.getElementById('signup-panel')?.classList.toggle('active', mode === 'signup');
+  document.title = mode === 'signup' ? 'Jeenius | Sign Up' : 'Jeenius | Login';
+  return mode;
+}
+const AUTH_MODE = initAuthMode();
+
+function initGoogleButtons() {
+  const targets = AUTH_MODE === 'signup'
+    ? [{ id: 'google-signup-button', text: 'signup_with' }]
+    : [{ id: 'google-login-button', text: 'continue_with' }];
+  const clientId = String(window.JEENIUS_GOOGLE_CLIENT_ID || '').trim();
+  if (!clientId || clientId.includes('YOUR_GOOGLE_CLIENT_ID')) {
+    targets.forEach(({ id }) => {
+      const target = document.getElementById(id);
+      if (target) target.innerHTML = '<span class="google-config-note">Google sign-in needs setup</span>';
+    });
+    return;
+  }
+  if (!window.google || !window.google.accounts || !window.google.accounts.id) {
+    targets.forEach(({ id }) => {
+      const target = document.getElementById(id);
+      if (target) target.innerHTML = '<span class="google-config-note">Google sign-in could not load. Try again later.</span>';
+    });
+    return;
+  }
+  // Initialize once; renderButton gives the user a deliberate button click instead of
+  // opening the One Tap prompt, which may be suppressed or appear inconsistently.
+  window.google.accounts.id.initialize({
+    client_id: clientId,
+    callback: handleGoogleCredential,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+  targets.forEach(({ id, text }) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.innerHTML = '';
+    const availableWidth = Math.floor(target.getBoundingClientRect().width || 400);
+    window.google.accounts.id.renderButton(target, {
+      type: 'standard',
+      theme: 'outline',
+      size: 'large',
+      text,
+      shape: 'rectangular',
+      logo_alignment: 'left',
+      width: Math.max(200, Math.min(400, availableWidth))
+    });
+  });
+}
+(function bootGoogle(attempt = 0) {
+  if (window.google && window.google.accounts && window.google.accounts.id) { initGoogleButtons(); return; }
+  if (attempt > 40) { initGoogleButtons(); return; }  // ~8 s, then show the "could not load" note
+  setTimeout(() => bootGoogle(attempt + 1), 200);
+})();
+let lastWidth = window.innerWidth;
+window.addEventListener('resize', () => { if (Math.abs(window.innerWidth - lastWidth) > 40) { lastWidth = window.innerWidth; if (window.google && window.google.accounts) initGoogleButtons(); } });
+</script>
+</body>
+</html>

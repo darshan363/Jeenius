@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Newton's Second Law · Jeenius</title>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/lesson-theme.css"></head><body><script src="../_shared/physics-lab.js"></script><script>
+const RUN = 3, REF_F = 20, REF_M = 5;   /* every race lasts 3 s; the reference trolley is 20 N on 5 kg */
+function trolley(c, h, x, y, mass, force, color, name, accel, dist) {
+  const { T, L, R, C, A, Tag, N, B, W, GREEN, RED, INK } = h;
+  const boxes = Math.max(0, Math.round(mass / 2.5)), cols = 4;
+  L(c, x - 8, y - 66, x + 6, y - 66, 5, INK); L(c, x + 6, y - 66, x + 14, y - 22, 4, INK);
+  R(c, x + 6, y - 58, 78, 36, W, N, 3); L(c, x + 6, y - 58, x + 84, y - 58, 3);
+  for (let i = 0; i < boxes; i++) { const cx = x + 10 + (i % cols) * 18, cy = y - 78 - Math.floor(i / cols) * 18; R(c, cx, cy + 20, 17, 17, color, N, 1.5); }
+  C(c, x + 24, y - 12, 10, N, N); C(c, x + 68, y - 12, 10, N, N); C(c, x + 24, y - 12, 4, W, N); C(c, x + 68, y - 12, 4, W, N);
+  if (force > 0) { A(c, x - 26 - force * 1.6, y - 40, x - 8, y - 40, 7, RED); }
+  Tag(c, name, x + 46, y - 120 - Math.floor(Math.max(0, boxes - 1) / cols) * 18, N, 'center', 13);
+}
+PhysicsLab({
+  title: "Newton's Second Law", tag: 'JEENIUS · CLASS 8–9 · F = m × a',
+  controls: [
+    { key: 'F', label: 'Pushing force', min: 0, max: 50, step: 5, value: 20, unit: ' N' },
+    { key: 'm', label: 'Mass of trolley + load', min: 1, max: 20, step: 1, value: 5, unit: ' kg' },
+  ],
+  init(S, M) { M.t = 0; M.phase = 'wait'; M.hold = 0; },
+  step(S, M, dt) {
+    if (M.phase === 'wait') { M.hold += dt; if (M.hold > 0.9) { M.phase = 'run'; M.t = 0; } }
+    else if (M.phase === 'run') { M.t += dt; if (M.t >= RUN) { M.t = RUN; M.phase = 'end'; M.hold = 0; } }
+    else { M.hold += dt; if (M.hold > 1.8) { M.phase = 'wait'; M.hold = 0; M.t = 0; } }
+  },
+  draw(c, S, M, h) {
+    const { T, L, R, C, A, Tag, N, B, W, GREEN, RED, GREY } = h;
+    const a = S.F / S.m, aR = REF_F / REF_M, xs = 0.5 * a * RUN * RUN, xr = 0.5 * aR * RUN * RUN, xmax = Math.max(xs, xr, 1);
+    const t = M.t, x1 = 0.5 * a * t * t, x2 = 0.5 * aR * t * t, x0 = 150, len = 520;
+    T(c, 'RACE FOR 3 SECONDS', 28, 34, 17, 'left', 'Goldman');
+    [[1, 175, 'YOUR TROLLEY', S.F, S.m, '#8fb6e8', a, x1], [2, 355, 'REFERENCE  20 N, 5 kg', REF_F, REF_M, '#b9d6c8', aR, x2]].forEach(([i, y, name, F, m, col, ac, xx]) => {
+      L(c, 60, y, 760, y, 3); L(c, x0, y - 4, x0, y + 8, 2); L(c, x0 + len + 60, y - 100, x0 + len + 60, y + 8, 3, N, [6, 5]);
+      for (let k = 1; k < 6; k++) L(c, x0 + k * len / 6 - 40, y, x0 + k * len / 6 - 40, y + 7, 1.5, GREY);
+      trolley(c, h, x0 - 20 + (xx / xmax) * len, y, m, F, col, name, ac, xx);
+      Tag(c, 'a = ' + ac.toFixed(2) + ' m/s²', 700, y - 112, GREEN, 'right', 15);
+    });
+    T(c, 'finish line = where the faster trolley ends after 3 s', 760, 438, 12, 'right', 'Saira', GREY); T(c, 't = ' + t.toFixed(1) + ' s', 28, 438, 14, 'left', 'Goldman');
+  },
+  readouts(S, M) { const a = S.F / S.m, aR = REF_F / REF_M; return [['Acceleration a', a.toFixed(2) + ' m/s²'], ['Speed after 3 s', (a * RUN).toFixed(1) + ' m/s'], ['Distance in 3 s', (0.5 * a * RUN * RUN).toFixed(1) + ' m'], ['Compared with reference', aR ? (a / aR).toFixed(2) + ' ×' : '—']]; },
+  formula(S) { return `a = F ÷ m = ${S.F} ÷ ${S.m} = ${(S.F / S.m).toFixed(2)} m/s²`; },
+  logic() { return 'More force gives more acceleration. More mass gives less acceleration. Double the force: acceleration doubles. Double the mass: acceleration halves.'; },
+  results(S) { const a = S.F / S.m; return [['Acceleration', a.toFixed(2) + ' m/s²'], ['Speed after 3 s', (a * RUN).toFixed(1) + ' m/s'], ['Distance in 3 s', (0.5 * a * RUN * RUN).toFixed(1) + ' m']]; },
+});
+</script></body></html>

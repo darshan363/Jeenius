@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#013062">
+<title>JEENIUS | Verify email</title>
+<style>
+:root{--navy:#013062;--pale:#e6eeff;--line:#dce5f2;--ink:#17375f;--muted:#6b7f9c;--blue:#2367c9;--danger:#b42318;--success:#147a45}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;font-family:Inter,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#f3f7ff,#e6eeff 52%,#f8faff);color:var(--ink);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom))}
+.page{width:100%;max-width:440px}
+.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 22px;color:var(--navy);font-size:28px;font-weight:850;letter-spacing:-1px}
+.brand img{width:38px;height:38px;object-fit:contain}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px 24px;box-shadow:0 18px 50px #01306212}
+h1{font-size:25px;letter-spacing:-.6px;margin:0 0 6px;color:var(--navy)}
+p.lead{line-height:1.5;font-size:14px;color:var(--muted);margin:0 0 20px}
+p.lead b{color:var(--ink);overflow-wrap:anywhere}
+.field{margin:0 0 14px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.field input{width:100%;height:50px;border:1px solid #c8d8ec;border-radius:12px;padding:0 14px;font-size:16px;color:var(--ink);outline:none;background:#fff}
+.field input:focus{border-color:#4a83d3;box-shadow:0 0 0 3px #2367c916}
+.code-input{text-align:center;font-size:28px!important;letter-spacing:.5em;font-weight:700;padding-left:.5em!important}
+.primary,.secondary{width:100%;min-height:50px;border-radius:12px;font-size:15px;font-weight:750;cursor:pointer}
+.primary{border:0;background:var(--navy);color:#fff;margin-top:4px}.primary:disabled{opacity:.6;cursor:wait}
+.secondary{border:1px solid var(--line);background:#fff;color:var(--navy);margin-top:10px}.secondary:disabled{opacity:.6;cursor:not-allowed}
+.message{display:none;margin:0 0 14px;border-radius:10px;padding:11px 12px;font-size:13px;line-height:1.45;background:#f3f6fb;color:var(--ink);overflow-wrap:anywhere}
+.message.show{display:block}.message.error{background:#fff0ef;color:var(--danger)}.message.success{background:#ecf9f0;color:var(--success)}
+.foot{margin-top:16px;text-align:center;font-size:13px;color:var(--muted)}.foot a{color:var(--blue);font-weight:700;text-decoration:none}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="brand"><img src="/brand/geini-happy.png" alt=""><span>Jeenius</span></div>
+  <section class="card">
+    <h1 id="title">Verify your email</h1>
+    <p class="lead" id="lead">Enter the 6-digit code we sent to your email. It expires in 10 minutes.</p>
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+    <form id="form" novalidate>
+      <div class="field" id="email-field"><label for="email">Email address</label><input id="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com"></div>
+      <div class="field"><label for="code">6-digit code</label><input id="code" class="code-input" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" required placeholder="••••••"></div>
+      <div class="field hidden" id="password-field"><label for="password">New password</label><input id="password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters"></div>
+      <button class="primary" id="submit" type="submit">Verify email</button>
+    </form>
+    <button id="resend" class="secondary" type="button">Resend code</button>
+    <div class="foot"><a href="/auth.html?mode=login">← Back to log in</a></div>
+  </section>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const mode = params.get('mode') === 'reset' ? 'reset' : 'verify';
+const emailInput = $('email'), codeInput = $('code'), passwordInput = $('password');
+const submitBtn = $('submit'), resendBtn = $('resend');
+let cooldownTimer = null, busy = false;
+
+emailInput.value = params.get('email') || '';
+if (mode === 'reset') {
+  $('title').textContent = 'Reset your password';
+  submitBtn.textContent = 'Save new password';
+  $('password-field').classList.remove('hidden');
+}
+function updateLead() {
+  const email = emailInput.value.trim();
+  const lead = $('lead');
+  lead.textContent = '';
+  if (email) {
+    lead.append(mode === 'reset' ? 'We emailed a reset code to ' : 'Enter the 6-digit code we sent to ');
+    const b = document.createElement('b'); b.textContent = email; lead.append(b, '. It expires in 10 minutes.');
+    $('email-field').classList.add('hidden');
+  } else {
+    lead.textContent = mode === 'reset' ? 'Enter your email and we will send a reset code.' : 'Enter your email and the 6-digit code.';
+    $('email-field').classList.remove('hidden');
+  }
+}
+updateLead();
+
+function show(text, type = 'error') {
+  const m = $('message');
+  m.textContent = text;
+  m.className = 'message show ' + type;
+}
+function clearMsg() { $('message').className = 'message'; }
+
+function startCooldown(seconds) {
+  clearInterval(cooldownTimer);
+  let left = seconds;
+  const tick = () => {
+    if (left <= 0) { clearInterval(cooldownTimer); resendBtn.disabled = false; resendBtn.textContent = 'Resend code'; return; }
+    resendBtn.disabled = true; resendBtn.textContent = 'Resend code in ' + left + 's'; left -= 1;
+  };
+  tick(); cooldownTimer = setInterval(tick, 1000);
+}
+
+async function post(path, data) {
+  const r = await fetch(path, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(d.error || 'Request failed. Please try again.'), { data: d, status: r.status });
+  return d;
+}
+function devHint(d) {
+  if (d && d.dev_code) show('Development code (local testing only): ' + d.dev_code, 'success');
+}
+
+// The first code was already sent by sign-up/login, so start the resend timer right away.
+if (mode === 'verify') startCooldown(45);
+else resendBtn.textContent = emailInput.value ? 'Resend code' : 'Send code';
+
+const notice = sessionStorage.getItem('jeenius_notice');
+if (notice) { show(notice, 'success'); sessionStorage.removeItem('jeenius_notice'); }
+const devCode = sessionStorage.getItem('jeenius_dev_otp');
+if (devCode) { show('Development code (local testing only): ' + devCode, 'success'); sessionStorage.removeItem('jeenius_dev_otp'); }
+
+async function submit() {
+  if (busy) return;
+  clearMsg();
+  const email = emailInput.value.trim(), code = codeInput.value.replace(/\D/g, '');
+  if (!email) { show('Enter your email address.'); emailInput.focus(); return; }
+  if (code.length !== 6) { show('Enter the 6-digit code from your email.'); codeInput.focus(); return; }
+  if (mode === 'reset' && passwordInput.value.length < 8) { show('Choose a new password with at least 8 characters.'); passwordInput.focus(); return; }
+  busy = true; submitBtn.disabled = true;
+  const label = submitBtn.textContent; submitBtn.textContent = mode === 'reset' ? 'Saving…' : 'Verifying…';
+  try {
+    const d = mode === 'reset'
+      ? await post('/api/auth/reset', { email, code, password: passwordInput.value })
+      : await post('/api/auth/verify-otp', { email, code });
+    show(mode === 'reset' ? 'Password updated. Taking you to log in…' : 'Email verified. Opening the next step…', 'success');
+    setTimeout(() => location.replace(d.redirect || (mode === 'reset' ? '/auth.html' : '/account-setup.html')), 500);
+    return;
+  } catch (err) {
+    if (err.data && err.data.code === 'already_verified') {
+      show(err.message, 'success'); setTimeout(() => location.replace('/auth.html'), 1400); return;
+    }
+    show(err.message);
+    codeInput.select();
+  }
+  busy = false; submitBtn.disabled = false; submitBtn.textContent = label;
+}
+$('form').addEventListener('submit', e => { e.preventDefault(); submit(); });
+codeInput.addEventListener('input', () => {
+  codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
+  if (codeInput.value.length === 6 && mode === 'verify' && emailInput.value.trim()) submit();
+});
+
+resendBtn.addEventListener('click', async () => {
+  clearMsg();
+  const email = emailInput.value.trim();
+  if (!email) { show('Enter your email address first.'); emailInput.focus(); return; }
+  resendBtn.disabled = true; resendBtn.textContent = 'Sending…';
+  try {
+    const d = await post(mode === 'reset' ? '/api/auth/forgot' : '/api/auth/resend-otp', { email });
+    if (d.code === 'already_verified') { show(d.message, 'success'); setTimeout(() => location.replace('/auth.html'), 1400); return; }
+    show(d.message || 'A new code was sent.', 'success'); devHint(d);
+    updateLead(); startCooldown(60); codeInput.focus();
+  } catch (err) {
+    show(err.message);
+    const wait = /(\d+)\s*seconds?/.exec(err.message);
+    if (wait) startCooldown(Math.min(60, +wait[1])); else { resendBtn.disabled = false; resendBtn.textContent = 'Resend code'; }
+  }
+});
+emailInput.addEventListener('change', updateLead);
+if (emailInput.value) codeInput.focus();
+</script>
+</body>
+</html>

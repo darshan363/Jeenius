@@ -1,0 +1,682 @@
+[
+  {
+    "id": "01-motion-lab",
+    "title": "Motion Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Change the speed slider and watch how distance grows over time.",
+    "available": true
+  },
+  {
+    "id": "02-force-pressure-lab",
+    "title": "Force and Pressure Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Push the same force on a small area vs. a large area — feel the difference.",
+    "available": true
+  },
+  {
+    "id": "03-friction-lab",
+    "title": "Friction Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Swap the surface and see how far the block slides before stopping.",
+    "available": true
+  },
+  {
+    "id": "04-reflection-of-light-lab",
+    "title": "Reflection of Light Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Tilt the mirror and trace how the reflected ray moves with it.",
+    "available": true
+  },
+  {
+    "id": "05-electric-circuit-builder",
+    "title": "Electric Circuit Builder",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Wire a bulb in series then in parallel and compare the brightness.",
+    "available": true
+  },
+  {
+    "id": "06-sound-vibration-lab",
+    "title": "Sound and Vibration Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Pluck the string harder and watch the wave amplitude change.",
+    "available": true
+  },
+  {
+    "id": "07-heat-particle-motion",
+    "title": "Heat and Particle Motion",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Turn up the temperature and see how fast the particles zoom around.",
+    "available": true
+  },
+  {
+    "id": "08-changes-of-state",
+    "title": "Changes of State",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Heat ice slowly and watch the temperature plateau at every state change.",
+    "available": true
+  },
+  {
+    "id": "09-magnetic-effect-of-current",
+    "title": "Magnetic Effect of Current",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Reverse the current direction and see which way the compass needle flips.",
+    "available": true
+  },
+  {
+    "id": "10-dispersion-of-light",
+    "title": "Dispersion of Light",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Rotate the prism and spread white light into its full rainbow spectrum.",
+    "available": true
+  },
+  {
+    "id": "11-lever-lab",
+    "title": "Lever Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Move the fulcrum and discover where the least effort lifts the load.",
+    "available": true
+  },
+  {
+    "id": "12-magnet-lab",
+    "title": "Magnet Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Bring the poles together and feel attract vs. repel in action.",
+    "available": true
+  },
+  {
+    "id": "27-gravitation",
+    "title": "Gravitation",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Drop objects from different heights and time their fall to check g.",
+    "available": true
+  },
+  {
+    "id": "29-work-energy-and-power",
+    "title": "Work, Energy and Power",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Push a block up a ramp and see kinetic energy convert to potential energy.",
+    "available": true
+  },
+  {
+    "id": "30-ohms-law-series-and-parallel",
+    "title": "Ohm's Law, Series and Parallel",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Triple the voltage and check whether current triples too — Ohm was right.",
+    "available": true
+  },
+  {
+    "id": "33-stars-solar-system-and-moon-phases",
+    "title": "Stars, Solar System and Moon Phases",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Orbit the Moon around Earth and watch its phases change in real time.",
+    "available": true
+  },
+  {
+    "id": "16-acid-base-indicator-lab",
+    "title": "Acid, Base and Indicator Lab",
+    "subject": "CHE",
+    "class": 8,
+    "tryThis": "Add a few drops of indicator to acids and bases and watch the colour shift.",
+    "available": true
+  },
+  {
+    "id": "17-chemical-change-and-bond",
+    "title": "Chemical Change and Bond",
+    "subject": "CHE",
+    "class": 8,
+    "tryThis": "Mix the reactants and look for signs of a new substance forming.",
+    "available": true
+  },
+  {
+    "id": "31-inside-the-atom",
+    "title": "Inside the Atom",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Add protons to the nucleus and see which element you have built.",
+    "available": true
+  },
+  {
+    "id": "32-metals-and-non-metals",
+    "title": "Metals and Non-metals",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Test conductivity, lustre and malleability to sort elements into groups.",
+    "available": true
+  },
+  {
+    "id": "13-cell-and-organelles",
+    "title": "Cell and Organelles",
+    "subject": "BIO",
+    "class": 8,
+    "tryThis": "Click each organelle to learn its job inside the cell.",
+    "available": true
+  },
+  {
+    "id": "14-human-body-organ-systems",
+    "title": "Human Body Organ Systems",
+    "subject": "BIO",
+    "class": 8,
+    "tryThis": "Toggle a system on or off and see which organs belong to it.",
+    "available": true
+  },
+  {
+    "id": "15-microorganism-lab",
+    "title": "Microorganism Lab",
+    "subject": "BIO",
+    "class": 8,
+    "tryThis": "Zoom in with the microscope and identify the microbes you spot.",
+    "available": true
+  },
+  {
+    "id": "18-ecosystem-food-web",
+    "title": "Ecosystem and Food Web",
+    "subject": "BIO",
+    "class": 8,
+    "tryThis": "Remove one species and watch how the food web ripples apart.",
+    "available": true
+  },
+  {
+    "id": "19-rational-irrational-number-line",
+    "title": "Rational and Irrational Numbers",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Place √2 on the number line and see exactly where it lands.",
+    "available": true
+  },
+  {
+    "id": "20-parallel-lines-transversals",
+    "title": "Parallel Lines and Transversals",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Drag the transversal and watch all angle pairs update together.",
+    "available": true
+  },
+  {
+    "id": "21-expansion-formulae",
+    "title": "Expansion Formulae",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Resize the square and see (a+b)² split into four coloured pieces.",
+    "available": true
+  },
+  {
+    "id": "22-factorisation-lab",
+    "title": "Factorisation Lab",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Rearrange the tiles to factor a trinomial into two brackets.",
+    "available": true
+  },
+  {
+    "id": "23-equation-balance-lab",
+    "title": "Equation Balance Lab",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Add weights to both pans and keep the scale balanced to solve for x.",
+    "available": true
+  },
+  {
+    "id": "24-congruence-of-triangles",
+    "title": "Congruence of Triangles",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Try each congruence rule and see which combos always make matching triangles.",
+    "available": true
+  },
+  {
+    "id": "25-area-of-shapes",
+    "title": "Area of Shapes",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Drag the handles to resize a shape and watch the area formula update live.",
+    "available": true
+  },
+  {
+    "id": "26-surface-area-and-volume",
+    "title": "Surface Area and Volume",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Unfold the 3D shape to its net and count the faces you need to cover.",
+    "available": true
+  },
+  {
+    "id": "34-coordinate-geometry",
+    "title": "Co-ordinate Geometry",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Plot two points and let the lab draw the line and compute its slope.",
+    "available": true
+  },
+  {
+    "id": "35-linear-equations-two-variables",
+    "title": "Linear Equations in Two Variables",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Change a coefficient and see how the line on the graph shifts.",
+    "available": true
+  },
+  {
+    "id": "36-sets-and-venn-diagrams",
+    "title": "Sets and Venn Diagrams",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Drag elements in and out of the circles to explore union and intersection.",
+    "available": true
+  },
+  {
+    "id": "37-statistics-histogram",
+    "title": "Statistics: Frequency and Mean",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Add data points and watch the histogram and mean update instantly.",
+    "available": true
+  },
+  {
+    "id": "38-circle-angles",
+    "title": "Circle: Angle at the Centre",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Move the arc and prove that the central angle is twice the inscribed angle.",
+    "available": true
+  },
+  {
+    "id": "39-quadrilaterals-parallelogram",
+    "title": "Quadrilaterals",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Drag a vertex to morph the quadrilateral and check which properties hold.",
+    "available": true
+  },
+  {
+    "id": "40-trigonometric-ratios",
+    "title": "Trigonometric Ratios",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Slide the angle from 0° to 90° and watch sin, cos, and tan change.",
+    "available": true
+  },
+  {
+    "id": "41-health-and-diseases",
+    "title": "Health and Diseases",
+    "subject": "BIO",
+    "class": 8,
+    "tryThis": "Raise hygiene habits and watch the spread of germs shrink.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "42-classification-of-microbes",
+    "title": "Classification of Microbes",
+    "subject": "BIO",
+    "class": 8,
+    "tryThis": "Compare bacteria, virus, fungi, protozoa and algae.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "43-classification-of-plants",
+    "title": "Classification of Plants",
+    "subject": "BIO",
+    "class": 9,
+    "tryThis": "Climb from algae to flowering plants and see features appear.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "44-digestion",
+    "title": "Human Digestion",
+    "subject": "BIO",
+    "class": 9,
+    "tryThis": "Follow a chapati through the digestive system.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "45-respiration-circulation",
+    "title": "Breathing and Circulation",
+    "subject": "BIO",
+    "class": 9,
+    "tryThis": "Switch from resting to running and watch heart and lungs speed up.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "46-excretion",
+    "title": "Excretion and Water Balance",
+    "subject": "BIO",
+    "class": 9,
+    "tryThis": "Change water intake and see how urine changes.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "47-heredity",
+    "title": "Heredity (Mendel)",
+    "subject": "BIO",
+    "class": 9,
+    "tryThis": "Cross tall and dwarf pea plants and count the offspring.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "48-biotechnology",
+    "title": "Introduction to Biotechnology",
+    "subject": "BIO",
+    "class": 9,
+    "tryThis": "Follow curd, bread, insulin and tissue culture step by step.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "49-useful-harmful-microbes",
+    "title": "Useful and Harmful Microbes",
+    "subject": "BIO",
+    "class": 9,
+    "tryThis": "Sort microbes into friends and enemies.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "50-environmental-management",
+    "title": "Environmental Management",
+    "subject": "ENV",
+    "class": 9,
+    "tryThis": "Recycle more and watch the dump shrink.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "51-composition-of-matter",
+    "title": "Composition of Matter",
+    "subject": "CHE",
+    "class": 8,
+    "tryThis": "See how particles differ in elements, compounds and mixtures.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "52-carbon",
+    "title": "Carbon and Its Forms",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Compare diamond, graphite and fullerene.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "53-substances-in-common-use",
+    "title": "Substances in Common Use",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Meet baking soda, washing soda, bleaching powder and plaster of Paris.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "54-measurement-of-matter",
+    "title": "Measurement of Matter",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Add atomic masses to get molecular mass.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "55-pollution",
+    "title": "Pollution",
+    "subject": "ENV",
+    "class": 8,
+    "tryThis": "Find the cause and prevention of air, water and soil pollution.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "56-disaster-management",
+    "title": "Disaster Management",
+    "subject": "ENV",
+    "class": 8,
+    "tryThis": "Learn the safe action for each disaster.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "57-telescopes",
+    "title": "Telescopes",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Enlarge the mirror and watch the collected light grow.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "58-indices-and-cube-root",
+    "title": "Indices and Cube Root",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Add powers when you multiply, and undo a cube with a cube root.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "59-altitudes-and-medians",
+    "title": "Altitudes and Medians",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Slide the vertex and see when altitude and median meet.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "60-variation",
+    "title": "Variation",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Compare direct and inverse variation by doubling x.",
+    "available": true,
+    "tier": "core",
+    "verified": "chapter-title only"
+  },
+  {
+    "id": "61-work-and-energy-lab",
+    "title": "Work and Energy Lab",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Change the height and speed to compare potential and kinetic energy.",
+    "available": true
+  },
+  {
+    "id": "62-inside-the-atom-lab",
+    "title": "Inside the Atom Lab",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Explore atomic structure and compare the particles in an atom.",
+    "available": true
+  },
+  {
+    "id": "64-discount-commission-lab",
+    "title": "Discount and Commission Lab",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Change the marked price and percentage to calculate discounts and commission.",
+    "available": true
+  },
+  {
+    "id": "65-division-of-polynomials-lab",
+    "title": "Division of Polynomials Lab",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Change polynomial terms and follow the division steps.",
+    "available": true
+  },
+  {
+    "id": "66-compound-interest-lab",
+    "title": "Compound Interest Lab",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Adjust principal, rate and time to compare compound interest.",
+    "available": true
+  },
+  {
+    "id": "67-metals-and-nonmetals-lab",
+    "title": "Metals and Nonmetals Lab",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Compare common physical properties of metals and non-metals.",
+    "available": true
+  },
+  {
+    "id": "68-life-cycle-of-stars-lab",
+    "title": "Life Cycle of Stars Lab",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Explore how a star changes through stages of its life cycle.",
+    "available": true
+  },
+  {
+    "id": "69-ratio-proportion-lab",
+    "title": "Ratio and Proportion Lab",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Adjust two quantities to explore equivalent ratios and proportions.",
+    "available": true
+  },
+  {
+    "id": "70-financial-planning-lab",
+    "title": "Financial Planning Lab",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Change income and expenses to explore a simple budget.",
+    "available": true
+  },
+  {
+    "id": "71-geometry-proof-lab",
+    "title": "Geometry and Proof Lab",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Explore a geometric property and follow its proof step by step.",
+    "available": true
+  },
+  {
+    "id": "72-triangle-construction-lab",
+    "title": "Triangle Construction Lab",
+    "subject": "MAT",
+    "class": 8,
+    "tryThis": "Change side lengths and angles to explore triangle construction.",
+    "available": true
+  },
+  {
+    "id": "73-man-made-materials-lab",
+    "title": "Man-made Materials Lab",
+    "subject": "CHE",
+    "class": 8,
+    "tryThis": "Explore the uses and properties of selected man-made materials.",
+    "available": true
+  },
+  {
+    "id": "74-ict-input-process-output-lab",
+    "title": "ICT Input–Process–Output Lab",
+    "subject": "ICT",
+    "class": 8,
+    "tryThis": "Change the input and processing rule to observe the output.",
+    "available": true
+  },
+  {
+    "id": "75-cone-sphere-surface-volume-lab",
+    "title": "Cone and Sphere Lab",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Adjust dimensions and compare surface area and volume.",
+    "available": true
+  },
+  {
+    "id": "76-pythagoras-theorem-lab",
+    "title": "Pythagoras Theorem",
+    "subject": "MAT",
+    "class": 9,
+    "tryThis": "Change the legs of a right triangle and verify a² + b² = c².",
+    "available": true
+  },
+  {
+    "id": "77-periodic-table-explorer",
+    "title": "Periodic Table Explorer",
+    "subject": "CHE",
+    "class": 9,
+    "tryThis": "Select an element to explore its position and basic properties.",
+    "available": true
+  },
+  {
+    "id": "78-battery-electricity-lab",
+    "title": "Battery and Electricity Lab",
+    "subject": "PHY",
+    "class": 8,
+    "tryThis": "Change circuit components and examine how current and voltage behave.",
+    "available": true
+  },
+  {
+    "id": "82-free-fall",
+    "title": "Free Fall",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Compare how objects fall under gravity and explore their motion.",
+    "available": true
+  },
+  {
+    "id": "79-newtons-first-law",
+    "title": "Newton's First Law",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Pick an example and see what happens when no net force acts.",
+    "available": true
+  },
+  {
+    "id": "80-newtons-second-law",
+    "title": "Newton's Second Law",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Change the force and the mass and compare with the reference trolley.",
+    "available": true
+  },
+  {
+    "id": "81-newtons-third-law",
+    "title": "Newton's Third Law",
+    "subject": "PHY",
+    "class": 9,
+    "tryThis": "Push apart skaters, a balloon rocket or a swimmer and compare the two forces.",
+    "available": true
+  }
+]

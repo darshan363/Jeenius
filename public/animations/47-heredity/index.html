@@ -1,0 +1,9 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>47-heredity</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const P = [['T', 'T', 't', 't'], ['T', 't', 'T', 't'], ['T', 't', 't', 't']], N = ['TT × tt', 'Tt × Tt', 'Tt × tt']
+  const g = (a, b) => a < b ? a + b : b + a
+  return { title: 'Heredity: Mendel and the Tall Pea Plant',
+  ctrl: [{ k: 'c', label: 'Cross these parent plants (T = tall, t = dwarf)', opts: N, val: 1 }],
+  draw: v => { const p = P[v.c]; let s = T(200, 22, 'Parent 1 gives: ' + p[0] + ' or ' + p[1] + '   Parent 2 gives: ' + p[2] + ' or ' + p[3], 12)
+    for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) { const gt = g(p[i], p[2 + j]); s += R(120 + j * 80, 45 + i * 60, 76, 54, gt.includes('T') ? '#c8ecd0' : '#f9d4d1') + T(158 + j * 80, 78 + i * 60, gt, 18, '#12305c', 'middle', 700) }
+    return s + T(200, 185, 'Green box = tall, red box = dwarf', 12) },
+  say: v => { const p = P[v.c]; let t = 0; for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) if (g(p[i], p[2 + j]).includes('T')) t++
+    return t + ' out of 4 offspring are tall and ' + (4 - t) + ' are dwarf. T is dominant: one T is enough to make the plant tall.' } } })())</script></body></html>

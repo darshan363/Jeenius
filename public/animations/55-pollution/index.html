@@ -1,0 +1,7 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>55-pollution</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [['Air', '💨', 'Cause: smoke from vehicles and factories. Prevent: public transport, planting trees, clean fuels.'],
+  ['Water', '🌊', 'Cause: sewage and factory waste in rivers. Prevent: treat waste water; do not throw garbage in water.'],
+  ['Soil', '🌱', 'Cause: plastic and chemical waste. Prevent: segregate waste, use compost, avoid plastic.']]
+  return { title: 'Pollution',
+  ctrl: [{ k: 'p', label: 'Pick a type of pollution', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => T(200, 100, D[v.p][1], 56) + T(200, 160, D[v.p][0] + ' pollution', 16, '#12305c', 'middle', 700),
+  say: v => D[v.p][2] } })())</script></body></html>

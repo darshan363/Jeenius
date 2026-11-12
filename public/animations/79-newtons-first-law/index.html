@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Newton's First Law · Jeenius</title>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/lesson-theme.css"></head><body><script src="../_shared/physics-lab.js"></script><script>
+const G = 9.8, MU = [0.5, 0.25, 0.03, 0], SURF = ['Carpet', 'Wood floor', 'Smooth ice', 'No friction'];
+
+/* ---- tablecloth physics (real units, shown in slow motion) ---- */
+function clothInit(S) { return { t: 0, xr: 0.3, cx: 0, cv: 0, out: false, fell: false, fy: 0, fvy: 0, phase: 'wait', hold: 0 }; }
+function clothSub(m, pull, mu, h) {
+  if (m.fell) return;
+  if (!m.out) {
+    m.xr -= pull * h;
+    if (m.xr < m.cx - 0.06) m.out = true;
+    else if (m.cv > -pull) { m.cv -= mu * G * h; if (m.cv < -pull) m.cv = -pull; }
+  } else if (m.cv < 0) { m.cv += 0.3 * G * h; if (m.cv > 0) m.cv = 0; }
+  m.cx += m.cv * h;
+  if (Math.abs(m.cx) > 0.55) m.fell = true;
+}
+function clothResult(S) {
+  const m = clothInit(S); let n = 0;
+  while (n++ < 20000 && !m.fell && !(m.out && m.cv === 0)) clothSub(m, S.pull, S.mu, 0.001);
+  return m;
+}
+
+PhysicsLab({
+  title: "Newton's First Law", tag: 'JEENIUS · CLASS 8–9 · LAW OF INERTIA',
+  controls: [
+    { key: 'scene', scene: true, label: 'Example', options: ['Bus brakes', 'Tablecloth', 'Sliding ball'], value: 0 },
+    { key: 'speed', label: 'Bus speed', min: 20, max: 60, step: 5, value: 40, unit: ' km/h', show: S => S.scene === 0 },
+    { key: 'brake', label: 'Braking strength', min: 0, max: 10, step: 1, value: 6, unit: ' m/s²', show: S => S.scene === 0 },
+    { key: 'pull', label: 'Pull speed', min: 0.3, max: 5, step: 0.1, value: 3, unit: ' m/s', show: S => S.scene === 1 },
+    { key: 'mu', label: 'Cloth roughness μ', min: 0.05, max: 0.6, step: 0.05, value: 0.3, show: S => S.scene === 1 },
+    { key: 'surface', label: 'Surface', options: SURF, value: 1, show: S => S.scene === 2 },
+    { key: 'push', label: 'Push speed', min: 2, max: 12, step: 1, value: 8, unit: ' m/s', show: S => S.scene === 2 },
+  ],
+  init(S, M) {
+    M.t = 0; M.phase = 'cruise'; M.lean = 0; M.road = 0; M.v = S.speed / 3.6; M.dist = 0;
+    M.cloth = clothInit(S);
+    M.x = 0; M.bv = S.push; M.hold = 0; M.ang = 0;
+  },
+  step(S, M, dt) {
+    if (S.scene === 0) {
+      M.t += dt;
+      if (M.phase === 'cruise' && M.t > 1.6) { M.phase = 'brake'; M.t = 0; }
+      else if (M.phase === 'brake') {
+        const a = S.brake;
+        M.v = Math.max(0, M.v - a * dt);
+        const target = Math.min(38, a * 4.2); M.lean += (target - M.lean) * Math.min(1, dt * 7);
+        if (a === 0 && M.t > 3) { M.phase = 'stop'; M.t = 0; }
+        if (M.v === 0 && a > 0) { M.phase = 'stop'; M.t = 0; }
+      } else if (M.phase === 'stop') {
+        if (M.t > .5) M.lean += (0 - M.lean) * Math.min(1, dt * 2.5);
+        if (M.t > 2.4) { M.phase = 'cruise'; M.t = 0; M.v = S.speed / 3.6; M.lean = 0; }
+      }
+      M.road += M.v * dt * 70;
+    } else if (S.scene === 1) {
+      const m = M.cloth;
+      if (m.phase === 'wait') { m.t += dt; if (m.t > .9) { m.phase = 'run'; m.t = 0; } }
+      else if (m.phase === 'run') {
+        const real = dt * 0.3, subs = Math.max(1, Math.ceil(real / 0.0005));
+        for (let i = 0; i < subs; i++) clothSub(m, S.pull, S.mu, real / subs);
+        if (m.fell) { m.fvy += 900 * dt; m.fy += m.fvy * dt; if (m.fy > 200) m.phase = 'hold'; }
+        else if (m.out && m.cv === 0) m.phase = 'hold';
+      } else { m.hold += dt; if (m.hold > 1.8) M.cloth = clothInit(S); }
+    } else {
+      const mu = MU[Math.round(S.surface)];
+      if (M.bv > 0) { M.bv = Math.max(0, M.bv - mu * G * dt); M.x += M.bv * dt; M.ang += M.bv * dt / 0.5; }
+      else { M.hold += dt; if (M.hold > 1.6) { M.x = 0; M.bv = S.push; M.hold = 0; } }
+    }
+  },
+  draw(c, S, M, h) {
+    const { T, L, R, C, A, P, E, Tag, N, B, W, GREEN, RED, GOLD, INK, GREY } = h;
+    if (S.scene === 0) {
+      const lean = M.lean * Math.PI / 180, fx = 390, fy = 318;
+      T(c, 'BUS BRAKES SUDDENLY', 28, 34, 17, 'left', 'Goldman');
+      L(c, 20, 358, 780, 358, 3); for (let x = -((M.road % 90) + 90) % 90; x < 800; x += 90) L(c, x, 398, x + 44, 398, 4, GREY);
+      R(c, 150, 130, 470, 192, B, N, 3); P(c, [[620, 175], [668, 232], [668, 322], [620, 322]], B, N, 3);
+      for (let i = 0; i < 5; i++) R(c, 172 + i * 84, 150, 62, 54, W, N, 1.5);
+      R(c, 606, 156, 44, 56, W, N, 1.5); L(c, 150, 322, 668, 322, 3);
+      C(c, 245, 336, 30, N, N); C(c, 245, 336, 12, W, N); C(c, 545, 336, 30, N, N); C(c, 545, 336, 12, W, N);
+      const hip = [fx + Math.sin(lean / 2) * 46, fy - Math.cos(lean / 2) * 46];
+      const sh = [hip[0] + Math.sin(lean) * 80, hip[1] - Math.cos(lean) * 80];
+      const hd = [sh[0] + Math.sin(lean) * 26, sh[1] - Math.cos(lean) * 26];
+      L(c, fx - 12, fy, hip[0] - 5, hip[1], 11, INK); L(c, fx + 12, fy, hip[0] + 5, hip[1], 11, INK);
+      L(c, hip[0], hip[1], sh[0], sh[1], 24, '#3f6fb5'); L(c, sh[0], sh[1] + 6, sh[0] + 22 + Math.sin(lean) * 26, sh[1] + 52, 9, '#f1c9a0');
+      C(c, hd[0], hd[1], 19, '#f1c9a0', INK, 2.5);
+      A(c, 300, 100, 300 + Math.min(170, M.v * 10), 100, 6, GREEN); Tag(c, 'bus speed', 300, 86, GREEN, 'left');
+      if (M.phase === 'brake' && M.v > 0 && S.brake > 0) {
+        A(c, 735, 285, 672, 285, 7, RED); Tag(c, 'brakes', 735, 268, RED, 'right');
+        A(c, hd[0] + 28, hd[1], hd[0] + 100, hd[1], 7, GREEN); Tag(c, 'upper body keeps moving', hd[0] + 40, hd[1] - 30, GREEN, 'left');
+        A(c, fx + 10, fy + 24, fx - 50, fy + 24, 6, RED); Tag(c, 'floor slows the feet', fx - 56, fy + 52, RED, 'right', 13);
+      } else if (M.phase === 'cruise' || (M.phase === 'brake' && S.brake === 0)) {
+        Tag(c, 'Bus and passenger move together', 400, 436, N);
+      }
+    } else if (S.scene === 1) {
+      const m = M.cloth, px = 400, k = 400, y0 = 320;
+      T(c, 'PULL THE TABLECLOTH', 28, 34, 17, 'left', 'Goldman');
+      R(c, 150, y0, 500, 18, '#d9b98a', N, 3); R(c, 176, y0 + 18, 18, 84, '#d9b98a', N, 3); R(c, 606, y0 + 18, 18, 84, '#d9b98a', N, 3); L(c, 90, y0 + 102, 710, y0 + 102, 3);
+      const xr = px + m.xr * k, xl = xr - 1.0 * k;
+      R(c, xl, y0 - 6, xr - xl, 6, GOLD, N, 1.5);
+      A(c, xl + 6, y0 - 40, xl - 60, y0 - 40, 7, N); Tag(c, 'pull', xl - 20, y0 - 56, N);
+      const cx = px + m.cx * k, cy = y0 - 6 + m.fy;
+      c.save(); c.translate(cx, cy); c.rotate(m.fell ? m.fy / 110 : 0);
+      P(c, [[-34, -64], [34, -64], [26, 0], [-26, 0]], W, N, 3); E(c, 0, -64, 34, 7, B, N, 2); c.restore();
+      if (!m.out && m.phase === 'run' && !m.fell) { A(c, cx, cy - 24, cx - Math.min(80, S.mu * 160), cy - 24, 6, RED); Tag(c, 'friction', cx - 20, cy - 84, RED); }
+      if (m.phase === 'hold' && !m.fell) Tag(c, Math.abs(m.cx) * 100 < 3 ? 'Cup stays almost where it was' : 'Cup moved ' + (Math.abs(m.cx) * 100).toFixed(0) + ' cm', 400, 200, GREEN, 'center', 17);
+      if (m.fell) Tag(c, 'Cup falls: the cloth carried it along', 400, 200, RED, 'center', 17);
+      T(c, 'SLOW MOTION ×0.3', 772, 436, 12, 'right', 'Saira', GREY);
+    } else {
+      const mu = MU[Math.round(S.surface)], gy = 340, bx = 250, sc = 40;
+      T(c, 'SLIDING BALL', 28, 34, 17, 'left', 'Goldman');
+      const fills = ['#cfd9ea', '#e6c9a0', '#dff3fb', '#f4f6fa'];
+      R(c, 0, gy, 800, 110, fills[Math.round(S.surface)], null); L(c, 0, gy, 800, gy, 4);
+      for (let m = Math.floor(M.x - 7); m < M.x + 15; m++) { const x = bx + (m - M.x) * sc; if (x < -5 || x > 805) continue; L(c, x, gy, x, gy + (m % 5 === 0 ? 18 : 9), m % 5 === 0 ? 2.5 : 1.2); if (m % 5 === 0) T(c, m + ' m', x, gy + 40, 13, 'center'); }
+      if (S.surface === 2) for (let i = 0; i < 4; i++) L(c, 60 + i * 190, gy + 74, 120 + i * 190, gy + 62, 3, '#fff');
+      C(c, bx, gy - 30, 30, '#ee8d57', N, 3); L(c, bx + Math.cos(M.ang) * 28, gy - 30 + Math.sin(M.ang) * 28, bx - Math.cos(M.ang) * 28, gy - 30 - Math.sin(M.ang) * 28, 3, N);
+      if (M.bv > 0.01) { A(c, bx + 44, gy - 100, bx + 44 + Math.min(260, M.bv * 20), gy - 100, 7, GREEN); Tag(c, 'velocity', bx + 44, gy - 116, GREEN, 'left'); }
+      if (mu > 0 && M.bv > 0.01) { A(c, bx - 36, gy - 30, bx - 36 - mu * 110 - 14, gy - 30, 7, RED); Tag(c, 'friction', bx - 40 - mu * 110, gy - 50, RED, 'right'); }
+      if (mu === 0) Tag(c, 'No net force: the ball never slows down', 400, 200, GREEN, 'center', 17);
+      else if (M.bv === 0) Tag(c, 'Friction stopped the ball', 400, 200, RED, 'center', 17);
+    }
+  },
+  readouts(S, M) {
+    if (S.scene === 0) return [['Bus speed', (M.v * 3.6).toFixed(0) + ' km/h'], ['Braking strength', S.brake + ' m/s²'], ['Upper body leans', M.lean.toFixed(0) + '°'], ['State', M.phase === 'cruise' ? 'steady speed' : M.phase === 'brake' ? 'braking' : 'stopped']];
+    if (S.scene === 1) { const m = M.cloth; return [['Pull speed', S.pull.toFixed(1) + ' m/s'], ['Friction on cup (per kg)', (S.mu * G).toFixed(2) + ' N'], ['Time cup touches moving cloth', (0.36 / S.pull).toFixed(2) + ' s'], ['Cup moved so far', (Math.abs(m.cx) * 100).toFixed(1) + ' cm']]; }
+    const mu = MU[Math.round(S.surface)];
+    return [['Speed', M.bv.toFixed(2) + ' m/s'], ['Friction force (1 kg ball)', (mu * G).toFixed(2) + ' N'], ['Distance covered', M.x.toFixed(1) + ' m'], ['Net force', mu === 0 ? '0 N' : M.bv > 0 ? (mu * G).toFixed(2) + ' N' : '0 N']];
+  },
+  formula(S, M) {
+    if (S.scene === 0) return M.phase === 'brake' && S.brake > 0 ? `Brakes act on the bus and feet. Upper body: net force ≈ 0, so its speed stays ${(S.speed).toFixed(0)} km/h for a moment: you lean forward.` : `Steady speed: net force = 0, so velocity stays ${S.speed} km/h.`;
+    if (S.scene === 1) { const tc = 0.36 / S.pull; return `Friction time = distance ÷ speed = 0.36 ÷ ${S.pull.toFixed(1)} = ${tc.toFixed(2)} s;  speed given to cup = μg × time = ${(S.mu * G).toFixed(2)} × ${tc.toFixed(2)} = ${(S.mu * G * tc).toFixed(2)} m/s`; }
+    const mu = MU[Math.round(S.surface)];
+    return mu === 0 ? `Net force = 0 N, so velocity stays ${S.push} m/s forever` : `Friction = μ × m × g = ${mu} × 1 × 9.8 = ${(mu * G).toFixed(2)} N;  a = F ÷ m = ${(mu * G).toFixed(2)} m/s² (slowing)`;
+  },
+  logic(S) {
+    return ['A body keeps its speed and direction unless a net force acts on it. The feet are slowed by the floor, but the upper body keeps moving forward.',
+      'Fast pull: friction acts for a very short time, so the cup hardly changes its state of rest. Slow pull: friction acts longer and the cup is dragged along.',
+      'Less friction means less net force, so the ball slows down more slowly. With zero net force it never slows down.'][S.scene];
+  },
+  results(S) {
+    if (S.scene === 0) { const v = S.speed / 3.6; return [['Body leans', Math.min(38, S.brake * 4.2).toFixed(0) + '°'], ['Bus stops in', S.brake > 0 ? (v * v / (2 * S.brake)).toFixed(1) + ' m' : 'never (no braking)']]; }
+    if (S.scene === 1) { const m = clothResult(S); return [['Cup', m.fell ? 'falls off with the cloth' : 'stays on the table'], ['Cup moves', m.fell ? '—' : (Math.abs(m.cx) * 100).toFixed(1) + ' cm']]; }
+    const mu = MU[Math.round(S.surface)], d = mu ? S.push * S.push / (2 * mu * G) : null;
+    return [['Ball stops after', d === null ? 'never' : d.toFixed(1) + ' m'], ['Time to stop', d === null ? 'never' : (S.push / (mu * G)).toFixed(1) + ' s']];
+  },
+});
+</script></body></html>

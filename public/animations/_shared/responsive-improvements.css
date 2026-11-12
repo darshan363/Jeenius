@@ -1,0 +1,179 @@
+/**
+ * Responsive improvements for Jeenius animations
+ * Preserves all colors, fonts, and design identity
+ * Fixes text overflow and mobile layout issues
+ */
+
+/* Enhanced formula box - better line wrapping */
+#fx {
+  font: 600 14px/1.65 Goldman, sans-serif;
+  background: #e6eeff;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border-left: 4px solid #013062;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+  min-height: 2.5em;
+}
+
+/* Readout values - prevent overflow */
+#ro b {
+  font-size: 13px;
+  text-align: right;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 58%;
+  flex-shrink: 0;
+}
+
+#ro div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px dashed rgba(1, 48, 98, 0.4);
+  padding: 3px 0;
+  font-size: 13px;
+  min-height: 1.8em;
+}
+
+#ro span {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Better paragraph handling */
+p {
+  max-width: 70ch;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Header text improvements */
+h1 {
+  font-size: clamp(20px, 4.5vw, 34px);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+}
+
+/* Canvas container - ensure proper scaling */
+canvas {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+  touch-action: none;
+  border: 1px solid #013062;
+  background: #fff;
+  max-width: 100%;
+  height: auto;
+  image-rendering: auto;
+}
+
+/* Control labels - prevent overflow */
+.row label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.row label b {
+  font-size: 14px;
+  word-break: break-word;
+  flex-shrink: 0;
+}
+
+/* Improved mobile/tablet layout */
+@media (max-width: 860px) {
+  main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  body {
+    padding: 12px 14px 24px;
+  }
+
+  .ch {
+    padding: 12px;
+  }
+
+  #ro b {
+    max-width: 52%;
+    font-size: 12px;
+  }
+
+  #ro div {
+    font-size: 12px;
+  }
+
+  #fx {
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 9px 11px;
+  }
+
+  h1 {
+    font-size: clamp(18px, 5vw, 28px);
+  }
+
+  h2 {
+    font-size: 12px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .g {
+    font-size: 10px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  body {
+    padding: 10px 10px 20px;
+  }
+
+  h1 {
+    font-size: clamp(17px, 6vw, 24px);
+  }
+
+  #ro b {
+    max-width: 48%;
+    font-size: 11px;
+  }
+
+  #ro div {
+    font-size: 11px;
+    gap: 6px;
+  }
+
+  #fx {
+    font-size: 12px;
+    line-height: 1.75;
+  }
+
+  .row label {
+    font-size: 12px;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

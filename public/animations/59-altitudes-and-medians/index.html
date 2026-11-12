@@ -1,0 +1,5 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>59-altitudes-and-medians</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => ({ title: 'Altitude and Median of a Triangle',
+  ctrl: [{ k: 'x', label: 'Move the top vertex sideways', min: 10, max: 90, step: 5, val: 30 }],
+  draw: v => { const px = 60 + v.x / 100 * 280; return '<polygon points="60,160 340,160 ' + px + ',40" fill="#eaf1fb" stroke="#0b3a75" stroke-width="2"/>' + L(px, 40, 200, 160, '#2a6fa8', 3) + L(px, 40, px, 160, '#e0574f', 3)
+    + T(200, 178, 'M (midpoint of base)', 11) + T(px, 32, 'P', 13) + T(80, 195, 'Blue = median   Red = altitude', 12) },
+  say: v => v.x == 50 ? 'This triangle is isosceles on this base, so the median and the altitude fall on the same line.' : 'The median goes to the midpoint of the base. The altitude drops at a right angle. Here they are different lines.' }))())</script></body></html>

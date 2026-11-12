@@ -1,0 +1,7 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>53-substances-in-common-use</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [['Baking soda', 'NaHCO3', 'Sodium hydrogen carbonate. Used in cooking and antacids; gives off carbon dioxide when heated, so cakes become soft.'],
+  ['Washing soda', 'Na2CO3', 'Sodium carbonate. Used to wash clothes and to soften hard water.'], ['Bleaching powder', 'CaOCl2', 'Calcium oxychloride. Used to disinfect drinking water and bleach cloth.'],
+  ['Plaster of Paris', 'CaSO4·½H2O', 'Calcium sulphate hemihydrate. Mixed with water it sets hard; used for casts on broken bones and for statues.']]
+  return { title: 'Substances in Common Use',
+  ctrl: [{ k: 's', label: 'Pick a substance', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => R(100, 40, 200, 110, '#eaf1fb', '#0b3a75', 12) + T(200, 85, D[v.s][0], 18, '#12305c', 'middle', 700) + T(200, 120, D[v.s][1], 16, '#13498f'),
+  say: v => D[v.s][2] } })())</script></body></html>

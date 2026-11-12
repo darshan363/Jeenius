@@ -1,0 +1,7 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>54-measurement-of-matter</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const A = { H: 1, C: 12, N: 14, O: 16, Na: 23, Cl: 35.5 }
+  const D = [['H2O', [['H', 2], ['O', 1]]], ['CO2', [['C', 1], ['O', 2]]], ['NaCl', [['Na', 1], ['Cl', 1]]], ['NH3', [['N', 1], ['H', 3]]]]
+  const mass = m => m[1].reduce((s, a) => s + A[a[0]] * a[1], 0)
+  return { title: 'Measurement of Matter: Molecular Mass',
+  ctrl: [{ k: 'm', label: 'Pick a substance', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => { let s = T(200, 28, D[v.m][0], 18, '#12305c', 'middle', 700); D[v.m][1].forEach((a, i) => { s += R(40 + i * 150, 60, 130, 60, '#eaf1fb') + T(105 + i * 150, 85, a[1] + ' × ' + a[0], 15) + T(105 + i * 150, 108, a[1] + ' × ' + A[a[0]] + ' = ' + a[1] * A[a[0]], 13) }); return s + T(200, 165, 'Molecular mass = ' + mass(D[v.m]) + ' u', 16, '#12305c', 'middle', 700) },
+  say: v => 'Add the atomic masses of all atoms: ' + D[v.m][1].map(a => a[1] + '×' + A[a[0]]).join(' + ') + ' = ' + mass(D[v.m]) + ' u.' } })())</script></body></html>

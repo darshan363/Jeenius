@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta http-equiv="Cache-Control" content="no-store"><title>JEENIUS | Account setup</title>
+<style>
+:root{--navy:#013062;--pale:#e6eeff;--line:#dce5f2;--ink:#17375f;--muted:#6b7f9c;--panel:#f8faff;--blue:#2367c9;--danger:#b42318;--success:#147a45}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(135deg,#f4f8ff,#e6eeff 52%,#f8faff);color:var(--ink);font-family:Arial,Helvetica,sans-serif;padding:22px}.shell{max-width:820px;margin:0 auto}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:6px 0 25px}.brand{display:flex;gap:10px;align-items:center;color:var(--navy);font-size:26px;font-weight:850;letter-spacing:-.8px}.brand img{width:38px;height:38px;object-fit:contain}.top a,.link{color:var(--blue);text-decoration:none;font-weight:700;font-size:13px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:16px;box-shadow:0 15px 42px #0130620c}h1{font-size:28px;letter-spacing:-.8px;color:var(--navy);margin:0 0 8px}h2{font-size:18px;color:var(--navy);margin:0 0 8px}p{margin:0 0 16px;line-height:1.55;color:var(--muted);font-size:14px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--blue)}.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:22px 0 10px}.step{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px;min-height:88px}.step .num{font-weight:800;font-size:12px;color:var(--blue)}.step strong{display:block;font-size:13px;margin-top:7px}.status{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:750;background:#f1f4f9;color:var(--muted);margin:4px 5px 6px 0}.status.ok{background:#e8f7ef;color:var(--success)}.status.wait{background:#fff5df;color:#875b08}.primary,.secondary{border-radius:10px;min-height:45px;padding:0 16px;font-size:13px;font-weight:750;cursor:pointer}.primary{border:0;background:var(--navy);color:#fff}.secondary{border:1px solid var(--line);background:#fff;color:var(--navy)}.primary:disabled,.secondary:disabled{opacity:.6;cursor:wait}.message{display:none;padding:12px;background:#f3f6fb;border-radius:10px;font-size:13px;margin:14px 0;line-height:1.5;overflow-wrap:anywhere}.message.show{display:block}.message.error{background:#fff0ef;color:var(--danger)}.message.success{background:#e8f7ef;color:var(--success)}.small{font-size:12px}.fine{font-size:12px;color:var(--muted);margin-top:18px}.field{margin:14px 0}.field label{display:block;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:7px}.field input,.field select{display:block;width:100%;min-height:45px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;color:var(--ink);background:white}.field input:focus,.field select:focus{outline:2px solid #9fc1f8;border-color:var(--blue)}.hidden{display:none!important}.notice{padding:12px;background:#f3f6fb;border:1px solid var(--line);border-radius:10px;margin:14px 0;font-size:13px;line-height:1.55}.form-actions{display:flex;gap:8px;flex-wrap:wrap}.form-actions button{margin:0}.role-picker{margin:18px 0 12px}.role-picker h2{margin-bottom:5px}.role-intro{font-size:13px!important;margin-bottom:12px}.role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.role-card{appearance:none;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:6px;min-height:122px;color:var(--ink);cursor:pointer;transition:border-color .15s,box-shadow .15s,background .15s}.role-card:hover{border-color:#9bb9e9}.role-card[aria-pressed="true"]{border-color:var(--blue);background:#f2f7ff;box-shadow:0 0 0 3px #2367c91a}.role-card .role-icon{font-size:25px}.role-card strong{font-size:15px;color:var(--navy)}.role-card small{font-size:12px;color:var(--muted);line-height:1.4}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-link{display:none;margin-top:14px}
+@media(max-width:600px){body{padding:14px}.card{padding:20px 17px}.top{align-items:flex-start}.steps{grid-template-columns:1fr}.step{min-height:unset}h1{font-size:24px}.role-grid,.grid-2{grid-template-columns:1fr}.role-card{min-height:unset}.primary{width:100%}.form-actions{display:grid;grid-template-columns:1fr}.field input,.field select{font-size:16px}}
+</style></head><body><main class="shell"><header class="top"><div class="brand"><img src="/brand/geini-happy.png" alt=""><span>JEENIUS</span></div><div class="top-links"><a href="/" id="back-link" hidden>← Back</a><a href="#" id="logout">Log out ↗</a></div></header>
+<section class="card"><div class="eyebrow">Account setup</div><h1>Personalise your learning</h1><p>Tell us your name, class and how you’ll use JEENIUS. If you’re under 18, add a parent or guardian email. An administrator approves each account.</p>
+<div class="steps"><div class="step"><span class="num">01</span><strong>Your email</strong><div id="email-status" class="status">Checking…</div></div><div class="step"><span class="num">02</span><strong>Profile and parent email</strong><div id="age-status" class="status">Checking…</div></div><div class="step"><span class="num">03</span><strong>Admin approval</strong><div id="admin-status" class="status">Checking…</div></div></div>
+<div id="message" class="message" role="status" aria-live="polite"></div>
+<button id="edit-details" type="button" class="secondary hidden" style="margin-bottom:14px">Edit my details</button>
+<form id="setup-form" novalidate>
+<div class="grid-2"><div class="field"><label for="student-name">Your name</label><input id="student-name" name="name" maxlength="100" autocomplete="name" required placeholder="Enter your name"></div><div class="field"><label for="standard">Your standard / class</label><select id="standard" name="standard" required><option value="" disabled selected>Select your class</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="multiple">Teacher / multiple classes</option></select></div></div>
+<div class="role-picker" aria-labelledby="role-heading"><h2 id="role-heading">How will you use JEENIUS?</h2><p class="role-intro">Choose the experience that fits you best.</p><div class="role-grid" role="group" aria-label="Choose account role"><button type="button" class="role-card" data-role="teacher" aria-pressed="false"><span class="role-icon" aria-hidden="true">🧑‍🏫</span><strong>As a teacher</strong><small>Use JEENIUS to teach students.</small></button><button type="button" class="role-card" data-role="learner" aria-pressed="false"><span class="role-icon" aria-hidden="true">📘</span><strong>As a learner</strong><small>Use JEENIUS to learn and check your understanding.</small></button></div><div id="role-saved" class="status">Choose a role to continue.</div></div>
+<div class="field" id="age-field"><label for="student-age">Your age (in years)</label><input id="student-age" name="age" type="number" min="1" max="120" step="1" inputmode="numeric" placeholder="Enter your age"></div>
+<div id="parent-fields" class="hidden"><div class="notice"><strong>Parent/guardian contact</strong><br>Enter an email address that belongs to your parent or guardian. It is stored as a contact address only.</div><div class="field"><label for="parent-email">Parent/guardian email</label><input id="parent-email" name="parent_email" type="email" maxlength="254" autocomplete="email" placeholder="parent@example.com"></div></div>
+<div class="notice"><strong>Privacy and approval:</strong> JEENIUS stores your name, class/standard and account role so Geini can tailor explanations. For users under 18, the parent email is stored as an unverified contact address only. It does not confirm guardian identity or consent.</div>
+<div class="form-actions"><button id="save-btn" type="submit" class="primary">Save and continue →</button><button id="refresh-btn" type="button" class="secondary">Refresh status ↻</button></div></form>
+<a class="link admin-link" id="admin-link" href="/admin.html">Open admin panel →</a><p class="fine">Age is self-declared. Access stays behind administrator approval.</p></section>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),form=$('setup-form'),nameInput=$('student-name'),standardInput=$('standard'),ageInput=$('student-age'),parentEmail=$('parent-email'),parentFields=$('parent-fields'),saveBtn=$('save-btn');
+const editMode=new URLSearchParams(location.search).get('edit')==='1';
+let me=null,selectedRole=null,pollTimer=null,wantsEdit=editMode;
+function show(text,type=''){const m=$('message');m.textContent=text;m.className='message show '+type}
+function status(id,label,ok,waiting=false){const e=$(id);e.textContent=label;e.className='status '+(ok?'ok':waiting?'wait':'')}
+async function api(url,opts={}){const r=await fetch(url,{cache:'no-store',credentials:'same-origin',headers:{Accept:'application/json',...(opts.body?{'Content-Type':'application/json'}:{})},...opts});const d=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data:d}}
+function setRole(role){
+  selectedRole=role==='teacher'||role==='learner'?role:null;
+  document.querySelectorAll('.role-card').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===selectedRole)));
+  $('role-saved').textContent=selectedRole?(selectedRole==='teacher'?'Selected: As a teacher.':'Selected: As a learner.'):'Choose a role to continue.';
+  standardInput.querySelector('option[value="multiple"]').disabled=selectedRole!=='teacher';
+  // Switching teacher → learner needs a real class; switching learner → teacher can keep "multiple classes".
+  if(selectedRole==='learner'&&standardInput.value==='multiple')standardInput.value='';
+  if(selectedRole==='teacher'&&!standardInput.value)standardInput.value='multiple';
+}
+document.querySelectorAll('.role-card').forEach(b=>b.addEventListener('click',()=>{if(roleLocked)return;setRole(b.dataset.role)}));
+let roleLocked=false;
+function lockRole(){roleLocked=!!(me&&(me.account_role==='teacher'||me.account_role==='learner'));document.querySelectorAll('.role-card').forEach(b=>{b.disabled=roleLocked&&b.dataset.role!==me.account_role;b.style.opacity=roleLocked&&b.dataset.role!==me.account_role?'.45':'';b.style.cursor=roleLocked?'default':''});if(roleLocked)$('role-saved').textContent='Your role is fixed as '+(me.account_role==='teacher'?'a teacher':'a learner')+' and cannot be changed. Ask the administrator if it is wrong.'}
+function updateParentField(){
+  const ageDone=!!(me&&me.age_verified),n=Number(ageInput.value);
+  const under18=!ageDone&&Number.isInteger(n)&&n>=1&&n<18;
+  parentFields.classList.toggle('hidden',!under18);parentEmail.required=under18;
+}
+ageInput.addEventListener('input',updateParentField);
+function stopPolling(){clearInterval(pollTimer);pollTimer=null}
+function startPolling(){if(pollTimer)return;pollTimer=setInterval(()=>{if(!document.hidden)refresh(true).catch(()=>{})},6000)}
+async function refresh(quiet=false){
+  const r=await api('/api/auth/me');
+  if(!r.data.authenticated||!r.data.user){location.replace('/auth.html');return}
+  me=r.data.user;window._isAdmin=!!r.data.is_admin;
+  const ageDone=!!me.age_verified,profileReady=!!(me.name&&me.standard&&me.account_role);
+  status('email-status',me.email_verified?'Verified':'Not verified',!!me.email_verified,!me.email_verified);
+  status('age-status',ageDone?(me.age_category==='under-18-parent-email-provided'?'Parent email saved':'Age declared'):'Required',ageDone,!ageDone);
+  status('admin-status',me.admin_approved?'Approved':'Pending approval',!!me.admin_approved,!me.admin_approved);
+  $('admin-link').style.display=window._isAdmin?'inline-block':'none';
+  $('back-link').hidden=!(r.data.access_ready&&wantsEdit);
+  if(me.email_verified&&ageDone&&profileReady&&me.admin_approved&&!wantsEdit){
+    stopPolling();location.replace(me.account_role==='teacher'?'/teacher-plan.html':'/dashboard.html');return;
+  }
+  // Fill the form once (never overwrite what the person is typing during background polling).
+  if(!form.dataset.filled||!quiet){
+    nameInput.value=me.name||'';standardInput.value=me.standard||'';setRole(me.account_role||null);
+    if(me.age_category==='self-declared-18-plus')ageInput.value='18';
+    parentEmail.value=me.parent_email||'';form.dataset.filled='1';
+  }
+  lockRole();
+  $('age-field').classList.toggle('hidden',ageDone);
+  updateParentField();
+  if(ageDone&&profileReady&&!me.admin_approved&&!wantsEdit){
+    form.classList.add('hidden');startPolling();
+    show('Your details are saved. We are waiting for an administrator to approve your account. This page checks automatically — you do not need to refresh.','success');
+    $('edit-details').classList.remove('hidden');return;
+  }
+  $('edit-details').classList.add('hidden');
+  form.classList.remove('hidden');
+  if(wantsEdit&&ageDone){saveBtn.textContent='Save changes';if(!quiet)show('Update your name or class. Your role is fixed.','');return}
+  if(!me.email_verified){show('Verify your JEENIUS account email before continuing.','');return}
+  if(!quiet)show('Complete the fields below. Under-18 users add a parent/guardian email.','');
+}
+form.addEventListener('submit',async e=>{
+  e.preventDefault();if(!me)return;
+  const name=nameInput.value.trim().replace(/\s+/g,' '),standard=standardInput.value,age=Number(ageInput.value);
+  if(!name){show('Enter your name.','error');nameInput.focus();return}
+  if(!selectedRole){show('Choose “As a teacher” or “As a learner”.','error');return}
+  if(!standard||(selectedRole==='learner'&&standard==='multiple')){show('Choose your class. Learners must select Class 8 or 9.','error');standardInput.focus();return}
+  if(!me.age_verified&&(!Number.isInteger(age)||age<1||age>120)){show('Enter your age as a whole number between 1 and 120.','error');ageInput.focus();return}
+  const under18=!me.age_verified&&age<18;
+  if(under18){
+    const pe=parentEmail.value.trim().toLowerCase();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pe)){show('Enter a valid parent/guardian email address.','error');parentEmail.focus();return}
+    if(pe===String(me.email||'').toLowerCase()){show('Use a parent/guardian email different from your own.','error');parentEmail.focus();return}
+  }
+  saveBtn.disabled=true;const label=saveBtn.textContent;saveBtn.textContent='Saving…';
+  try{
+    let r=await api('/api/account/profile',{method:'POST',body:JSON.stringify({name,standard,account_role:selectedRole})});
+    if(!r.ok)throw new Error(r.data.error||'Could not save your profile.');
+    if(!me.age_verified){
+      const body={age,account_role:selectedRole};if(under18)body.parent_email=parentEmail.value.trim();
+      r=await api('/api/age/declare',{method:'POST',body:JSON.stringify(body)});
+      if(!r.ok)throw new Error(r.data.error||'Could not save your age step.');
+    }
+    wantsEdit=false;
+    if(editMode){show('Saved. Opening your home…','success');setTimeout(()=>location.replace('/'),500);return}
+    await refresh();
+  }catch(err){show(err.message||'Something went wrong. Please try again.','error')}
+  finally{saveBtn.disabled=false;saveBtn.textContent=label}
+});
+$('refresh-btn').addEventListener('click',()=>refresh().catch(()=>show('Could not refresh account status.','error')));
+$('edit-details').addEventListener('click',()=>{wantsEdit=true;stopPolling();refresh().catch(()=>{})});
+$('logout').addEventListener('click',async e=>{e.preventDefault();await api('/api/auth/logout',{method:'POST',body:JSON.stringify({})});location.replace('/auth.html')});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(true).catch(()=>{})});
+window.addEventListener('pageshow',e=>{if(e.persisted)refresh(true).catch(()=>{})});
+refresh().catch(()=>show('Could not load account status. Please retry.','error'));
+</script></body></html>

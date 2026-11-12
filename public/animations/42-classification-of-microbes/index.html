@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>42-classification-of-microbes</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [
+  ['Bacteria', 'Single cell, no true nucleus. Example: Lactobacillus turns milk into curd; Vibrio causes cholera.'],
+  ['Virus', 'Not a cell. It multiplies only inside a living host cell. Example: influenza, chickenpox.'],
+  ['Fungi', 'Yeast is single-celled; mushrooms are many-celled. Yeast makes bread rise; some fungi spoil food.'],
+  ['Protozoa', 'Single-celled, animal-like microbes. Amoeba lives in ponds; Plasmodium causes malaria.'],
+  ['Algae', 'Mostly green; they make food by photosynthesis. Example: Spirogyra in ponds.']]
+  return { title: 'Classification of Microbes',
+  ctrl: [{ k: 'm', label: 'Pick a microbe group', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => { const m = v.m; let s = ''
+    if (m == 0) s = R(140, 70, 120, 50, '#bfe3c8', '#2c7a4b', 25) + L(140, 95, 100, 80, '#2c7a4b') + L(260, 95, 300, 110, '#2c7a4b')
+    if (m == 1) { s = C(200, 95, 30, '#d9d2f2', '#5b46b3'); for (let a = 0; a < 12; a++) s += L(200 + 30 * Math.cos(a / 12 * 6.28), 95 + 30 * Math.sin(a / 12 * 6.28), 200 + 44 * Math.cos(a / 12 * 6.28), 95 + 44 * Math.sin(a / 12 * 6.28), '#5b46b3') }
+    if (m == 2) s = C(180, 95, 30, '#f3d9a8', '#a8741a') + C(225, 80, 18, '#f3d9a8', '#a8741a') + C(250, 65, 10, '#f3d9a8', '#a8741a')
+    if (m == 3) s = '<ellipse cx="200" cy="95" rx="70" ry="40" fill="#cfe6f7" stroke="#2a6fa8"/>' + C(190, 90, 10, '#2a6fa8') + C(235, 110, 6, '#fff', '#2a6fa8')
+    if (m == 4) for (let i = 0; i < 6; i++) s += R(100 + i * 33, 80, 30, 30, '#9fdc9f', '#2c7a4b', 4)
+    return s + T(200, 25, D[m][0], 16, '#12305c', 'middle', 700) + T(200, 175, m == 1 ? 'Much smaller than bacteria' : 'Seen only with a microscope', 12) },
+  say: v => D[v.m][1] } })())</script></body></html>

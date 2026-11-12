@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Human Body and Organ Systems · Jeenius</title>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0}
+body{font:15px/1.4 Saira,sans-serif;color:#013062;background:#e9e9e9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0v24' fill='none' stroke='%23013062' stroke-opacity='.13'/%3E%3C/svg%3E");padding:14px 20px 28px}
+main{max-width:1280px;margin:auto;display:grid;gap:26px;grid-template-columns:minmax(0,2fr) minmax(250px,1fr)}
+.sh{filter:drop-shadow(6px 6px 0 #013062)}
+.ch{background:#fff;padding:14px;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+.w{grid-column:1/-1}h1,h2,b,.g,button{font-family:Goldman,sans-serif;font-weight:400}
+h1{font-size:clamp(22px,4vw,34px);letter-spacing:.02em}h2{font-size:13px;border-bottom:1px solid #013062;margin:4px 0 10px;padding-bottom:3px}
+.g{font-size:11px;opacity:.75}p{max-width:70ch}
+canvas{width:100%;aspect-ratio:16/9;display:block;touch-action:none;border:1px solid #013062;background:#fff}
+.row{margin-bottom:12px}label{display:flex;justify-content:space-between;font-size:13px}label b{font-size:14px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:none;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:#013062}
+input[type=range]::-moz-range-track{height:2px;background:#013062}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-9px;background:#e6eeff;border:2px solid #013062;box-shadow:3px 3px 0 #013062;border-radius:0}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:#e6eeff;border:2px solid #013062;box-shadow:3px 3px 0 #013062;border-radius:0}
+button{font-size:13px;background:#fff;color:#013062;border:2px solid #013062;padding:8px 12px;box-shadow:3px 3px 0 #013062;cursor:pointer;border-radius:0;margin:0 8px 8px 0}
+button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #013062}button[aria-pressed=true]{background:#013062;color:#fff}
+.row button{width:100%;margin:0}:focus-visible{outline:3px dashed #013062;outline-offset:2px}
+#ro div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(1,48,98,.4);padding:3px 0;font-size:13px}#ro b{font-size:13px;text-align:right}
+#fx{font:600 14px/1.5 Goldman,sans-serif;background:#e6eeff;padding:10px 12px;margin-top:8px;border-left:4px solid #013062;overflow-wrap:anywhere}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}}
+/* JEENIUS RESPONSIVE IMPROVEMENTS - Preserves all design tokens */
+#fx{font:600 14px/1.65 Goldman,sans-serif;background:#e6eeff;padding:10px 12px;margin-top:8px;border-left:4px solid #013062;overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
+#ro b{font-size:13px;text-align:right;word-break:break-word;overflow-wrap:anywhere;max-width:58%}
+#ro div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(1,48,98,.4);padding:3px 0;font-size:13px}
+p{max-width:70ch;overflow-wrap:break-word}
+h1{font-size:clamp(20px,4.5vw,34px);letter-spacing:.02em;overflow-wrap:break-word}
+canvas{width:100%;aspect-ratio:16/9;display:block;touch-action:none;border:1px solid #013062;background:#fff;max-width:100%;height:auto}
+.row label{display:flex;justify-content:space-between;gap:8px;font-size:13px;align-items:baseline;flex-wrap:wrap}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}body{padding:12px 14px 24px}.ch{padding:12px}#ro b{max-width:52%;font-size:12px}#ro div{font-size:12px}#fx{font-size:13px;line-height:1.7}h1{font-size:clamp(18px,5vw,28px)}h2{font-size:12px}}
+@media(max-width:480px){body{padding:10px 10px 20px}h1{font-size:clamp(17px,6vw,24px)}#ro b{max-width:48%;font-size:11px}#ro div{font-size:11px;gap:6px}#fx{font-size:12px;line-height:1.75}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}#chg{font:600 14px/1.6 Goldman,sans-serif;background:#fff;padding:10px 12px;margin-top:8px;border-left:4px solid #609a83;overflow-wrap:anywhere}#chg:empty{display:none}#chg i{font-style:normal;color:#609a83}</style></head><body><main>
+<header class="sh w"><div class="ch"><div class="g">JEENIUS · CLASS 8 · MAHARASHTRA STATE BOARD · SHEET 14 OF 26</div><h1>Human Body and Organ Systems</h1></div></header>
+<section class="sh"><div class="ch"><canvas id="cv" aria-label="Human Body and Organ Systems interactive animation"></canvas></div></section>
+<aside class="sh"><div class="ch"><h2>CONTROLS</h2><div id="ctl"></div><div id="bt"></div><h2>LIVE READOUTS</h2><div id="ro"></div></div></aside>
+<footer class="sh w"><div class="ch"><span class="g">NOTE IT !!</span><div id="fx"></div><div id="chg" aria-live="polite"></div></div></footer></main><script>
+const N='#013062',B='#e6eeff',G='#e9e9e9',W='#fff',Q=new URLSearchParams(location.search),VW=800,VH=450;
+const cl=(x,a,b)=>Math.min(b,Math.max(a,x)),sin=Math.sin,cos=Math.cos,PI=Math.PI;
+const cv=document.getElementById('cv'),c=cv.getContext('2d'),S={},M={},D={"n": 14, "t": "Organ Systems", "p": [{"k": "sy", "l": "Organ system", "n": ["DIGESTIVE", "RESPIRATORY", "CIRCULATORY", "EXCRETORY"], "a": 0, "b": 3, "s": 1, "v": 0}, {"k": "p", "l": "Pathway covered", "u": " %", "a": 0, "b": 100, "s": 1, "v": 0}, {"k": "e", "l": "Activity", "n": ["REST", "WALKING", "JOGGING", "SPRINTING"], "a": 0, "b": 3, "s": 1, "v": 0}]},P=D.p;
+function fit(){const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;c.setTransform(cv.width/VW,0,0,cv.height/VH,0,0)}
+addEventListener('resize',fit);
+const L=(a,b,x,y,w=1,d=0,col=N,al=1)=>{c.globalAlpha=al;c.strokeStyle=col;c.lineWidth=w;c.setLineDash(d?[d,d]:[]);c.beginPath();c.moveTo(a,b);c.lineTo(x,y);c.stroke();c.setLineDash([]);c.globalAlpha=1};
+const T=(s,x,y,z=12,al='left',g=0,col=N)=>{c.fillStyle=col;c.font=z+'px '+(g?'Goldman':'Saira')+',sans-serif';c.textAlign=al;c.fillText(s,x,y)};
+const R=(x,y,w,h,f,s,lw=1)=>{if(f){c.fillStyle=f;c.fillRect(x,y,w,h)}if(s){c.strokeStyle=s;c.lineWidth=lw;c.strokeRect(x,y,w,h)}};
+const K=(x,y,r,f,s,lw=1)=>{c.beginPath();c.arc(x,y,r,0,7);if(f){c.fillStyle=f;c.fill()}if(s){c.strokeStyle=s;c.lineWidth=lw;c.stroke()}};
+const AR=(a,b,x,y,w=1.5)=>{if(Math.hypot(x-a,y-b)<3)return;L(a,b,x,y,w);const t=Math.atan2(y-b,x-a);c.fillStyle=N;c.beginPath();c.moveTo(x,y);c.lineTo(x-9*cos(t-.4),y-9*sin(t-.4));c.lineTo(x-9*cos(t+.4),y-9*sin(t+.4));c.fill()};
+const DIM=(a,b,x,y,s)=>{L(a,b,x,y,.8);L(a,b-5,a,b+5,.8);L(x,y-5,x,y+5,.8);T(s,(a+x)/2,b-7,11,'center',1)};
+
+const E=(x,y,rx,ry,rot,f,s,lw=1)=>{c.beginPath();c.ellipse(x,y,Math.max(.1,rx),Math.max(.1,ry),rot||0,0,7);if(f){c.fillStyle=f;c.fill()}if(s){c.strokeStyle=s;c.lineWidth=lw;c.stroke()}};
+const PG=(pts,f,s,lw=1,al=1)=>{c.globalAlpha=al;c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath();if(f){c.fillStyle=f;c.fill()}if(s){c.strokeStyle=s;c.lineWidth=lw;c.stroke()}c.globalAlpha=1};
+const WR=(s,x,y,w,z=12,lh=16,g=0)=>{c.font=z+'px '+(g?'Goldman':'Saira')+',sans-serif';let ln='',yy=y;String(s).split(' ').forEach(wd=>{const u=ln?ln+' '+wd:wd;if(c.measureText(u).width>w&&ln){T(ln,x,yy,z,'left',g);yy+=lh;ln=wd}else ln=u});if(ln){T(ln,x,yy,z,'left',g);yy+=lh}return yy};
+const ez=x=>x*x*(3-2*x);
+
+const SV=70,TV=.5,HRS=[72,90,120,160],BRS=[16,20,30,45];// CHECK: at rest cardiac output = 72 × 70 mL = 5040 mL = 5.04 L/min; air moved = 16 × 0.5 L = 8.0 L/min
+const SY=[
+{n:'DIGESTIVE',pts:[[210,86],[210,118],[210,168],[228,184],[206,202],[236,218],[184,232],[236,246],[184,260],[236,274],[262,290],[262,206],[158,206],[158,290],[210,290],[210,302]],
+st:[[0,'MOUTH','Teeth grind the food and saliva starts digesting starch.'],[1,'OESOPHAGUS','Muscles squeeze the food down by peristalsis.'],[2,'STOMACH','Acid and enzymes begin digesting proteins.'],[4,'SMALL INTESTINE','Digestion is finished and nutrients pass into the blood.'],[9,'LARGE INTESTINE','Water is absorbed; the rest becomes faeces.'],[14,'RECTUM AND ANUS','Undigested waste leaves the body.']]},
+{n:'RESPIRATORY',pts:[[210,84],[210,120],[210,160],[236,176],[254,218],[236,176],[210,160],[210,120],[210,84]],
+st:[[0,'NOSE AND THROAT','Air is warmed, filtered and moistened.'],[1,'WINDPIPE (INHALING)','Air travels down the trachea.'],[2,'BRONCHUS (INHALING)','The trachea splits into two bronchi, one for each lung.'],[3,'ALVEOLI: OXYGEN IN','Oxygen passes from the air sacs into the blood.'],[4,'ALVEOLI: CARBON DIOXIDE OUT','Carbon dioxide passes from the blood into the air sacs.'],[5,'BRONCHUS (EXHALING)','Used air flows back up.'],[6,'WINDPIPE (EXHALING)','Air with extra carbon dioxide moves up the trachea.'],[7,'NOSE (EXHALING)','Air leaves the body.']]},
+{n:'CIRCULATORY',pts:[[214,184],[190,158],[172,180],[196,200],[228,192],[246,160],[250,230],[246,330],[214,372],[176,330],[172,230],[206,194],[214,184]],
+st:[[0,'PULMONARY ARTERY','The right side of the heart pumps oxygen-poor blood to the lungs.'],[1,'LUNGS','Blood picks up oxygen and loses carbon dioxide.'],[2,'PULMONARY VEIN','Oxygen-rich blood returns to the left side of the heart.'],[3,'LEFT VENTRICLE','A strong muscle pumps blood into the aorta.'],[4,'ARTERIES','Arteries carry blood away from the heart to the body.'],[7,'BODY CELLS','Blood gives oxygen and food to cells and collects waste.'],[9,'VEINS','Veins carry blood back towards the heart.'],[11,'RIGHT ATRIUM','Blood enters the right side of the heart again.']]},
+{n:'EXCRETORY',pts:[[210,160],[234,192],[236,214],[226,246],[212,262],[212,282],[210,300]],
+st:[[0,'RENAL ARTERY','Blood carrying waste arrives at the kidneys.'],[1,'KIDNEY','The kidney filters the blood and makes urine.'],[3,'URETER','A tube carries urine down to the bladder.'],[4,'URINARY BLADDER','Urine is stored until it is released.'],[5,'URETHRA','Urine leaves the body.']]}];
+function along(pts,pc){let tot=0,ls=[];for(let i=0;i<pts.length-1;i++){const l=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);ls.push(l);tot+=l}let s=pc/100*tot,i=0;while(i<ls.length-1&&s>ls[i]){s-=ls[i];i++}const f=ls[i]?cl(s/ls[i],0,1):0;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f,seg:i,f}}
+function proj(pts,x,y){let tot=0,ls=[];for(let i=0;i<pts.length-1;i++){const l=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);ls.push(l);tot+=l}let best=1e9,bs=0,acc=0;for(let i=0;i<ls.length;i++){const a=pts[i],b=pts[i+1],dx=b[0]-a[0],dy=b[1]-a[1],u=cl(((x-a[0])*dx+(y-a[1])*dy)/(ls[i]*ls[i]||1),0,1),d=Math.hypot(x-a[0]-u*dx,y-a[1]-u*dy);if(d<best){best=d;bs=acc+u*ls[i]}acc+=ls[i]}return bs/tot*100}
+const NOTE=['Nutrients absorbed in the small intestine enter the blood.','Oxygen from the lungs is carried by the blood to every cell.','The heart and lungs work together: more activity means both speed up.','The kidneys clean the blood that the heart pumps to them.'];
+const SIM={init(S,M){M.pl=0},btns:[['PLAY / PAUSE',(S,M)=>{if(S.p>=100)S.p=0;M.pl=!M.pl}]],
+drag(S,M,x,y,f){if(x<400)S.p=Math.round(proj(SY[S.sy].pts,x,y))},
+draw(S,M,t,dt){if(M.pl){S.p=Math.min(100,S.p+dt*(6+4*S.e));if(S.p>=100)M.pl=0}
+const sy=SY[S.sy],pts=sy.pts,hr=HRS[S.e],br=BRS[S.e],co=hr*SV/1000,ve=br*TV,pos=along(pts,S.p);
+let si=0;sy.st.forEach((s,i)=>{if(pos.seg>=s[0])si=i});const stg=sy.st[si];
+// body
+PG([[152,118],[268,118],[260,205],[252,300],[168,300],[160,205]],W,N,2);
+const limb=(a,b,x,y)=>{c.lineCap='round';L(a,b,x,y,14,0,N);L(a,b,x,y,10,0,W);c.lineCap='butt'};
+limb(150,126,116,235);limb(270,126,304,235);limb(190,300,186,392);limb(230,300,234,392);K(210,78,26,W,N,2);L(210,104,210,118,10,0,N);L(210,104,210,118,6,0,W);
+const hb=1+.07*sin(t*2*PI*hr/60),lb=1+.06*sin(t*2*PI*br/60);
+if(S.sy==1||S.sy==2){E(184,206,28,52*lb,.08,G,N,2);E(238,206,28,52*lb,-.08,G,N,2)}
+if(S.sy==0)E(223,186,24,17,.5,B,N,2);
+if(S.sy==3){E(190,204,13,22,.2,G,N,2);E(232,204,13,22,-.2,G,N,2);K(212,272,15,B,N,2);L(190,226,200,262,3);L(200,262,212,262,3)}
+if(S.sy==2)E(214,188,26*hb,22*hb,.3,B,N,2);
+c.lineCap='round';for(let i=0;i<pts.length-1;i++)L(pts[i][0],pts[i][1],pts[i+1][0],pts[i+1][1],12,0,N);for(let i=0;i<pts.length-1;i++)L(pts[i][0],pts[i][1],pts[i+1][0],pts[i+1][1],8,0,B);
+// travelled part
+let pp=[[pts[0][0],pts[0][1]]];for(let i=0;i<pos.seg;i++)pp.push(pts[i+1]);pp.push([pos.x,pos.y]);for(let i=0;i<pp.length-1;i++)L(pp[i][0],pp[i][1],pp[i+1][0],pp[i+1][1],4,0,N);c.lineCap='butt';
+if(S.sy==1)for(let i=0;i<6;i++)K(248+6*cos(i*1.05),218+6*sin(i*1.05),3,W,N,1);
+let ox='';if(S.sy==2){const sg=pos.seg;let rich=sg>=2&&sg<=6;if(sg==1)rich=pos.f>.5;if(sg==7)rich=pos.f<.5;ox=rich?'OXYGEN-RICH':'OXYGEN-POOR';K(pos.x,pos.y,9,rich?N:W,N,2.5)}else K(pos.x,pos.y,9,W,N,2.5);
+c.setLineDash([3,3]);K(pos.x,pos.y,14+2*sin(t*6),null,N,1);c.setLineDash([]);
+T(sy.n,400,66,22,'left',1);
+T('STAGE '+(si+1)+' OF '+sy.st.length,400,96,11,'left',1);T(stg[1],400,126,20,'left',1);WR(stg[2]+(ox?' Blood now: '+ox+'.':''),400,152,380,14,19);
+R(400,236,380,152,null,N,1.5);T('WORKING TOGETHER',410,256,12,'left',1);
+T('HEART '+hr+' beats/min',410,282,11,'left',1);R(560,272,200,10,null,N,1);R(560,272,200*hr/200,10,N);
+T('BREATHING '+br+' /min',410,306,11,'left',1);R(560,296,200,10,null,N,1);R(560,296,200*br/60,10,N);
+T('BLOOD PUMPED '+co.toFixed(2)+' L/min     AIR MOVED '+ve.toFixed(1)+' L/min',410,332,11,'left',1);
+WR(NOTE[S.sy],410,350,360,11,15);
+const fs=S.sy==2?'Blood pumped per minute = heart rate × stroke volume = '+hr+' × '+SV+' mL = '+co.toFixed(2)+' L/min  ·  stage: '+stg[1]:S.sy==1?'Air moved per minute = breathing rate × air per breath = '+br+' × '+TV+' L = '+ve.toFixed(1)+' L/min  ·  stage: '+stg[1]:S.sy==0?'Food has travelled '+Math.round(S.p)+'% of its pathway → '+stg[1]+'. Heart pumps '+co.toFixed(2)+' L/min to carry absorbed nutrients.':'Waste pathway '+Math.round(S.p)+'% complete → '+stg[1]+'. Heart pumps '+co.toFixed(2)+' L/min through the body, including the kidneys.';
+return{r:[['System',sy.n],['Stage',stg[1]],['Pathway covered',Math.round(S.p)+' %'],['Activity',['Rest','Walking','Jogging','Sprinting'][S.e]],['Heart rate',hr+' /min'],['Breathing rate',br+' /min'],['Blood pumped',co.toFixed(2)+' L/min'],['Air moved',ve.toFixed(1)+' L/min']],f:fs,res:[['blood pumped',co,'L/min'],['air moved',ve,'L/min'],['pathway covered',S.p,'%']]}}};
+
+const S0={};
+P.forEach(p=>{if(p.t){p.a=0;p.b=1}let v=Q.get(p.k);v=(v===null||v===''||isNaN(+v))?p.v:+v;S[p.k]=cl(v,p.a,p.b);S0[p.k]=S[p.k]});
+const ctl=document.getElementById('ctl'),bt=document.getElementById('bt'),ro=document.getElementById('ro'),fx=document.getElementById('fx'),els={};
+const fv=(p,x)=>p.n?p.n[Math.round(x)]:(+x.toFixed(2))+(p.u||'');
+P.forEach(p=>{const d=document.createElement('div');d.className='row';
+d.innerHTML='<label><span>'+p.l+'</span><b></b></label>'+(p.t?'<button type="button" aria-pressed="false"></button>':'<input type="range" min="'+p.a+'" max="'+p.b+'" step="'+p.s+'" aria-label="'+p.l+'">');
+ctl.appendChild(d);const e=d.querySelector(p.t?'button':'input'),v=d.querySelector('b');els[p.k]=[e,v,p];
+if(p.t)e.onclick=()=>{S[p.k]=1-S[p.k]};else e.oninput=()=>{S[p.k]=+e.value}});
+function sync(){for(const k in els){const[e,v,p]=els[k],x=S[k],s=fv(p,x);if(p.t){e.textContent=p.n?p.n[x]:(x?'ON':'OFF');e.setAttribute('aria-pressed',x?'true':'false');v.textContent=''}else{if(+e.value!==x)e.value=x;v.textContent=s}}}
+(SIM.btns||[]).concat([['RESET',()=>{Object.assign(S,S0);SIM.init(S,M);base=null;clearTimeout(tm)}]]).forEach(a=>{const b=document.createElement('button');b.type='button';b.textContent=a[0];b.onclick=()=>a[1](S,M);bt.appendChild(b)});
+window.addEventListener("message", e => { if (e.data && e.data.type === "jeenius-params") { const q=e.data.params||{}; P.forEach(p=>{if(q[p.k]!==undefined&&!isNaN(+q[p.k]))S[p.k]=cl(+q[p.k],p.a,p.b)}); } });
+let dn=0;const xy=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*VW/r.width,(e.clientY-r.top)*VH/r.height]};
+cv.onpointerdown=e=>{dn=1;try{cv.setPointerCapture(e.pointerId)}catch(_){}SIM.drag&&SIM.drag(S,M,...xy(e),1)};
+cv.onpointermove=e=>{dn&&SIM.drag&&SIM.drag(S,M,...xy(e),0)};cv.onpointerup=cv.onpointercancel=()=>{dn=0};
+addEventListener('keydown',e=>{SIM.key&&SIM.key(S,e,M)});
+
+let dispBase=null,dispRo=null,dispTm=0,dispSnap='';
+function roMap(){const m={};(cur.r||[]).forEach(a=>m[a[0]]=String(a[1]));return m}
+function showChg(){const el=document.getElementById('chg');if(!el||!cur)return;const sn=JSON.stringify(S);
+if(!dispBase){dispBase={...S};dispRo=roMap();bres0=(cur.res||[]).map(r=>r.slice());dispSnap=sn;return}
+if(sn===dispSnap)return;dispSnap=sn;clearTimeout(dispTm);
+dispTm=setTimeout(()=>{const ch=P.filter(p=>dispBase[p.k]!==S[p.k]);if(!ch.length)return;
+const now=roMap(),res=cur.res||[];let out=[];
+res.forEach((r,i)=>{const b=bres0&&bres0[i];if(b&&Math.abs(r[1]-b[1])>1e-6)out.push(r[0]+' '+(r[1]>b[1]?'rises':'falls')+' '+(+b[1].toFixed(2))+' → '+(+r[1].toFixed(2))+' '+r[2])});
+if(!out.length){for(const k in now){if(dispRo[k]!==undefined&&dispRo[k]!==now[k])out.push(k+': '+dispRo[k]+' → '+now[k])}out=out.slice(0,3)}
+el.innerHTML='';const a=document.createElement('span');a.textContent='IF '+ch.map(p=>p.l.toLowerCase()+' '+fv(p,dispBase[p.k])+' → '+fv(p,S[p.k])).join(', ');el.append(a);
+const b=document.createElement('span');b.textContent=out.length?'  ⇒  '+out.join('; '):'  ⇒  the result stays the same';el.append(b);
+dispBase={...S};dispRo=now;bres0=res.map(r=>r.slice())},350)}
+let bres0=null;
+let last=0,tm=0,base=null,bres=[],cur={},snap='',lh='',lf='';
+function rep(){if(!base)return;const ch=P.filter(p=>base[p.k]!==S[p.k]);if(!ch.length)return;
+let s='student changed '+ch.map(p=>p.l.toLowerCase()+' '+fv(p,base[p.k])+' -> '+fv(p,S[p.k])).join(', ');
+(cur.res||[]).forEach((r,i)=>{const b=bres[i];if(b&&Math.abs(r[1]-b[1])>1e-6)s+='; '+r[0]+' '+(r[1]>b[1]?'rose':'fell')+' from '+(+b[1].toFixed(2))+' '+r[2]+' to '+(+r[1].toFixed(2))+' '+r[2]});
+base={...S};bres=(cur.res||[]).map(r=>r.slice());
+window.parent.postMessage({ type: "jeenius-event", summary: s }, "*")}
+function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+c.clearRect(0,0,VW,VH);R(0,0,VW,VH,W);
+for(let x=0;x<=VW;x+=25)L(x,0,x,VH,.5,0,N,x%100?.07:.16);for(let y=0;y<=VH;y+=25)L(0,y,VW,y,.5,0,N,y%100?.07:.16);
+cur=SIM.draw(S,M,ts/1000,dt)||{};
+R(548,404,250,44,W,N,1.5);T('SHEET '+D.n+' / 26 · '+D.t.toUpperCase(),556,423,12,'left',1);T('JEENIUS · CLASS 8 · MAHARASHTRA BOARD',556,439,9);
+sync();showChg();
+if(!base){base={...S};bres=(cur.res||[]).map(r=>r.slice())}
+const h=(cur.r||[]).map(a=>'<div><span>'+a[0]+'</span><b>'+a[1]+'</b></div>').join('');if(h!==lh){ro.innerHTML=h;lh=h}
+if(cur.f!==lf){fx.textContent=cur.f||'';lf=cur.f}
+const sn=JSON.stringify(S);if(sn!==snap){snap=sn;clearTimeout(tm);tm=setTimeout(rep,1500)}
+requestAnimationFrame(frame)}
+fit();SIM.init(S,M);requestAnimationFrame(frame);
+</script>
+
+</body></html>

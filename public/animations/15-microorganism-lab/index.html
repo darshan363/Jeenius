@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Microorganism Lab · Jeenius</title>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0}
+body{font:15px/1.4 Saira,sans-serif;color:#013062;background:#e9e9e9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0v24' fill='none' stroke='%23013062' stroke-opacity='.13'/%3E%3C/svg%3E");padding:14px 20px 28px}
+main{max-width:1280px;margin:auto;display:grid;gap:26px;grid-template-columns:minmax(0,2fr) minmax(250px,1fr)}
+.sh{filter:drop-shadow(6px 6px 0 #013062)}
+.ch{background:#fff;padding:14px;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+.w{grid-column:1/-1}h1,h2,b,.g,button{font-family:Goldman,sans-serif;font-weight:400}
+h1{font-size:clamp(22px,4vw,34px);letter-spacing:.02em}h2{font-size:13px;border-bottom:1px solid #013062;margin:4px 0 10px;padding-bottom:3px}
+.g{font-size:11px;opacity:.75}p{max-width:70ch}
+canvas{width:100%;aspect-ratio:16/9;display:block;touch-action:none;border:1px solid #013062;background:#fff}
+.row{margin-bottom:12px}label{display:flex;justify-content:space-between;font-size:13px}label b{font-size:14px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:none;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:#013062}
+input[type=range]::-moz-range-track{height:2px;background:#013062}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-9px;background:#e6eeff;border:2px solid #013062;box-shadow:3px 3px 0 #013062;border-radius:0}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:#e6eeff;border:2px solid #013062;box-shadow:3px 3px 0 #013062;border-radius:0}
+button{font-size:13px;background:#fff;color:#013062;border:2px solid #013062;padding:8px 12px;box-shadow:3px 3px 0 #013062;cursor:pointer;border-radius:0;margin:0 8px 8px 0}
+button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #013062}button[aria-pressed=true]{background:#013062;color:#fff}
+.row button{width:100%;margin:0}:focus-visible{outline:3px dashed #013062;outline-offset:2px}
+#ro div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(1,48,98,.4);padding:3px 0;font-size:13px}#ro b{font-size:13px;text-align:right}
+#fx{font:600 14px/1.5 Goldman,sans-serif;background:#e6eeff;padding:10px 12px;margin-top:8px;border-left:4px solid #013062;overflow-wrap:anywhere}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}}
+/* JEENIUS RESPONSIVE IMPROVEMENTS - Preserves all design tokens */
+#fx{font:600 14px/1.65 Goldman,sans-serif;background:#e6eeff;padding:10px 12px;margin-top:8px;border-left:4px solid #013062;overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
+#ro b{font-size:13px;text-align:right;word-break:break-word;overflow-wrap:anywhere;max-width:58%}
+#ro div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(1,48,98,.4);padding:3px 0;font-size:13px}
+p{max-width:70ch;overflow-wrap:break-word}
+h1{font-size:clamp(20px,4.5vw,34px);letter-spacing:.02em;overflow-wrap:break-word}
+canvas{width:100%;aspect-ratio:16/9;display:block;touch-action:none;border:1px solid #013062;background:#fff;max-width:100%;height:auto}
+.row label{display:flex;justify-content:space-between;gap:8px;font-size:13px;align-items:baseline;flex-wrap:wrap}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}body{padding:12px 14px 24px}.ch{padding:12px}#ro b{max-width:52%;font-size:12px}#ro div{font-size:12px}#fx{font-size:13px;line-height:1.7}h1{font-size:clamp(18px,5vw,28px)}h2{font-size:12px}}
+@media(max-width:480px){body{padding:10px 10px 20px}h1{font-size:clamp(17px,6vw,24px)}#ro b{max-width:48%;font-size:11px}#ro div{font-size:11px;gap:6px}#fx{font-size:12px;line-height:1.75}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}#chg{font:600 14px/1.6 Goldman,sans-serif;background:#fff;padding:10px 12px;margin-top:8px;border-left:4px solid #609a83;overflow-wrap:anywhere}#chg:empty{display:none}#chg i{font-style:normal;color:#609a83}</style></head><body><main>
+<header class="sh w"><div class="ch"><div class="g">JEENIUS </div><h1>Microorganism Lab</h1></div></header>
+<section class="sh"><div class="ch"><canvas id="cv" aria-label="Microorganism Lab interactive animation"></canvas></div></section>
+<aside class="sh"><div class="ch"><h2>CONTROLS</h2><div id="ctl"></div><div id="bt"></div><h2>LIVE READOUTS</h2><div id="ro"></div></div></aside>
+<footer class="sh w"><div class="ch"><span class="g">Note It !!</span><div id="fx"></div><div id="chg" aria-live="polite"></div></div></footer></main><script>
+const N='#013062',B='#e6eeff',G='#e9e9e9',W='#fff',Q=new URLSearchParams(location.search),VW=800,VH=450;
+const cl=(x,a,b)=>Math.min(b,Math.max(a,x)),sin=Math.sin,cos=Math.cos,PI=Math.PI;
+const cv=document.getElementById('cv'),c=cv.getContext('2d'),S={},M={},D={"n": 15, "t": "Microorganism Lab", "p": [{"k": "sp", "l": "Specimen", "n": ["BACTERIUM", "PARAMECIUM", "YEAST", "SPIROGYRA"], "a": 0, "b": 3, "s": 1, "v": 0}, {"k": "m", "l": "Magnification", "n": ["40×", "100×", "400×", "1000×"], "a": 0, "b": 3, "s": 1, "v": 2}, {"k": "gr", "l": "Reproduction", "t": 1, "n": ["STILL", "DIVIDING"], "v": 0}]},P=D.p;
+function fit(){const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;c.setTransform(cv.width/VW,0,0,cv.height/VH,0,0)}
+addEventListener('resize',fit);
+const L=(a,b,x,y,w=1,d=0,col=N,al=1)=>{c.globalAlpha=al;c.strokeStyle=col;c.lineWidth=w;c.setLineDash(d?[d,d]:[]);c.beginPath();c.moveTo(a,b);c.lineTo(x,y);c.stroke();c.setLineDash([]);c.globalAlpha=1};
+const T=(s,x,y,z=12,al='left',g=0,col=N)=>{c.fillStyle=col;c.font=z+'px '+(g?'Goldman':'Saira')+',sans-serif';c.textAlign=al;c.fillText(s,x,y)};
+const R=(x,y,w,h,f,s,lw=1)=>{if(f){c.fillStyle=f;c.fillRect(x,y,w,h)}if(s){c.strokeStyle=s;c.lineWidth=lw;c.strokeRect(x,y,w,h)}};
+const K=(x,y,r,f,s,lw=1)=>{c.beginPath();c.arc(x,y,r,0,7);if(f){c.fillStyle=f;c.fill()}if(s){c.strokeStyle=s;c.lineWidth=lw;c.stroke()}};
+const AR=(a,b,x,y,w=1.5)=>{if(Math.hypot(x-a,y-b)<3)return;L(a,b,x,y,w);const t=Math.atan2(y-b,x-a);c.fillStyle=N;c.beginPath();c.moveTo(x,y);c.lineTo(x-9*cos(t-.4),y-9*sin(t-.4));c.lineTo(x-9*cos(t+.4),y-9*sin(t+.4));c.fill()};
+const DIM=(a,b,x,y,s)=>{L(a,b,x,y,.8);L(a,b-5,a,b+5,.8);L(x,y-5,x,y+5,.8);T(s,(a+x)/2,b-7,11,'center',1)};
+
+const E=(x,y,rx,ry,rot,f,s,lw=1)=>{c.beginPath();c.ellipse(x,y,Math.max(.1,rx),Math.max(.1,ry),rot||0,0,7);if(f){c.fillStyle=f;c.fill()}if(s){c.strokeStyle=s;c.lineWidth=lw;c.stroke()}};
+const PG=(pts,f,s,lw=1,al=1)=>{c.globalAlpha=al;c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath();if(f){c.fillStyle=f;c.fill()}if(s){c.strokeStyle=s;c.lineWidth=lw;c.stroke()}c.globalAlpha=1};
+const WR=(s,x,y,w,z=12,lh=16,g=0)=>{c.font=z+'px '+(g?'Goldman':'Saira')+',sans-serif';let ln='',yy=y;String(s).split(' ').forEach(wd=>{const u=ln?ln+' '+wd:wd;if(c.measureText(u).width>w&&ln){T(ln,x,yy,z,'left',g);yy+=lh;ln=wd}else ln=u});if(ln){T(ln,x,yy,z,'left',g);yy+=lh}return yy};
+const ez=x=>x*x*(3-2*x);
+
+const VCX=240,VCY=235,VR=150,PXMM=2*VR/18,MAG=[40,100,400,1000],TG=4;// CHECK: bacterium 3 µm at 400× -> apparent size 3 × 400 = 1200 µm = 1.20 mm (≥ 0.1 mm, visible); after 3 divisions 2^3 = 8 cells
+const SP=[{n:'Bacterium (bacillus)',g:'BACTERIA',sz:3,sl:'3 µm long',sh:'Rod-shaped, no nucleus',rp:'Binary fission',ex:'Lactobacillus turns milk into curd.'},
+{n:'Paramecium',g:'PROTOZOA',sz:150,sl:'150 µm long',sh:'Slipper-shaped, covered in cilia',rp:'Binary fission',ex:'Lives in pond water and swims with cilia.'},
+{n:'Yeast',g:'FUNGI',sz:8,sl:'8 µm across',sh:'Oval single cell',rp:'Budding',ex:'Makes dough rise by releasing carbon dioxide.'},
+{n:'Spirogyra',g:'ALGAE',sz:30,sl:'30 µm wide cells',sh:'Green filament with spiral chloroplast',rp:'Fragmentation',ex:'Common green scum on ponds; makes food by photosynthesis.'}];
+const h1=i=>{const v=Math.sin(i*12.9898)*43758.5;return v-Math.floor(v)};
+const SC=[.5,1,2,5,10,20,50,100,200,500,1000];
+const SIM={init(S,M){M.x=0;M.y=0;M.g=0;M.d=null},
+drag(S,M,x,y,f){if(f)M.d=[x,y,M.x,M.y];else if(M.d){M.x=cl(M.d[2]+x-M.d[0],-320,320);M.y=cl(M.d[3]+y-M.d[1],-320,320)}},
+draw(S,M,t,dt){const sp=SP[S.sp],mag=MAG[S.m],k=mag/1000*PXMM;
+if(S.gr){M.g+=dt;if(M.g/TG>=10)M.g=0}
+const ph=(M.g/TG)%1,nd=Math.min(10,Math.floor(M.g/TG)),cells=2**nd;
+const pi=i=>S.gr?(ph+h1(i+3))%1:h1(i+3)*.9;
+K(VCX,VCY,VR,B,N,3);c.save();c.beginPath();c.arc(VCX,VCY,VR,0,7);c.clip();
+const ox=VCX+M.x,oy=VCY+M.y,X=u=>ox+u*k,Y=u=>oy+u*k;
+if(S.sp==0){for(let i=0;i<120;i++){const ux=(h1(i)-.5)*70,uy=(h1(i+500)-.5)*70,rt=h1(i+900)*PI,p=pi(i),len=3,w=1;
+const dx=cos(rt),dy=sin(rt),rod=(cu,l)=>{c.lineCap='round';L(X(ux+dx*cu)-dx*l*k/2+w*k/2*dx,Y(uy+dy*cu)-dy*l*k/2+w*k/2*dy,X(ux+dx*cu)+dx*l*k/2-w*k/2*dx,Y(uy+dy*cu)+dy*l*k/2-w*k/2*dy,Math.max(2.5,w*k+1.5),0,N);L(X(ux+dx*cu)-dx*l*k/2+w*k/2*dx,Y(uy+dy*cu)-dy*l*k/2+w*k/2*dy,X(ux+dx*cu)+dx*l*k/2-w*k/2*dx,Y(uy+dy*cu)+dy*l*k/2-w*k/2*dy,Math.max(1,w*k-.5),0,W);c.lineCap='butt'};
+if(p<.8)rod(0,len*(1+p/.8));else{const g=(p-.8)/.2*.3;rod(-(len/2+g),len);rod(len/2+g,len)}}}
+if(S.sp==1)[[0,0,.3],[-170,90,-.5],[150,-110,.9]].forEach((q,j)=>{const pp=pi(j*7),d=pp*85,cx=q[0],cy=q[1],rt=q[2],cr=(a,b)=>[X(cx+a*cos(rt)-b*sin(rt)),Y(cy+a*sin(rt)+b*cos(rt))];
+const el=sg=>{const p=cr(sg*d,0);E(p[0],p[1],75*k,22*k,rt,W,N,2)};c.lineWidth=2;[-1,1].forEach(sg=>{const p=cr(sg*d,0);E(p[0],p[1],75*k,22*k,rt,null,N,2)});[-1,1].forEach(sg=>{const p=cr(sg*d,0);E(p[0],p[1],75*k-1.5,22*k-1.5,rt,W)});
+for(let a=0;a<36;a++){const th=a/36*2*PI,sg=Math.cos(th)>=0?1:-1,bx=sg*d+75*cos(th),by=22*sin(th),inside=Math.abs(bx-sg*d*-1)<0;const p0=cr(bx,by),p1=cr(bx+cos(th)*5*(1+.4*sin(t*9+a)),by+sin(th)*5*(1+.4*sin(t*9+a)));if(Math.abs(bx)>=Math.abs(d)||d<1)L(p0[0],p0[1],p1[0],p1[1],1)}
+[-1,1].forEach(sg=>{const p=cr(sg*d,0);E(p[0],p[1],14*k,8*k,rt,G,N,1.5);const v1=cr(sg*d-38,10),v2=cr(sg*d+38,-10);K(v1[0],v1[1],Math.max(1.5,7*k*(.6+.4*sin(t*1.5))),W,N,1);K(v2[0],v2[1],Math.max(1.5,7*k*(.6+.4*cos(t*1.5))),W,N,1)});if(pp<.01){const g1=cr(-40,12),g2=cr(-28,22);L(g1[0],g1[1],g2[0],g2[1],1.5)}});
+if(S.sp==2)for(let i=0;i<22;i++){const ux=(h1(i+40)-.5)*60,uy=(h1(i+80)-.5)*60,rt=h1(i+120)*PI,p=pi(i+9),a=4,b=3;E(X(ux),Y(uy),a*k,b*k,rt,W,N,Math.max(1.2,.4*k));
+if(p<.85){const br=p*2.2,off=a+br*.7;K(X(ux+off*cos(rt)),Y(uy+off*sin(rt)),br*k,W,N,Math.max(1.2,.4*k))}else{const br=2.2,off=a+br*.7+(p-.85)*20;K(X(ux+off*cos(rt)),Y(uy+off*sin(rt)),br*k,W,N,Math.max(1.2,.4*k))}K(X(ux),Y(uy),1*k,G,N,Math.max(1,.2*k))}
+if(S.sp==3)[[-180,-40,.1],[-140,70,-.12]].forEach((q,j)=>{const pp=pi(j*5+1),gap=pp>.5?(pp-.5)*2*30:0,rt=q[2];for(let i=0;i<5;i++){const off=i*90+(i>=3?gap:0),cu=(a,b)=>[X(q[0]+(off+a)*cos(rt)-b*sin(rt)),Y(q[1]+(off+a)*sin(rt)+b*cos(rt))];
+const P=[cu(0,-15),cu(90,-15),cu(90,15),cu(0,15)];PG(P,W,N,Math.max(1.5,.6*k));c.beginPath();for(let a=0;a<=90;a+=3){const p=cu(a,10*sin(a/90*2*PI*2.5));a?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1])}c.strokeStyle=N;c.lineWidth=Math.max(1.5,2.5*k);c.stroke();const nc=cu(45,0);K(nc[0],nc[1],4*k,G,N,Math.max(1,.5*k))}});
+c.restore();K(VCX,VCY,VR,null,N,3);
+let u=SC[0];SC.forEach(v=>{if(v*k<=110)u=v});R(VCX-VR+12,VCY+VR-34,u*k+20,24,W,N,1);L(VCX-VR+22,VCY+VR-18,VCX-VR+22+u*k,VCY+VR-18,3);T(u>=1000?'1 mm':u+' µm',VCX-VR+22,VCY+VR-24,10,'left',1);
+T(sp.n.toUpperCase(),60,66,20,'left',1);T(mag+'×',420,66,22,'right',1);
+const px=440;T('GROUP',px,100,10,'left',1);T(sp.g,px+90,100,13,'left',1);T('STRUCTURE',px,124,10,'left',1);WR(sp.sh,px+90,124,250,12,15);T('SIZE',px,152,10,'left',1);T(sp.sl,px+90,152,12);T('REPRODUCES BY',px,176,10,'left',1);T(sp.rp,px+110,176,12);T('FOUND / USED',px,200,10,'left',1);WR(sp.ex,px+110,200,230,12,15);
+T('DIVISIONS: '+nd+'    CELLS: '+cells,px,290,13,'left',1);for(let i=0;i<64;i++)K(px+6+(i%16)*14,312+Math.floor(i/16)*14,4,i<cells?N:W,N,1);if(cells>64)T('+ more cells than shown',px,382,10,'left');
+const app=sp.sz*mag/1000,vis=app>=.1;
+return{r:[['Specimen',sp.n],['Group',sp.g],['Magnification',mag+'×'],['Actual size',sp.sz+' µm'],['Apparent size',app.toFixed(2)+' mm'],['Visible to eye (≥0.1 mm)',vis?'YES':'NO'],['Reproduction',S.gr?'DIVIDING':'STILL'],['Divisions',nd],['Cells',cells]],
+f:'Apparent size = actual size × magnification = '+sp.sz+' µm × '+mag+' = '+app.toFixed(2)+' mm'+(S.gr?'   ·   after '+nd+' divisions: 2^'+nd+' = '+cells+' cells':''),res:[['apparent size',app,'mm'],['cells',cells,'']]}}};
+
+const S0={};
+P.forEach(p=>{if(p.t){p.a=0;p.b=1}let v=Q.get(p.k);v=(v===null||v===''||isNaN(+v))?p.v:+v;S[p.k]=cl(v,p.a,p.b);S0[p.k]=S[p.k]});
+const ctl=document.getElementById('ctl'),bt=document.getElementById('bt'),ro=document.getElementById('ro'),fx=document.getElementById('fx'),els={};
+const fv=(p,x)=>p.n?p.n[Math.round(x)]:(+x.toFixed(2))+(p.u||'');
+P.forEach(p=>{const d=document.createElement('div');d.className='row';
+d.innerHTML='<label><span>'+p.l+'</span><b></b></label>'+(p.t?'<button type="button" aria-pressed="false"></button>':'<input type="range" min="'+p.a+'" max="'+p.b+'" step="'+p.s+'" aria-label="'+p.l+'">');
+ctl.appendChild(d);const e=d.querySelector(p.t?'button':'input'),v=d.querySelector('b');els[p.k]=[e,v,p];
+if(p.t)e.onclick=()=>{S[p.k]=1-S[p.k]};else e.oninput=()=>{S[p.k]=+e.value}});
+function sync(){for(const k in els){const[e,v,p]=els[k],x=S[k],s=fv(p,x);if(p.t){e.textContent=p.n?p.n[x]:(x?'ON':'OFF');e.setAttribute('aria-pressed',x?'true':'false');v.textContent=''}else{if(+e.value!==x)e.value=x;v.textContent=s}}}
+(SIM.btns||[]).concat([['RESET',()=>{Object.assign(S,S0);SIM.init(S,M);base=null;clearTimeout(tm)}]]).forEach(a=>{const b=document.createElement('button');b.type='button';b.textContent=a[0];b.onclick=()=>a[1](S,M);bt.appendChild(b)});
+window.addEventListener("message", e => { if (e.data && e.data.type === "jeenius-params") { const q=e.data.params||{}; P.forEach(p=>{if(q[p.k]!==undefined&&!isNaN(+q[p.k]))S[p.k]=cl(+q[p.k],p.a,p.b)}); } });
+let dn=0;const xy=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*VW/r.width,(e.clientY-r.top)*VH/r.height]};
+cv.onpointerdown=e=>{dn=1;try{cv.setPointerCapture(e.pointerId)}catch(_){}SIM.drag&&SIM.drag(S,M,...xy(e),1)};
+cv.onpointermove=e=>{dn&&SIM.drag&&SIM.drag(S,M,...xy(e),0)};cv.onpointerup=cv.onpointercancel=()=>{dn=0};
+addEventListener('keydown',e=>{SIM.key&&SIM.key(S,e,M)});
+
+let dispBase=null,dispRo=null,dispTm=0,dispSnap='';
+function roMap(){const m={};(cur.r||[]).forEach(a=>m[a[0]]=String(a[1]));return m}
+function showChg(){const el=document.getElementById('chg');if(!el||!cur)return;const sn=JSON.stringify(S);
+if(!dispBase){dispBase={...S};dispRo=roMap();bres0=(cur.res||[]).map(r=>r.slice());dispSnap=sn;return}
+if(sn===dispSnap)return;dispSnap=sn;clearTimeout(dispTm);
+dispTm=setTimeout(()=>{const ch=P.filter(p=>dispBase[p.k]!==S[p.k]);if(!ch.length)return;
+const now=roMap(),res=cur.res||[];let out=[];
+res.forEach((r,i)=>{const b=bres0&&bres0[i];if(b&&Math.abs(r[1]-b[1])>1e-6)out.push(r[0]+' '+(r[1]>b[1]?'rises':'falls')+' '+(+b[1].toFixed(2))+' → '+(+r[1].toFixed(2))+' '+r[2])});
+if(!out.length){for(const k in now){if(dispRo[k]!==undefined&&dispRo[k]!==now[k])out.push(k+': '+dispRo[k]+' → '+now[k])}out=out.slice(0,3)}
+el.innerHTML='';const a=document.createElement('span');a.textContent='IF '+ch.map(p=>p.l.toLowerCase()+' '+fv(p,dispBase[p.k])+' → '+fv(p,S[p.k])).join(', ');el.append(a);
+const b=document.createElement('span');b.textContent=out.length?'  ⇒  '+out.join('; '):'  ⇒  the result stays the same';el.append(b);
+dispBase={...S};dispRo=now;bres0=res.map(r=>r.slice())},350)}
+let bres0=null;
+let last=0,tm=0,base=null,bres=[],cur={},snap='',lh='',lf='';
+function rep(){if(!base)return;const ch=P.filter(p=>base[p.k]!==S[p.k]);if(!ch.length)return;
+let s='student changed '+ch.map(p=>p.l.toLowerCase()+' '+fv(p,base[p.k])+' -> '+fv(p,S[p.k])).join(', ');
+(cur.res||[]).forEach((r,i)=>{const b=bres[i];if(b&&Math.abs(r[1]-b[1])>1e-6)s+='; '+r[0]+' '+(r[1]>b[1]?'rose':'fell')+' from '+(+b[1].toFixed(2))+' '+r[2]+' to '+(+r[1].toFixed(2))+' '+r[2]});
+base={...S};bres=(cur.res||[]).map(r=>r.slice());
+window.parent.postMessage({ type: "jeenius-event", summary: s }, "*")}
+function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+c.clearRect(0,0,VW,VH);R(0,0,VW,VH,W);
+for(let x=0;x<=VW;x+=25)L(x,0,x,VH,.5,0,N,x%100?.07:.16);for(let y=0;y<=VH;y+=25)L(0,y,VW,y,.5,0,N,y%100?.07:.16);
+cur=SIM.draw(S,M,ts/1000,dt)||{};
+R(548,404,250,44,W,N,1.5);T('SHEET '+D.n+' / 26 · '+D.t.toUpperCase(),556,423,12,'left',1);T('JEENIUS · CLASS 8 · MAHARASHTRA BOARD',556,439,9);
+sync();showChg();
+if(!base){base={...S};bres=(cur.res||[]).map(r=>r.slice())}
+const h=(cur.r||[]).map(a=>'<div><span>'+a[0]+'</span><b>'+a[1]+'</b></div>').join('');if(h!==lh){ro.innerHTML=h;lh=h}
+if(cur.f!==lf){fx.textContent=cur.f||'';lf=cur.f}
+const sn=JSON.stringify(S);if(sn!==snap){snap=sn;clearTimeout(tm);tm=setTimeout(rep,1500)}
+requestAnimationFrame(frame)}
+fit();SIM.init(S,M);requestAnimationFrame(frame);
+</script>
+
+
+</body></html>

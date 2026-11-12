@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free Fall · Jeenius Energy Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--ink:#17324e;--muted:#71849a;--line:#dbe4ed;--paper:#f3f7fb;--white:#fff;--blue:#4386ef;--amber:#f2a93b;--heat:#e78383;--green:#20826c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}
+.page{max-width:1440px;margin:0 auto;padding:24px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.mark{width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:19px}
+h1{font-size:clamp(22px,3vw,32px);line-height:1.05;letter-spacing:-.035em;margin:0}
+.kicker{font-size:11px;font-weight:750;letter-spacing:.14em;color:var(--muted);margin-bottom:5px}
+.planet{background:#e5edf7;border:1px solid #d5e0ec;border-radius:999px;padding:9px 13px;white-space:nowrap;font-size:12px;font-weight:750}
+.layout{display:grid;grid-template-columns:245px minmax(0,1fr) 248px;gap:16px;align-items:stretch}
+.card{background:var(--white);border:1px solid var(--line);border-radius:20px;min-width:0;box-shadow:0 5px 18px rgba(27,60,96,.035)}
+.energy{padding:18px 14px;display:flex;flex-direction:column}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:19px}
+.card-head h2{font-size:12px;letter-spacing:.13em;margin:0;font-weight:850}
+.small-muted{font-size:11px;color:var(--muted)}
+.tube-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;align-items:end}
+.tube-card{min-width:0;text-align:center}
+.energy-value{font-size:11px;color:var(--muted);font-weight:750;white-space:nowrap;letter-spacing:-.02em;margin-bottom:8px}
+.glass{height:166px;max-width:61px;margin:0 auto 9px;position:relative;border:2px solid #c5d3e2;border-top:4px solid #aebfd1;border-radius:8px 8px 24px 24px;overflow:hidden;background:linear-gradient(90deg,rgba(229,238,247,.78),rgba(255,255,255,.8) 40%,rgba(226,236,247,.65));box-shadow:inset 3px 0 0 rgba(255,255,255,.8)}
+.glass:before{content:"";position:absolute;top:-4px;left:4px;right:4px;height:5px;border-radius:50%;border:1px solid #b2c2d4;background:#f8fbff;z-index:3}
+.liquid{position:absolute;left:0;right:0;bottom:0;height:0%;border-radius:0 0 20px 20px;transition:height .08s linear;background:var(--blue)}
+.liquid:after{content:"";position:absolute;top:0;left:6px;width:4px;height:100%;background:rgba(255,255,255,.22);border-radius:4px}
+.glass.pe .liquid{background:var(--blue)}.glass.ke .liquid{background:var(--amber)}
+.stack{position:absolute;inset:0;overflow:hidden;border-radius:0 0 21px 21px}
+.seg{position:absolute;left:0;right:0;transition:height .08s linear,bottom .08s linear}
+.seg.pe{background:var(--blue)}.seg.ke{background:var(--amber)}.seg.heat{background:var(--heat)}
+.tube-label{font-size:11px;font-weight:850;letter-spacing:.045em}
+.energy-j{font-size:10px;color:var(--muted);margin-top:4px;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:8px 11px;margin-top:18px;border-top:1px solid var(--line);padding-top:13px}
+.legend span{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:10px;font-weight:700}
+.dot{width:7px;height:7px;display:inline-block;border-radius:3px}.dot.pe{background:var(--blue)}.dot.ke{background:var(--amber)}.dot.heat{background:var(--heat)}
+.energy-note{margin-top:auto;padding-top:16px;font-size:11px;color:var(--muted);line-height:1.5}
+.scene-card{padding:12px;display:flex;flex-direction:column;min-height:535px}
+.scene-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 7px 12px}
+.scene-top h2{margin:0;font-size:12px;letter-spacing:.12em;font-weight:850}
+.status{border-radius:999px;background:#edf4fc;color:#496581;font-size:10px;font-weight:850;letter-spacing:.08em;padding:7px 10px;white-space:nowrap}
+canvas{display:block;width:100%;height:auto;flex:1;min-height:350px;max-height:560px;aspect-ratio:1.38;border-radius:14px;background:#f8fbfe;border:1px solid #e5edf5}
+.landings{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 7px 3px;font-size:11px;color:var(--muted)}
+.landings strong{color:var(--ink);font-size:12px}
+.controls{padding:18px;display:flex;flex-direction:column;gap:22px}
+.controls h2{margin:0 0 17px;font-size:12px;letter-spacing:.13em;font-weight:850}
+.control{margin-bottom:20px}.control:last-child{margin-bottom:0}
+.label-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;font-weight:800}
+.val{color:var(--blue);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer;margin:0;height:20px}
+.limits{display:flex;justify-content:space-between;color:#91a0b1;font-size:10px;margin-top:2px}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.toggle-name{font-size:12px;font-weight:850}
+.switch{position:relative;width:66px;height:32px;border:1px solid #cad5e0;border-radius:999px;background:#e8edf3;display:flex;align-items:center;justify-content:center;padding:3px;cursor:pointer;color:#65788b;font-size:10px;font-weight:850}
+.switch:before{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:white;box-shadow:0 1px 4px #17324e2a;transition:transform .18s}
+.switch[aria-checked=true]{background:#d9efe9;border-color:#b5ddd2;color:#166955}
+.switch[aria-checked=true]:before{transform:translateX(34px);background:var(--green)}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:auto}
+button.action{border:0;border-radius:11px;padding:13px 12px;font-size:12px;font-weight:850;letter-spacing:.06em;cursor:pointer;transition:transform .12s,filter .12s}
+button.action:active{transform:translateY(1px)}.primary{background:var(--ink);color:white}.secondary{background:#edf2f8;color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px solid #83b2ff;outline-offset:3px}
+.foot{font-size:10px;color:#8b9bae;text-align:right;margin-top:12px}
+@media(max-width:1100px){.page{padding:18px}.layout{grid-template-columns:220px minmax(0,1fr)}.controls{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;align-items:start}.controls h2{grid-column:1/-1;margin-bottom:0}.buttons{align-self:end}.energy-note{margin-top:25px}}
+@media(max-width:680px){.page{padding:12px}.top{align-items:flex-start}.planet{font-size:10px;padding:8px 10px}.layout{grid-template-columns:minmax(0,1fr);gap:12px}.energy{order:1;padding:14px}.scene-card{order:2;min-height:0}.controls{order:3;grid-column:auto;display:block;padding:16px}.controls h2{margin-bottom:17px}.glass{height:145px;max-width:58px}.energy-note{margin-top:14px;padding-top:0}.tube-grid{max-width:340px;margin:0 auto;gap:20px}.energy-value{font-size:10px}canvas{min-height:280px}.landings{font-size:10px}.landings strong{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+
+/* Jeenius brand skin: presentation only. Simulation and control behavior stay unchanged. */
+:root{color-scheme:light;--ink:#013062;--muted:#526b86;--line:rgba(1,48,98,.24);--paper:#e9e9e9;--white:#fff;--blue:#013062;--amber:#6f91bc;--heat:#d2ddec;--green:#013062}
+body{background-color:var(--paper);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0v24' fill='none' stroke='%23013062' stroke-opacity='.10'/%3E%3C/svg%3E");color:var(--ink);font:15px/1.4 Saira,sans-serif}
+.page{max-width:1280px;padding:18px 20px 28px}
+h1,h2,.mark,.planet,.tube-label,.kicker,.label-row,.toggle-name,button,.status{font-family:Goldman,sans-serif;font-weight:400;letter-spacing:.025em}
+h1{font-size:clamp(24px,4vw,34px);line-height:1.1;letter-spacing:.02em}
+.kicker{font-size:11px;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.top{margin-bottom:22px;align-items:center;background:#fff;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px);padding:12px 18px;filter:drop-shadow(6px 6px 0 var(--ink))}
+.brand{gap:15px}.mark{width:46px;height:46px;flex:0 0 46px;border-radius:0;background:var(--ink);color:#fff;font-size:21px;box-shadow:4px 4px 0 var(--ink)}
+.planet{background:#e6eeff;border:2px solid var(--ink);border-radius:0;padding:9px 14px;color:var(--ink);box-shadow:3px 3px 0 var(--ink);font-size:12px}
+.layout{grid-template-columns:minmax(245px,.92fr) minmax(0,1.8fr) minmax(230px,.88fr);gap:22px;align-items:stretch}
+.card{background:transparent;border:0;border-radius:0;box-shadow:none;min-width:0;filter:drop-shadow(6px 6px 0 var(--ink))}
+.energy,.scene-card,.controls{background:#fff;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px);border:0;border-radius:0}
+.energy{padding:17px 14px}.scene-card{padding:13px;min-height:535px}.controls{padding:18px;gap:22px}
+.card-head h2,.scene-top h2,.controls h2{font-size:13px;letter-spacing:.04em;color:var(--ink)}
+.card-head{border-bottom:1px solid var(--ink);padding-bottom:9px;margin-bottom:16px}
+.glass{border-radius:3px 3px 18px 18px;border:2px solid #9aacc1;border-top:4px solid var(--ink);box-shadow:inset 3px 0 0 rgba(255,255,255,.8)}
+.glass:before{border-radius:0;border-color:#9aacc1;background:#fff}
+.stack{border-radius:0 0 15px 15px}.liquid{border-radius:0 0 14px 14px}
+.tube-label{font-size:11px;letter-spacing:.04em}.energy-j{font:11px Saira,sans-serif;color:var(--muted)}
+.legend{border-top:1px dashed rgba(1,48,98,.4)}
+.scene-top{padding:6px 7px 12px}.status{border:1px solid var(--ink);border-radius:0;background:#e6eeff;color:var(--ink);font-size:10px}
+canvas{border:1px solid var(--ink);border-radius:0;background:#fff}
+.controls h2{margin-bottom:17px;border-bottom:1px solid var(--ink);padding-bottom:8px}
+.label-row{font-size:12px}.val{color:var(--ink)}
+input[type=range]{accent-color:var(--ink)}
+.toggle-row{border-color:rgba(1,48,98,.35)}
+.switch{border:2px solid var(--ink);border-radius:0;background:#e9e9e9;color:var(--ink)}
+.switch:before{border-radius:0;box-shadow:2px 2px 0 rgba(1,48,98,.3)}
+.switch[aria-checked=true]{background:#dbe7ff;border-color:var(--ink);color:var(--ink)}.switch[aria-checked=true]:before{background:var(--ink)}
+button.action{border:2px solid var(--ink);border-radius:0;padding:11px 12px;box-shadow:3px 3px 0 var(--ink);letter-spacing:.035em}
+.primary{background:var(--ink);color:#fff}.secondary{background:#fff;color:var(--ink)}
+button.action:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
+.foot{color:var(--muted);font:11px Goldman,sans-serif;letter-spacing:.03em}
+@media(max-width:1100px){.layout{grid-template-columns:220px minmax(0,1fr);gap:18px}.card{filter:drop-shadow(4px 4px 0 var(--ink))}}
+@media(max-width:680px){.page{padding:12px 12px 22px}.top{align-items:center}.layout{grid-template-columns:minmax(0,1fr);gap:15px}.energy{order:1}.scene-card{order:2;min-height:0}.controls{order:3}.mark{width:40px;height:40px;flex-basis:40px}.glass{height:145px;max-width:58px}.tube-grid{gap:20px}.card{filter:drop-shadow(3px 3px 0 var(--ink))}}
+
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div class="brand"><div class="mark">J</div><div><div class="kicker">JEENIUS · PHYSICS LAB</div><h1>Free Fall</h1></div></div>
+    <div class="planet">EARTH</div>
+  </header>
+  <main class="layout">
+    <section class="card energy" aria-label="Energy tubes">
+      <div class="card-head"><h2>ENERGY</h2><span class="small-muted">J</span></div>
+      <div class="tube-grid">
+        <div class="tube-card">
+          <div class="energy-value" id="peValue">0 J</div>
+          <div class="glass pe"><div class="liquid" id="peFill"></div></div>
+          <div class="tube-label">PE</div><div class="energy-j">Potential</div>
+        </div>
+        <div class="tube-card">
+          <div class="energy-value" id="keValue">0 J</div>
+          <div class="glass ke"><div class="liquid" id="keFill"></div></div>
+          <div class="tube-label">KE</div><div class="energy-j">Kinetic</div>
+        </div>
+        <div class="tube-card">
+          <div class="energy-value" id="totalValue">0 J</div>
+          <div class="glass"><div class="stack"><div class="seg heat" id="heatSeg"></div><div class="seg ke" id="totalKeSeg"></div><div class="seg pe" id="totalPeSeg"></div></div></div>
+          <div class="tube-label">TOTAL</div><div class="energy-j">Energy</div>
+        </div>
+      </div>
+      <div class="legend"><span><i class="dot pe"></i>PE</span><span><i class="dot ke"></i>KE</span><span><i class="dot heat"></i>HEAT</span></div>
+      <div class="energy-note">PE + KE + HEAT</div>
+    </section>
+
+    <section class="card scene-card" aria-label="Falling balls animation">
+      <div class="scene-top"><h2>MOTION</h2><span class="status" id="status" aria-live="polite">READY</span></div>
+      <canvas id="scene" width="850" height="560" aria-label="Two balls falling and bouncing while energy changes"></canvas>
+      <div class="landings"><span>A <strong id="landA">—</strong></span><span>B <strong id="landB">—</strong></span><span>TIME <strong id="timeNow">0.00 s</strong></span></div>
+    </section>
+
+    <aside class="card controls" aria-label="Controls">
+      <div><h2>SETTINGS</h2>
+        <div class="control">
+          <div class="label-row"><label for="height">HEIGHT</label><span class="val" id="heightVal">35 m</span></div>
+          <input id="height" type="range" min="5" max="50" step="1" value="35">
+          <div class="limits"><span>5 m</span><span>50 m</span></div>
+        </div>
+        <div class="control">
+          <div class="label-row"><label for="mass">MASS A</label><span class="val" id="massVal">5 kg</span></div>
+          <input id="mass" type="range" min="1" max="10" step="1" value="5">
+          <div class="limits"><span>1 kg</span><span>10 kg</span></div>
+        </div>
+        <div class="toggle-row"><span class="toggle-name">AIR FRICTION</span><button class="switch" id="dragToggle" type="button" role="switch" aria-checked="true" aria-label="Air friction"><span id="dragText">ON</span></button></div>
+      </div>
+      <div class="buttons"><button class="action primary" id="drop" type="button">DROP</button><button class="action secondary" id="reset" type="button">RESET</button></div>
+    </aside>
+  </main>
+</div>
+<script>
+(() => {
+  'use strict';
+  const G = 9.81, RHO = 1.225, CD = 0.47, DIAMETER = 0.30;
+  const AREA = Math.PI * (DIAMETER / 2) ** 2, RESTITUTION = 0.78;
+  const W = 850, H = 560, TOP = 72, FLOOR = 455, DRAW_H = FLOOR - TOP, DT = 1 / 240;
+  const $ = id => document.getElementById(id);
+  const canvas = $('scene'), ctx = canvas.getContext('2d');
+  const ui = {
+    height: $('height'), mass: $('mass'), heightVal: $('heightVal'), massVal: $('massVal'),
+    drag: $('dragToggle'), dragText: $('dragText'), drop: $('drop'), reset: $('reset'),
+    status: $('status'), landA: $('landA'), landB: $('landB'), time: $('timeNow'),
+    peValue: $('peValue'), keValue: $('keValue'), totalValue: $('totalValue'),
+    peFill: $('peFill'), keFill: $('keFill'), heatSeg: $('heatSeg'), totalKeSeg: $('totalKeSeg'), totalPeSeg: $('totalPeSeg')
+  };
+  let dragOn = true, running = false, simTime = 0, lastFrame = 0, balls = [], firstEnergy = 0, raf = 0;
+  let landingA = null, landingB = null, lastStatus = '';
+  const heightM = () => Number(ui.height.value);
+  const massA = () => Number(ui.mass.value);
+  const masses = () => [massA(), 1];
+  const fmtJ = n => `${Math.max(0, n).toLocaleString('en-US', { maximumFractionDigits: 0 })} J`;
+  const fmtTime = n => n == null ? '—' : `${n.toFixed(2)} s`;
+  const ballStart = () => masses().map((m, i) => ({id:i===0?'A':'B', mass:m, x:i===0?285:565, p:0, v:0, hits:0, stopped:false, trail:[]}));
+
+  function refreshLabels() {
+    ui.heightVal.textContent = `${heightM()} m`;
+    ui.massVal.textContent = `${massA()} kg`;
+  }
+  function energy() {
+    let pe = 0, ke = 0;
+    for (const b of balls) {
+      pe += b.mass * G * Math.max(0, heightM() - b.p);
+      ke += 0.5 * b.mass * b.v * b.v;
+    }
+    pe = Math.max(0, pe); ke = Math.max(0, ke);
+    const mechanical = pe + ke;
+    const heat = Math.max(0, firstEnergy - mechanical);
+    return {pe, ke, heat, total:firstEnergy};
+  }
+  function positionY(p) { return TOP + Math.max(0, Math.min(heightM(), p)) / heightM() * DRAW_H; }
+
+  function drawScene() {
+    const c = ctx;
+    c.clearRect(0, 0, W, H);
+    c.fillStyle = '#fff'; c.fillRect(0, 0, W, H);
+
+    // Jeenius graph-paper canvas: quiet minor grid and stronger 100 px guides.
+    for (let x = 25; x < W; x += 25) {
+      c.strokeStyle = x % 100 === 0 ? 'rgba(1,48,98,.15)' : 'rgba(1,48,98,.07)';
+      c.lineWidth = 1; c.beginPath(); c.moveTo(x, 0); c.lineTo(x, FLOOR + 35); c.stroke();
+    }
+    for (let y = 25; y < FLOOR + 35; y += 25) {
+      c.strokeStyle = y % 100 === 0 ? 'rgba(1,48,98,.15)' : 'rgba(1,48,98,.07)';
+      c.lineWidth = 1; c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke();
+    }
+
+    // Drop-height markers.
+    c.strokeStyle = 'rgba(1,48,98,.38)'; c.lineWidth = 1.5; c.setLineDash([5, 5]);
+    for (const x of [285, 565]) { c.beginPath(); c.moveTo(x, TOP + 16); c.lineTo(x, FLOOR - 15); c.stroke(); }
+    c.setLineDash([]);
+    c.fillStyle = '#013062'; c.font = '12px Saira, sans-serif'; c.textAlign = 'left';
+    c.fillText(`${heightM()} m`, 24, (TOP + FLOOR) / 2);
+
+    // Ground line and hatch marks use the same navy technical-drawing style.
+    c.strokeStyle = '#013062'; c.lineWidth = 3; c.beginPath(); c.moveTo(95, FLOOR + 14); c.lineTo(755, FLOOR + 14); c.stroke();
+    c.strokeStyle = 'rgba(1,48,98,.55)'; c.lineWidth = 1.25;
+    for (let x = 105; x < 750; x += 17) { c.beginPath(); c.moveTo(x, FLOOR + 15); c.lineTo(x - 9, FLOOR + 26); c.stroke(); }
+
+    // Flat, outlined balls match the Jeenius white / pale-blue / navy palette.
+    for (const b of balls) {
+      const y = positionY(b.p), radius = 15;
+      c.globalAlpha = .12; c.fillStyle = '#013062'; c.beginPath(); c.ellipse(b.x, FLOOR + 10, 21, 5, 0, 0, Math.PI * 2); c.fill(); c.globalAlpha = 1;
+
+      c.fillStyle = b.id === 'A' ? '#e6eeff' : '#013062';
+      c.strokeStyle = '#013062'; c.lineWidth = 3;
+      c.beginPath(); c.arc(b.x, y, radius, 0, Math.PI * 2); c.fill(); c.stroke();
+      c.fillStyle = b.id === 'A' ? '#013062' : '#fff'; c.font = '12px Goldman, sans-serif'; c.textAlign = 'center';
+      c.fillText(b.id, b.x, y + 4);
+      c.fillStyle = '#013062'; c.font = '12px Goldman, sans-serif';
+      c.fillText(`${b.id} · ${b.mass} kg`, b.x, Math.max(26, y - 26));
+
+      // Direction cue remains tied to the same velocity and running state.
+      if (running && Math.abs(b.v) > 2) {
+        const sign = Math.sign(b.v), sx = b.x + 27, sy = y;
+        c.strokeStyle = '#013062'; c.lineWidth = 1.7; c.beginPath(); c.moveTo(sx, sy - 10 * sign); c.lineTo(sx, sy + 10 * sign); c.stroke();
+        c.beginPath(); c.moveTo(sx - 4, sy + 5 * sign); c.lineTo(sx, sy + 10 * sign); c.lineTo(sx + 4, sy + 5 * sign); c.stroke();
+      }
+    }
+
+    c.textAlign = 'left'; c.fillStyle = '#013062'; c.font = '11px Goldman, sans-serif';
+    c.fillText(dragOn ? 'AIR FRICTION  ON' : 'AIR FRICTION  OFF', 20, H - 17);
+    c.textAlign = 'right'; c.font = '11px Saira, sans-serif'; c.fillText('g = 9.81 m/s²', W - 20, H - 17);
+  }
+
+  function setSegment(el, energyValue, base) {
+    const pct = base > 0 ? Math.max(0, Math.min(100, energyValue / base * 100)) : 0;
+    el.style.height = pct + '%';
+  }
+  function updateEnergy() {
+    const e = energy();
+    ui.peValue.textContent = fmtJ(e.pe);
+    ui.keValue.textContent = fmtJ(e.ke);
+    ui.totalValue.textContent = fmtJ(e.total);
+    const toPct = n => e.total > 0 ? Math.max(0, Math.min(100, n / e.total * 100)) : 0;
+    setSegment(ui.peFill, e.pe, e.total);
+    setSegment(ui.keFill, e.ke, e.total);
+    // Stacked total tube: heat at bottom, kinetic in the middle, potential at the top.
+    const hp = toPct(e.heat), kp = toPct(e.ke), pp = toPct(e.pe);
+    ui.heatSeg.style.bottom = '0%'; ui.heatSeg.style.height = hp + '%';
+    ui.totalKeSeg.style.bottom = hp + '%'; ui.totalKeSeg.style.height = kp + '%';
+    ui.totalPeSeg.style.bottom = (hp + kp) + '%'; ui.totalPeSeg.style.height = pp + '%';
+  }
+
+  function setStatus(value) {
+    if (value !== lastStatus) { ui.status.textContent = value; lastStatus = value; }
+  }
+  function resetSimulation(keepReady=true) {
+    running = false; simTime = 0; landingA = landingB = null; balls = ballStart();
+    firstEnergy = (massA() + 1) * G * heightM();
+    ui.landA.textContent = '—'; ui.landB.textContent = '—'; ui.time.textContent = '0.00 s';
+    setStatus(keepReady ? 'READY' : 'RESET');
+    updateEnergy(); drawScene();
+  }
+  function beginDrop() {
+    resetSimulation(true);
+    running = true; setStatus('FALLING');
+    lastFrame = 0;
+  }
+  function acceleration(v, mass) {
+    if (!dragOn) return G;
+    const k = 0.5 * RHO * CD * AREA / mass;
+    return G - k * v * Math.abs(v);
+  }
+  function advance(dt) {
+    const oldTime = simTime;
+    for (const b of balls) {
+      if (b.stopped) continue;
+      const a0 = acceleration(b.v, b.mass);
+      const vm = b.v + 0.5 * a0 * dt;
+      const pm = b.p + 0.5 * b.v * dt;
+      const am = acceleration(vm, b.mass);
+      const p1 = b.p + vm * dt;
+      const v1 = b.v + am * dt;
+      if (p1 >= heightM() && v1 > 0) {
+        const fraction = Math.max(0, Math.min(1, (heightM() - b.p) / Math.max(1e-9, p1 - b.p)));
+        const hitTime = oldTime + fraction * dt;
+        if (b.id === 'A' && landingA === null) { landingA = hitTime; ui.landA.textContent = fmtTime(hitTime); }
+        if (b.id === 'B' && landingB === null) { landingB = hitTime; ui.landB.textContent = fmtTime(hitTime); }
+        b.p = heightM(); b.hits++;
+        const rebound = Math.abs(v1) * RESTITUTION;
+        if (rebound < 0.55 || b.hits >= 14) { b.v = 0; b.stopped = true; }
+        else b.v = -rebound;
+      } else {
+        b.p = Math.max(0, Math.min(heightM(), p1)); b.v = v1;
+      }
+    }
+    simTime += dt;
+    ui.time.textContent = `${simTime.toFixed(2)} s`;
+    const anyBouncing = balls.some(b => b.hits > 0 && !b.stopped);
+    if (balls.every(b => b.stopped) || simTime >= 60) {
+      running = false; setStatus('LANDED');
+    } else if (anyBouncing) setStatus('BOUNCING');
+    else setStatus('FALLING');
+  }
+
+  function frame(ts) {
+    const dt = lastFrame ? Math.min(0.04, Math.max(0, (ts - lastFrame) / 1000)) : 0;
+    lastFrame = ts;
+    if (running && dt > 0) {
+      let remaining = dt;
+      while (remaining > 1e-8) { const step = Math.min(DT, remaining); advance(step); remaining -= step; if (!running) break; }
+    }
+    updateEnergy(); drawScene();
+    raf = requestAnimationFrame(frame);
+  }
+
+  ui.height.addEventListener('input', () => { refreshLabels(); resetSimulation(true); });
+  ui.mass.addEventListener('input', () => { refreshLabels(); resetSimulation(true); });
+  ui.drag.addEventListener('click', () => {
+    dragOn = !dragOn; ui.drag.setAttribute('aria-checked', String(dragOn)); ui.dragText.textContent = dragOn ? 'ON' : 'OFF'; resetSimulation(true);
+  });
+  ui.drop.addEventListener('click', beginDrop);
+  ui.reset.addEventListener('click', () => resetSimulation(true));
+
+  refreshLabels(); resetSimulation(true); frame(0);
+  window.addEventListener('beforeunload', () => cancelAnimationFrame(raf));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dispersion of Light · Jeenius</title>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0}
+body{font:15px/1.4 Saira,sans-serif;color:#013062;background:#e9e9e9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0v24' fill='none' stroke='%23013062' stroke-opacity='.13'/%3E%3C/svg%3E");padding:14px 20px 28px}
+main{max-width:1280px;margin:auto;display:grid;gap:26px;grid-template-columns:minmax(0,2fr) minmax(250px,1fr)}
+.sh{filter:drop-shadow(6px 6px 0 #013062)}
+.ch{background:#fff;padding:14px;clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)}
+.w{grid-column:1/-1}h1,h2,b,.g,button{font-family:Goldman,sans-serif;font-weight:400}
+h1{font-size:clamp(22px,4vw,34px);letter-spacing:.02em}h2{font-size:13px;border-bottom:1px solid #013062;margin:4px 0 10px;padding-bottom:3px}
+.g{font-size:11px;opacity:.75}p{max-width:70ch}
+canvas{width:100%;aspect-ratio:16/9;display:block;touch-action:none;border:1px solid #013062;background:#fff}
+.row{margin-bottom:12px}label{display:flex;justify-content:space-between;font-size:13px}label b{font-size:14px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:none;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:#013062}
+input[type=range]::-moz-range-track{height:2px;background:#013062}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-9px;background:#e6eeff;border:2px solid #013062;box-shadow:3px 3px 0 #013062;border-radius:0}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:#e6eeff;border:2px solid #013062;box-shadow:3px 3px 0 #013062;border-radius:0}
+button{font-size:13px;background:#fff;color:#013062;border:2px solid #013062;padding:8px 12px;box-shadow:3px 3px 0 #013062;cursor:pointer;border-radius:0;margin:0 8px 8px 0}
+button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #013062}button[aria-pressed=true]{background:#013062;color:#fff}
+.row button{width:100%;margin:0}:focus-visible{outline:3px dashed #013062;outline-offset:2px}
+#ro div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(1,48,98,.4);padding:3px 0;font-size:13px}#ro b{font-size:13px;text-align:right}
+#fx{font:600 14px/1.5 Goldman,sans-serif;background:#e6eeff;padding:10px 12px;margin-top:8px;border-left:4px solid #013062;overflow-wrap:anywhere}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}}
+/* JEENIUS RESPONSIVE IMPROVEMENTS - Preserves all design tokens */
+#fx{font:600 14px/1.65 Goldman,sans-serif;background:#e6eeff;padding:10px 12px;margin-top:8px;border-left:4px solid #013062;overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
+#ro b{font-size:13px;text-align:right;word-break:break-word;overflow-wrap:anywhere;max-width:58%}
+#ro div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(1,48,98,.4);padding:3px 0;font-size:13px}
+p{max-width:70ch;overflow-wrap:break-word}
+h1{font-size:clamp(20px,4.5vw,34px);letter-spacing:.02em;overflow-wrap:break-word}
+canvas{width:100%;aspect-ratio:16/9;display:block;touch-action:none;border:1px solid #013062;background:#fff;max-width:100%;height:auto}
+.row label{display:flex;justify-content:space-between;gap:8px;font-size:13px;align-items:baseline;flex-wrap:wrap}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}body{padding:12px 14px 24px}.ch{padding:12px}#ro b{max-width:52%;font-size:12px}#ro div{font-size:12px}#fx{font-size:13px;line-height:1.7}h1{font-size:clamp(18px,5vw,28px)}h2{font-size:12px}}
+@media(max-width:480px){body{padding:10px 10px 20px}h1{font-size:clamp(17px,6vw,24px)}#ro b{max-width:48%;font-size:11px}#ro div{font-size:11px;gap:6px}#fx{font-size:12px;line-height:1.75}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}#chg{font:600 14px/1.6 Goldman,sans-serif;background:#fff;padding:10px 12px;margin-top:8px;border-left:4px solid #609a83;overflow-wrap:anywhere}#chg:empty{display:none}#chg i{font-style:normal;color:#609a83}</style></head><body><main>
+<header class="sh w"><div class="ch"><div class="g">JEENIUS · CLASS 8 · MAHARASHTRA STATE BOARD · SHEET 10 OF 12</div><h1>Dispersion of Light</h1></div></header>
+<section class="sh"><div class="ch"><canvas id="cv" aria-label="Dispersion of Light interactive animation"></canvas></div></section>
+<aside class="sh"><div class="ch"><h2>CONTROLS</h2><div id="ctl"></div><div id="bt"></div><h2>LIVE READOUTS</h2><div id="ro"></div></div></aside>
+<footer class="sh w"><div class="ch"><span class="g">FORMULA WITH LIVE NUMBERS</span><div id="fx"></div><div id="chg" aria-live="polite"></div></div></footer></main><script>
+const N='#013062',B='#e6eeff',G='#e9e9e9',W='#fff',Q=new URLSearchParams(location.search),VW=800,VH=450;
+const cl=(x,a,b)=>Math.min(b,Math.max(a,x)),sin=Math.sin,cos=Math.cos,PI=Math.PI;
+const cv=document.getElementById('cv'),c=cv.getContext('2d'),S={},M={},D={"n": 10, "t": "Dispersion of Light", "p": [{"k": "rot", "l": "Prism rotation", "u": "\u00b0", "a": 0, "b": 35, "s": 1, "v": 24}]},P=D.p;
+function fit(){const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;c.setTransform(cv.width/VW,0,0,cv.height/VH,0,0)}
+addEventListener('resize',fit);
+const L=(a,b,x,y,w=1,d=0,col=N,al=1)=>{c.globalAlpha=al;c.strokeStyle=col;c.lineWidth=w;c.setLineDash(d?[d,d]:[]);c.beginPath();c.moveTo(a,b);c.lineTo(x,y);c.stroke();c.setLineDash([]);c.globalAlpha=1};
+const T=(s,x,y,z=12,al='left',g=0,col=N)=>{c.fillStyle=col;c.font=z+'px '+(g?'Goldman':'Saira')+',sans-serif';c.textAlign=al;c.fillText(s,x,y)};
+const R=(x,y,w,h,f,s,lw=1)=>{if(f){c.fillStyle=f;c.fillRect(x,y,w,h)}if(s){c.strokeStyle=s;c.lineWidth=lw;c.strokeRect(x,y,w,h)}};
+const K=(x,y,r,f,s,lw=1)=>{c.beginPath();c.arc(x,y,r,0,7);if(f){c.fillStyle=f;c.fill()}if(s){c.strokeStyle=s;c.lineWidth=lw;c.stroke()}};
+const AR=(a,b,x,y,w=1.5)=>{if(Math.hypot(x-a,y-b)<3)return;L(a,b,x,y,w);const t=Math.atan2(y-b,x-a);c.fillStyle=N;c.beginPath();c.moveTo(x,y);c.lineTo(x-9*cos(t-.4),y-9*sin(t-.4));c.lineTo(x-9*cos(t+.4),y-9*sin(t+.4));c.fill()};
+const DIM=(a,b,x,y,s)=>{L(a,b,x,y,.8);L(a,b-5,a,b+5,.8);L(x,y-5,x,y+5,.8);T(s,(a+x)/2,b-7,11,'center',1)};
+
+const WL=[['V',.40],['I',.445],['B',.475],['G',.51],['Y',.58],['O',.60],['R',.70]],nf=l=>1.6+.01/(l*l),CX=250,CY=230,RP=110,SX=740;
+// CHECK: dense flint, Cauchy n=1.6+0.01/λ²; 580 nm → n=1.6297; 60° prism at minimum deviation: δ=2·asin(n·sin30°)−60=2×54.5°−60≈49°
+const hit=(p,d,a,b)=>{const ex=b[0]-a[0],ey=b[1]-a[1],den=d[0]*ey-d[1]*ex;if(Math.abs(den)<1e-9)return null;const s=((a[0]-p[0])*ey-(a[1]-p[1])*ex)/den,u=((a[0]-p[0])*d[1]-(a[1]-p[1])*d[0])/den;return s>1e-6&&u>=0&&u<=1?s:null};
+const refr=(d,n,a,b)=>{if(d[0]*n[0]+d[1]*n[1]>0)n=[-n[0],-n[1]];const ci=-(d[0]*n[0]+d[1]*n[1]),r=a/b,k=1-r*r*(1-ci*ci);if(k<0)return null;const q=r*ci-Math.sqrt(k);return[d[0]*r+n[0]*q,d[1]*r+n[1]*q]};
+function near(V,p,d,skip){let b=null;V.forEach((a,e)=>{if(e===skip)return;const s=hit(p,d,a,V[(e+1)%3]);if(s!==null&&(!b||s<b.s))b={s,e}});return b}
+function trace(V,l){const n=nf(l),p=[40,235],d=[1,0],nrm=e=>{const a=V[e],b=V[(e+1)%3],m=[(a[0]+b[0])/2-CX,(a[1]+b[1])/2-CY],h=Math.hypot(m[0],m[1]);return[m[0]/h,m[1]/h]};
+const b1=near(V,p,d,-1);if(!b1)return{};const p1=[p[0]+d[0]*b1.s,p[1]+d[1]*b1.s],d1=refr(d,nrm(b1.e),1,n),b2=near(V,p1,d1,b1.e);if(!b2)return{p1};
+const p2=[p1[0]+d1[0]*b2.s,p1[1]+d1[1]*b2.s],d2=refr(d1,nrm(b2.e),n,1);if(!d2||d2[0]<.05)return{p1,p2,tir:1};
+return{p1,p2,p3:[SX,p2[1]+d2[1]*(SX-p2[0])/d2[0]],dev:Math.abs(Math.atan2(d2[1],d2[0]))*180/PI}}
+const SIM={init(){},draw(S,M,t){const V=[-90,30,150].map(a=>{const r=(a+S.rot)*PI/180;return[CX+RP*cos(r),CY+RP*sin(r)]});
+c.beginPath();V.forEach((v,i)=>i?c.lineTo(v[0],v[1]):c.moveTo(v[0],v[1]));c.closePath();c.fillStyle=B;c.fill();c.strokeStyle=N;c.lineWidth=2;c.stroke();T('GLASS PRISM  (apex 60°)',CX,CY+RP+22,11,'center',1);
+const rs=WL.map(w=>trace(V,w[1])),en=rs[4].p1?rs[4].p1[0]:CX;
+L(40,235,en,235,9,0,B);L(40,230.5,en,230.5,.8);L(40,239.5,en,239.5,.8);T('WHITE LIGHT',40,218,11,'left',1);
+rs.forEach((r,i)=>{if(r.p1&&r.p2)L(r.p1[0],r.p1[1],r.p2[0],r.p2[1],1,0,N,.5);if(r.p3)L(r.p2[0],r.p2[1],r.p3[0],r.p3[1],[1,1,1.4,1.4,2,2,2.4][i],[3,5,0,7,0,5,0][i])});
+L(SX,40,SX,420,2.2);for(let y=40;y<420;y+=12)L(SX,y,SX+8,y+8,.8);
+const hs=rs.map((r,i)=>({i,y:r.p3&&r.p3[1]})).filter(o=>o.y!=null).sort((a,b)=>a.y-b.y),ym=hs.reduce((s,o)=>s+o.y,0)/(hs.length||1);
+hs.forEach((o,k)=>{const ly=ym+(k-(hs.length-1)/2)*15;L(SX,o.y,SX+14,ly,.7);T(WL[o.i][0],SX+18,ly+4,11,'left',1)});
+if(rs[4].tir)T('TOTAL INTERNAL REFLECTION: rotate the prism',400,400,12,'center',1);
+const dV=rs[0].dev,dR=rs[6].dev,ok=dV!=null&&dR!=null;
+return{r:[['Prism rotation',S.rot+'°'],['Angle of incidence',(30+S.rot)+'°'],['Violet deviation',dV!=null?dV.toFixed(1)+'°':'—'],['Red deviation',dR!=null?dR.toFixed(1)+'°':'—'],['Spread V − R',ok?(dV-dR).toFixed(2)+'°':'—']],
+f:ok?'Spread = δviolet − δred = '+dV.toFixed(2)+'° − '+dR.toFixed(2)+'° = '+(dV-dR).toFixed(2)+'°   (violet bends most)':'Light cannot leave the second face at this angle',res:ok?[['violet-red spread',dV-dR,'°']]:[]}}};
+const S0={};
+P.forEach(p=>{if(p.t){p.a=0;p.b=1}let v=Q.get(p.k);v=(v===null||v===''||isNaN(+v))?p.v:+v;S[p.k]=cl(v,p.a,p.b);S0[p.k]=S[p.k]});
+const ctl=document.getElementById('ctl'),bt=document.getElementById('bt'),ro=document.getElementById('ro'),fx=document.getElementById('fx'),els={};
+const fv=(p,x)=>p.n?p.n[Math.round(x)]:(+x.toFixed(2))+(p.u||'');
+P.forEach(p=>{const d=document.createElement('div');d.className='row';
+d.innerHTML='<label><span>'+p.l+'</span><b></b></label>'+(p.t?'<button type="button" aria-pressed="false"></button>':'<input type="range" min="'+p.a+'" max="'+p.b+'" step="'+p.s+'" aria-label="'+p.l+'">');
+ctl.appendChild(d);const e=d.querySelector(p.t?'button':'input'),v=d.querySelector('b');els[p.k]=[e,v,p];
+if(p.t)e.onclick=()=>{S[p.k]=1-S[p.k]};else e.oninput=()=>{S[p.k]=+e.value}});
+function sync(){for(const k in els){const[e,v,p]=els[k],x=S[k],s=fv(p,x);if(p.t){e.textContent=p.n?p.n[x]:(x?'ON':'OFF');e.setAttribute('aria-pressed',x?'true':'false');v.textContent=''}else{if(+e.value!==x)e.value=x;v.textContent=s}}}
+(SIM.btns||[]).concat([['RESET',()=>{Object.assign(S,S0);SIM.init(S,M);base=null;clearTimeout(tm)}]]).forEach(a=>{const b=document.createElement('button');b.type='button';b.textContent=a[0];b.onclick=()=>a[1](S,M);bt.appendChild(b)});
+window.addEventListener("message", e => { if (e.data && e.data.type === "jeenius-params") { const q=e.data.params||{}; P.forEach(p=>{if(q[p.k]!==undefined&&!isNaN(+q[p.k]))S[p.k]=cl(+q[p.k],p.a,p.b)}); } });
+let dn=0;const xy=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*VW/r.width,(e.clientY-r.top)*VH/r.height]};
+cv.onpointerdown=e=>{dn=1;try{cv.setPointerCapture(e.pointerId)}catch(_){}SIM.drag&&SIM.drag(S,M,...xy(e),1)};
+cv.onpointermove=e=>{dn&&SIM.drag&&SIM.drag(S,M,...xy(e),0)};cv.onpointerup=cv.onpointercancel=()=>{dn=0};
+addEventListener('keydown',e=>{SIM.key&&SIM.key(S,e,M)});
+
+let dispBase=null,dispRo=null,dispTm=0,dispSnap='';
+function roMap(){const m={};(cur.r||[]).forEach(a=>m[a[0]]=String(a[1]));return m}
+function showChg(){const el=document.getElementById('chg');if(!el||!cur)return;const sn=JSON.stringify(S);
+if(!dispBase){dispBase={...S};dispRo=roMap();bres0=(cur.res||[]).map(r=>r.slice());dispSnap=sn;return}
+if(sn===dispSnap)return;dispSnap=sn;clearTimeout(dispTm);
+dispTm=setTimeout(()=>{const ch=P.filter(p=>dispBase[p.k]!==S[p.k]);if(!ch.length)return;
+const now=roMap(),res=cur.res||[];let out=[];
+res.forEach((r,i)=>{const b=bres0&&bres0[i];if(b&&Math.abs(r[1]-b[1])>1e-6)out.push(r[0]+' '+(r[1]>b[1]?'rises':'falls')+' '+(+b[1].toFixed(2))+' → '+(+r[1].toFixed(2))+' '+r[2])});
+if(!out.length){for(const k in now){if(dispRo[k]!==undefined&&dispRo[k]!==now[k])out.push(k+': '+dispRo[k]+' → '+now[k])}out=out.slice(0,3)}
+el.innerHTML='';const a=document.createElement('span');a.textContent='IF '+ch.map(p=>p.l.toLowerCase()+' '+fv(p,dispBase[p.k])+' → '+fv(p,S[p.k])).join(', ');el.append(a);
+const b=document.createElement('span');b.textContent=out.length?'  ⇒  '+out.join('; '):'  ⇒  the result stays the same';el.append(b);
+dispBase={...S};dispRo=now;bres0=res.map(r=>r.slice())},350)}
+let bres0=null;
+let last=0,tm=0,base=null,bres=[],cur={},snap='',lh='',lf='';
+function rep(){if(!base)return;const ch=P.filter(p=>base[p.k]!==S[p.k]);if(!ch.length)return;
+let s='student changed '+ch.map(p=>p.l.toLowerCase()+' '+fv(p,base[p.k])+' -> '+fv(p,S[p.k])).join(', ');
+(cur.res||[]).forEach((r,i)=>{const b=bres[i];if(b&&Math.abs(r[1]-b[1])>1e-6)s+='; '+r[0]+' '+(r[1]>b[1]?'rose':'fell')+' from '+(+b[1].toFixed(2))+' '+r[2]+' to '+(+r[1].toFixed(2))+' '+r[2]});
+base={...S};bres=(cur.res||[]).map(r=>r.slice());
+window.parent.postMessage({ type: "jeenius-event", summary: s }, "*")}
+function frame(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+c.clearRect(0,0,VW,VH);R(0,0,VW,VH,W);
+for(let x=0;x<=VW;x+=25)L(x,0,x,VH,.5,0,N,x%100?.07:.16);for(let y=0;y<=VH;y+=25)L(0,y,VW,y,.5,0,N,y%100?.07:.16);
+cur=SIM.draw(S,M,ts/1000,dt)||{};
+R(548,404,250,44,W,N,1.5);T('SHEET '+D.n+' / 12 · '+D.t.toUpperCase(),556,423,12,'left',1);T('JEENIUS · CLASS 8 · MAHARASHTRA BOARD',556,439,9);
+sync();showChg();
+if(!base){base={...S};bres=(cur.res||[]).map(r=>r.slice())}
+const h=(cur.r||[]).map(a=>'<div><span>'+a[0]+'</span><b>'+a[1]+'</b></div>').join('');if(h!==lh){ro.innerHTML=h;lh=h}
+if(cur.f!==lf){fx.textContent=cur.f||'';lf=cur.f}
+const sn=JSON.stringify(S);if(sn!==snap){snap=sn;clearTimeout(tm);tm=setTimeout(rep,1500)}
+requestAnimationFrame(frame)}
+fit();SIM.init(S,M);requestAnimationFrame(frame);
+</script>
+
+</body></html>

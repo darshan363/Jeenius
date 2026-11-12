@@ -1,0 +1,8 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>45-respiration-circulation</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const hr = [72, 100, 150], br = [16, 20, 30], N = ['Resting', 'Walking', 'Running']
+  return { title: 'Breathing and Blood Circulation',
+  ctrl: [{ k: 'a', label: 'Activity', opts: N, val: 0 }],
+  draw: v => '<ellipse cx="90" cy="100" rx="30" ry="45" fill="#cfe6f7" stroke="#2a6fa8"><animate attributeName="ry" values="38;48;38" dur="' + (60 / br[v.a]) + 's" repeatCount="indefinite"/></ellipse>'
+    + '<ellipse cx="150" cy="100" rx="30" ry="45" fill="#cfe6f7" stroke="#2a6fa8"><animate attributeName="ry" values="38;48;38" dur="' + (60 / br[v.a]) + 's" repeatCount="indefinite"/></ellipse>'
+    + '<circle cx="300" cy="100" r="30" fill="#e0574f"><animate attributeName="r" values="26;34;26" dur="' + (60 / hr[v.a]) + 's" repeatCount="indefinite"/></circle>'
+    + T(120, 170, 'Lungs: about ' + br[v.a] + ' breaths/min', 12) + T(300, 170, 'Heart: about ' + hr[v.a] + ' beats/min', 12) + T(200, 22, N[v.a], 15, '#12305c', 'middle', 700),
+  say: v => v.a == 0 ? 'At rest the body needs little oxygen, so heart and breathing are slow.' : 'Muscles need more oxygen and release more carbon dioxide, so heart and lungs work faster. (Values are typical, not exact.)' } })())</script></body></html>

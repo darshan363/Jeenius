@@ -1,0 +1,5 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>50-environmental-management</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => ({ title: 'Environmental Management: Reduce, Reuse, Recycle',
+  ctrl: [{ k: 'r', label: 'Waste recycled or composted', min: 0, max: 100, step: 10, val: 0, unit: '%' }],
+  draw: v => R(60, 50, 280, 30, '#eaf1fb') + R(60, 50, 280 * v.r / 100, 30, '#5fb37a') + R(60, 110, 280, 30, '#eaf1fb') + R(60, 110, 280 * (100 - v.r) / 100, 30, '#a67c52')
+    + T(200, 42, 'Recycled / composted: ' + v.r + ' kg', 13) + T(200, 102, 'Goes to dump: ' + (100 - v.r) + ' kg', 13) + T(200, 175, 'Out of 100 kg of waste', 12),
+  say: v => v.r < 40 ? 'Most waste goes to the dump. Dumps pollute soil, water and air.' : 'Segregating waste and recycling or composting leaves much less for the dump. Reduce and reuse come first.' }))())</script></body></html>

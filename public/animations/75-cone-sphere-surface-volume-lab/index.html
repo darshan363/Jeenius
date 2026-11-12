@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cone and Sphere Lab | Jeenius</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy: #013062;
+  --blue: #dce9ff;
+  --green: #16845b;
+  --red: #d64b4b;
+  --ink: #172b45;
+  --muted: #5d6d82;
+  --paper: #f3f7fc;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Saira, Arial, sans-serif;
+}
+
+main {
+  max-width: 1150px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+  gap: 14px;
+}
+
+.panel {
+  min-width: 0;
+  padding: 16px;
+  background: white;
+  border: 1px solid #d7e1ee;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px #0130620b;
+}
+
+.wide { grid-column: 1 / -1; }
+
+.eyebrow {
+  color: var(--navy);
+  font: 700 12px Goldman, sans-serif;
+  letter-spacing: .06em;
+}
+
+h1 {
+  margin: 8px 0;
+  color: var(--navy);
+  font: 700 clamp(23px, 4vw, 34px) Goldman, sans-serif;
+}
+
+h2 {
+  margin: 16px 0 10px;
+  color: var(--navy);
+  font: 700 14px Goldman, sans-serif;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 800 / 450;
+  border: 1px solid #d2ddeb;
+  border-radius: 8px;
+  background: white;
+}
+
+.controls {
+  display: grid;
+  gap: 18px;
+}
+
+.control label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+output {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+select, input[type="range"] { width: 100%; }
+
+select {
+  padding: 10px;
+  border: 1px solid #bdcce0;
+  border-radius: 7px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+
+input[type="range"] {
+  accent-color: var(--navy);
+  cursor: pointer;
+}
+
+.readout {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #cbd6e5;
+  font-size: 13px;
+}
+
+.readout strong {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+#formula {
+  margin-top: 8px;
+  padding: 12px;
+  background: var(--blue);
+  border-left: 4px solid var(--navy);
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  body { padding: 9px; }
+
+  main { grid-template-columns: minmax(0, 1fr); }
+
+  .wide { grid-column: auto; }
+
+  .panel { padding: 12px; }
+}
+.tx2{}#chg{font:600 14px/1.6 Goldman,sans-serif;background:#fff;padding:10px 12px;margin-top:8px;border-left:4px solid #609a83;overflow-wrap:anywhere}#chg:empty{display:none}.logic{margin-top:8px;font-size:13px}</style>
+</head>
+
+<body>
+<main>
+
+  <header class="panel wide">
+    <div class="eyebrow">JEENIUS · CLASS 9 · MATHEMATICS</div>
+    <h1>Cone and Sphere Lab</h1>
+  </header>
+
+  <section class="panel">
+    <canvas id="cv" width="800" height="450"
+      aria-label="Interactive cone and sphere model"></canvas>
+  </section>
+
+  <aside class="panel">
+    <h2>CONTROLS</h2>
+
+    <div class="controls">
+      <div class="control">
+        <label for="shape">Solid</label>
+        <select id="shape">
+          <option value="cone">Cone</option>
+          <option value="sphere">Sphere</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label for="radius">
+          Radius <output id="radiusValue">3 cm</output>
+        </label>
+        <input id="radius" type="range" min="1" max="8"
+          step="1" value="3">
+      </div>
+
+      <div class="control" id="heightControl">
+        <label for="height">
+          Height <output id="heightValue">4 cm</output>
+        </label>
+        <input id="height" type="range" min="2" max="12"
+          step="1" value="4">
+      </div>
+    </div>
+
+    <h2>LIVE READOUTS</h2>
+    <div id="readouts" aria-live="polite"></div>
+  </aside>
+
+  <footer class="panel wide">
+    <div class="eyebrow">FORMULAS</div>
+    <div id="formula"></div>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const canvas = document.getElementById("cv");
+  const ctx = canvas.getContext("2d");
+
+  const shapeInput = document.getElementById("shape");
+  const radiusInput = document.getElementById("radius");
+  const heightInput = document.getElementById("height");
+
+  const radiusValue = document.getElementById("radiusValue");
+  const heightValue = document.getElementById("heightValue");
+  const heightControl = document.getElementById("heightControl");
+  const readouts = document.getElementById("readouts");
+  const formula = document.getElementById("formula");
+
+  const W = canvas.width;
+  const H = canvas.height;
+
+  const color = {
+    navy: "#013062",
+    blue: "#dce9ff",
+    green: "#16845b",
+    red: "#d64b4b",
+    muted: "#5d6d82",
+    white: "#ffffff"
+  };
+
+  function line(x1, y1, x2, y2, stroke, width = 2, dash = []) {
+    ctx.beginPath();
+    ctx.setLineDash(dash);
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = width;
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function write(text, x, y, size = 15, fill = color.navy,
+                  align = "left", font = "Saira") {
+    ctx.fillStyle = fill;
+    ctx.font = `600 ${size}px "${font}", Arial, sans-serif`;
+    ctx.textAlign = align;
+    ctx.fillText(text, x, y);
+  }
+
+  function panel(x, y, w, h) {
+    ctx.fillStyle = "#f8fbff";
+    ctx.strokeStyle = "#cbd8e8";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 10);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawCone(r, h) {
+    const cx = 260;
+    const baseY = 345;
+    const scale = Math.min(17, 180 / Math.max(r, h));
+    const rx = r * scale;
+    const ry = Math.max(8, rx * 0.25);
+    const apexY = baseY - h * scale;
+    const slant = Math.sqrt(r * r + h * h);
+
+    // Cone body
+    ctx.beginPath();
+    ctx.moveTo(cx, apexY);
+    ctx.lineTo(cx - rx, baseY);
+    ctx.ellipse(cx, baseY, rx, ry, 0, Math.PI, Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = color.blue;
+    ctx.fill();
+    ctx.strokeStyle = color.navy;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Hidden rear edge of the base
+    ctx.beginPath();
+    ctx.ellipse(cx, baseY, rx, ry, 0, 0, Math.PI);
+    ctx.strokeStyle = color.navy;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Height, radius and slant height
+    line(cx, apexY, cx, baseY, color.navy, 1.8, [6, 5]);
+    line(cx, baseY, cx + rx, baseY, color.green, 2.5);
+    line(cx, apexY, cx + rx, baseY, color.red, 2.5);
+
+    write(`h = ${h} cm`, cx + 9, (apexY + baseY) / 2, 14);
+    write(`r = ${r} cm`, cx + rx / 2, baseY + 30,
+          14, color.green, "center");
+    write(`l = ${slant.toFixed(2)} cm`,
+          cx + rx / 2 + 10, (apexY + baseY) / 2 + 22,
+          13, color.red);
+
+    write("CONE", cx, 405, 18, color.navy, "center", "Goldman");
+  }
+
+  function drawSphere(r) {
+    const cx = 260;
+    const cy = 235;
+    const rad = Math.min(120, r * 15);
+
+    const gradient = ctx.createRadialGradient(
+      cx - rad * 0.35,
+      cy - rad * 0.4,
+      rad * 0.05,
+      cx,
+      cy,
+      rad
+    );
+
+    gradient.addColorStop(0, "#ffffff");
+    gradient.addColorStop(1, "#a9c9f5");
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    ctx.strokeStyle = color.navy;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Latitude curves
+    [0.3, 0.6].forEach(factor => {
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rad, rad * factor, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = color.green;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    });
+
+    // Longitude curves
+    [0.4, 0.7].forEach(factor => {
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rad * factor, rad, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = "#7d9fcf";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    });
+
+    line(cx, cy, cx + rad, cy, color.red, 2.5);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = color.navy;
+    ctx.fill();
+
+    write(`r = ${r} cm`, cx + rad / 2, cy - 12,
+          14, color.red, "center");
+    write("SPHERE", cx, 405, 18, color.navy, "center", "Goldman");
+  }
+
+  function fmt(n) {
+    return Number(n.toFixed(2)).toString();
+  }
+
+  function showReadouts(items) {
+    readouts.replaceChildren();
+
+    items.forEach(([label, value]) => {
+      const row = document.createElement("div");
+      row.className = "readout";
+
+      const name = document.createElement("span");
+      name.textContent = label;
+
+      const result = document.createElement("strong");
+      result.textContent = value;
+
+      row.append(name, result);
+      readouts.appendChild(row);
+    });
+  }
+
+  function draw() {
+    const shape = shapeInput.value;
+    const r = Number(radiusInput.value);
+    const h = Number(heightInput.value);
+
+    radiusValue.textContent = `${r} cm`;
+    heightValue.textContent = `${h} cm`;
+    heightControl.hidden = shape === "sphere";
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = color.white;
+    ctx.fillRect(0, 0, W, H);
+
+    write("SURFACE AREA AND VOLUME",
+          25, 32, 17, color.navy, "left", "Goldman");
+
+    write(shape === "cone" ? "Cone" : "Sphere",
+          25, 55, 13, color.muted);
+
+    panel(20, 75, 470, 350);
+    panel(510, 75, 270, 350);
+
+    if (shape === "cone") {
+      drawCone(r, h);
+
+      const slant = Math.sqrt(r * r + h * h);
+      const curvedArea = Math.PI * r * slant;
+      const totalArea = Math.PI * r * (slant + r);
+      const volume = Math.PI * r * r * h / 3;
+
+      showReadouts([
+        ["Radius", `${r} cm`],
+        ["Vertical height", `${h} cm`],
+        ["Slant height", `${fmt(slant)} cm`],
+        ["Curved surface area", `${fmt(curvedArea)} cm²`],
+        ["Total surface area", `${fmt(totalArea)} cm²`],
+        ["Volume", `${fmt(volume)} cm³`]
+      ]);
+
+      formula.textContent =
+        `Slant height: l = √(r² + h²) = ${fmt(slant)} cm\n` +
+        `Curved area: πrl = ${fmt(curvedArea)} cm²\n` +
+        `Total area: πr(l + r) = ${fmt(totalArea)} cm²\n` +
+        `Volume: ⅓πr²h = ${fmt(volume)} cm³`;
+
+      write("CONE FORMULAS", 530, 112, 14,
+            color.navy, "left", "Goldman");
+
+      [
+        "l = √(r² + h²)",
+        "Curved area = πrl",
+        "Total area = πr(l + r)",
+        "Volume = ⅓πr²h"
+      ].forEach((item, i) => {
+        write(item, 530, 155 + i * 37, 13);
+      });
+
+    } else {
+      drawSphere(r);
+
+      const area = 4 * Math.PI * r * r;
+      const volume = 4 * Math.PI * r * r * r / 3;
+
+      showReadouts([
+        ["Radius", `${r} cm`],
+        ["Surface area", `${fmt(area)} cm²`],
+        ["Volume", `${fmt(volume)} cm³`]
+      ]);
+
+      formula.textContent =
+        `Surface area: 4πr² = ${fmt(area)} cm²\n` +
+        `Volume: ⁴⁄₃πr³ = ${fmt(volume)} cm³`;
+
+      write("SPHERE FORMULAS", 530, 112, 14,
+            color.navy, "left", "Goldman");
+
+      [
+        "Surface area = 4πr²",
+        "Volume = ⁴⁄₃πr³",
+        "Only radius is needed"
+      ].forEach((item, i) => {
+        write(item, 530, 155 + i * 37, 13);
+      });
+    }
+  }
+
+  shapeInput.addEventListener("change", draw);
+  radiusInput.addEventListener("input", draw);
+  heightInput.addEventListener("input", draw);
+
+  // Draw immediately when the page loads
+  draw();
+})();
+</script>
+
+</body>
+</html>

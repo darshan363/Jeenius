@@ -1,0 +1,8 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>48-biotechnology</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [['Curd', ['Milk', '+ bacteria', 'Curd'], 'Lactobacillus bacteria ferment milk sugar into lactic acid, so milk becomes curd.'],
+  ['Bread', ['Dough', '+ yeast', 'Risen dough'], 'Yeast ferments sugar and releases carbon dioxide gas, so dough rises.'],
+  ['Insulin', ['Human gene', 'Put in bacteria', 'Insulin'], 'The human insulin gene is put into bacteria, which then make insulin for diabetes patients.'],
+  ['Tissue culture', ['Plant piece', 'Nutrient jelly', 'New plants'], 'A tiny piece of a plant grows into many new plants in a nutrient medium.']]
+  return { title: 'Introduction to Biotechnology',
+  ctrl: [{ k: 'b', label: 'Pick an example', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => { let s = T(200, 28, D[v.b][0], 16, '#12305c', 'middle', 700); D[v.b][1].forEach((x, i) => { s += R(20 + i * 130, 70, 110, 60, '#eaf1fb') + T(75 + i * 130, 106, x, 13); if (i < 2) s += T(138 + i * 130, 106, '➜', 16) }); return s },
+  say: v => D[v.b][2] } })())</script></body></html>

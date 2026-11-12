@@ -1,0 +1,10 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>52-carbon</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const D = [['Diamond', 'Hardest natural substance. Each carbon atom joins 4 others. Does not conduct electricity.'],
+  ['Graphite', 'Layers slide over each other, so it is soft (pencil lead). It conducts electricity.'], ['Fullerene (C60)', 'A hollow ball of 60 carbon atoms, shaped like a football.']]
+  return { title: 'Carbon and Its Forms',
+  ctrl: [{ k: 'f', label: 'Pick a form of carbon', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => { let s = T(200, 25, D[v.f][0], 16, '#12305c', 'middle', 700)
+    if (v.f == 0) { for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) { s += C(110 + i * 60, 65 + j * 40, 8, '#555'); if (i < 3) s += L(110 + i * 60, 65 + j * 40, 170 + i * 60, 65 + j * 40, '#999', 2); if (j < 2) s += L(110 + i * 60, 65 + j * 40, 110 + i * 60, 105 + j * 40, '#999', 2) } }
+    if (v.f == 1) { for (let r = 0; r < 3; r++) { s += L(90, 70 + r * 40, 310, 70 + r * 40, '#555', 2); for (let i = 0; i < 8; i++) s += C(100 + i * 28, 70 + r * 40, 6, '#555') } }
+    if (v.f == 2) { s += C(200, 105, 55, 'none', '#555'); for (let a = 0; a < 20; a++) s += C(200 + 55 * Math.cos(a / 20 * 6.28), 105 + 55 * Math.sin(a / 20 * 6.28), 5, '#555') }
+    return s + T(200, 188, v.f == 1 ? 'Layers: weak links between sheets' : 'Simple sketch of the arrangement', 11) },
+  say: v => D[v.f][1] } })())</script></body></html>

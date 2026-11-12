@@ -1,0 +1,7 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>41-health-and-diseases</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => ({
+  title: 'Health and Diseases: Stopping the Spread',
+  ctrl: [{ k: 'h', label: 'Good hygiene habits followed (hand washing, covering cough, clean water, rest)', min: 0, max: 4, val: 0 }],
+  draw: v => { const inf = Math.round(20 * (0.8 - 0.2 * v.h)); let s = ''
+    for (let i = 0; i < 20; i++) s += C(30 + (i % 10) * 37, 70 + Math.floor(i / 10) * 55, 13, i < inf ? '#e0574f' : '#5fb37a')
+    return T(200, 28, 'Illustration: 20 students (red = sick)', 13) + s + T(200, 185, inf + ' of 20 sick', 15, '#12305c', 'middle', 700) },
+  say: v => v.h == 0 ? 'Without hygiene habits, germs spread easily from one person to many.' : 'With ' + v.h + ' good habit' + (v.h > 1 ? 's' : '') + ', fewer students get infected. Prevention is better than cure.' }))())</script></body></html>

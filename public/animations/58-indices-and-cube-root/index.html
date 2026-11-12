@@ -1,0 +1,5 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>58-indices-and-cube-root</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => ({ title: 'Indices and Cube Root',
+  ctrl: [{ k: 'm', label: 'Power m (base 2)', min: 1, max: 5, val: 2 }, { k: 'n', label: 'Power n (base 2)', min: 1, max: 5, val: 3 }, { k: 's', label: 'Cube side s', min: 1, max: 10, val: 3 }],
+  draw: v => T(200, 40, '2^' + v.m + ' × 2^' + v.n + ' = 2^(' + v.m + '+' + v.n + ') = 2^' + (v.m + v.n), 17, '#12305c', 'middle', 700) + T(200, 70, Math.pow(2, v.m) + ' × ' + Math.pow(2, v.n) + ' = ' + Math.pow(2, v.m + v.n), 15)
+    + T(200, 125, 'Cube of side ' + v.s + ': volume = ' + v.s + '³ = ' + Math.pow(v.s, 3), 16, '#12305c', 'middle', 700) + T(200, 155, 'Cube root of ' + Math.pow(v.s, 3) + ' is ' + v.s, 15),
+  say: v => 'When bases are the same, add the powers: a^m × a^n = a^(m+n). The cube root undoes the cube: the cube root of ' + Math.pow(v.s, 3) + ' is ' + v.s + '.' }))())</script></body></html>

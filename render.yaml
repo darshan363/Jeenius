@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: jeenius-app
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: ENVIRONMENT
+        value: production
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jeenius-db
+          property: connectionString
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: ADMIN_EMAILS
+        sync: false
+      - key: OTP_PEPPER
+        generateValue: true
+      # Email codes: Render's free plan blocks SMTP, so use Brevo's HTTPS API (free, no domain needed).
+      - key: BREVO_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_KEY_2
+        sync: false
+      - key: GEMINI_KEY_3
+        sync: false
+
+databases:
+  - name: jeenius-db
+    databaseName: jeenius
+    user: jeenius
+    plan: free

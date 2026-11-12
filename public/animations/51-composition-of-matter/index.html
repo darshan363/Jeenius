@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>51-composition-of-matter</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const mol = (x, y, a) => a.map((t, i) => (i ? L(x, y, x + t[0], y + t[1], '#555', 2) : '')).join('') + a.map((t, i) => C(x + (i ? t[0] : 0), y + (i ? t[1] : 0), t[3] || 11, t[2])).join('')
+  const O2 = '#e0574f', H = '#7fb2e5', Cc = '#555', Fe = '#a07c5b', N = '#6f7bd6', Na = '#9a6fd6'
+  const D = [['Oxygen', 'Element', 'Only one kind of atom (O). Here two atoms join to form an O2 molecule.', (x, y) => mol(x, y, [[0, 0, O2], [24, 0, O2]])],
+  ['Water', 'Compound', 'Different atoms joined chemically in a fixed ratio: H2O has 2 hydrogen and 1 oxygen.', (x, y) => mol(x, y, [[0, 0, O2], [-20, 18, H, 8], [20, 18, H, 8]])],
+  ['Salt solution', 'Mixture', 'Salt and water are mixed but not chemically joined. They can be separated again.', (x, y, i) => C(x, y, 9, i % 2 ? Na : H)],
+  ['Carbon dioxide', 'Compound', 'One carbon and two oxygen atoms joined together: CO2.', (x, y) => mol(x, y, [[0, 0, Cc], [-24, 0, O2], [24, 0, O2]])],
+  ['Iron', 'Element', 'Only iron atoms.', (x, y) => C(x, y, 12, Fe)],
+  ['Air', 'Mixture', 'Mostly nitrogen and oxygen gases mixed together with a little of other gases.', (x, y, i) => i % 3 ? mol(x, y, [[0, 0, N], [20, 0, N]]) : mol(x, y, [[0, 0, O2], [20, 0, O2]])]]
+  return { title: 'Composition of Matter: Element, Compound, Mixture',
+  ctrl: [{ k: 'x', label: 'Pick a substance', opts: D.map(d => d[0]), val: 1 }],
+  draw: v => { let s = T(200, 25, D[v.x][0] + ' = ' + D[v.x][1].toUpperCase(), 16, '#12305c', 'middle', 700); for (let i = 0; i < 8; i++) s += D[v.x][3](70 + (i % 4) * 90, 75 + Math.floor(i / 4) * 70, i); return s },
+  say: v => D[v.x][2] } })())</script></body></html>

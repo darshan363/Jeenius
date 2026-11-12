@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>43-classification-of-plants</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => { const H = ['Root', 'Stem', 'Leaf', 'Flower', 'Seed']
+  const D = [['Thallophyta (algae)', [0, 0, 0, 0, 0], 'Body not divided into root, stem and leaf. Example: Spirogyra.'],
+  ['Bryophyta (moss)', [.5, .5, .5, 0, 0], 'Simple root-like, stem-like and leaf-like parts. Grows in damp places. Example: moss.'],
+  ['Pteridophyta (fern)', [1, 1, 1, 0, 0], 'True root, stem and leaves, but no flowers or seeds; reproduces by spores.'],
+  ['Gymnosperms (pine)', [1, 1, 1, 0, 1], 'Seeds are naked, not inside fruits. No flowers. Example: pine, cycas.'],
+  ['Angiosperms (flowering)', [1, 1, 1, 1, 1], 'Have flowers; seeds are inside fruits. Example: mango, rose.']]
+  return { title: 'Classification of Plants',
+  ctrl: [{ k: 'p', label: 'Pick a plant group', opts: D.map(d => d[0]), val: 0 }],
+  draw: v => { let s = T(200, 25, D[v.p][0], 16, '#12305c', 'middle', 700)
+    D[v.p][1].forEach((x, i) => { const cx = 40 + i * 80; s += R(cx - 32, 60, 64, 70, x == 1 ? '#c8ecd0' : x ? '#fff1c4' : '#f9d4d1', '#0b3a75') + T(cx, 85, H[i], 13) + T(cx, 115, x == 1 ? 'Yes' : x ? 'Simple' : 'No', 15, '#12305c', 'middle', 700) })
+    return s + T(200, 170, 'Present in this group?', 12) },
+  say: v => D[v.p][2] } })())</script></body></html>

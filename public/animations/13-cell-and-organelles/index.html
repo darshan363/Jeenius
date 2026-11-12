@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cell and Cell Organelles · Jeenius</title>
+  <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0
+    }
+
+    body {
+      font: 15px/1.4 Saira, sans-serif;
+      color: #013062;
+      background: #e9e9e9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0v24' fill='none' stroke='%23013062' stroke-opacity='.13'/%3E%3C/svg%3E");
+      padding: 14px 20px 28px
+    }
+
+    main {
+      max-width: 1280px;
+      margin: auto;
+      display: grid;
+      gap: 26px;
+      grid-template-columns: minmax(0, 2fr) minmax(250px, 1fr)
+    }
+
+    .sh {
+      filter: drop-shadow(6px 6px 0 #013062)
+    }
+
+    .ch {
+      background: #fff;
+      padding: 14px;
+      clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px)
+    }
+
+    .w {
+      grid-column: 1/-1
+    }
+
+    h1,
+    h2,
+    b,
+    .g,
+    button {
+      font-family: Goldman, sans-serif;
+      font-weight: 400
+    }
+
+    h1 {
+      font-size: clamp(22px, 4vw, 34px);
+      letter-spacing: .02em
+    }
+
+    h2 {
+      font-size: 13px;
+      border-bottom: 1px solid #013062;
+      margin: 4px 0 10px;
+      padding-bottom: 3px
+    }
+
+    .g {
+      font-size: 11px;
+      opacity: .75
+    }
+
+    p {
+      max-width: 70ch
+    }
+
+    canvas {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: block;
+      touch-action: none;
+      border: 1px solid #013062;
+      background: #fff
+    }
+
+    .row {
+      margin-bottom: 12px
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px
+    }
+
+    label b {
+      font-size: 14px
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 28px;
+      background: none;
+      cursor: pointer
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+      height: 2px;
+      background: #013062
+    }
+
+    input[type=range]::-moz-range-track {
+      height: 2px;
+      background: #013062
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      margin-top: -9px;
+      background: #e6eeff;
+      border: 2px solid #013062;
+      box-shadow: 3px 3px 0 #013062;
+      border-radius: 0
+    }
+
+    input[type=range]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #e6eeff;
+      border: 2px solid #013062;
+      box-shadow: 3px 3px 0 #013062;
+      border-radius: 0
+    }
+
+    button {
+      font-size: 13px;
+      background: #fff;
+      color: #013062;
+      border: 2px solid #013062;
+      padding: 8px 12px;
+      box-shadow: 3px 3px 0 #013062;
+      cursor: pointer;
+      border-radius: 0;
+      margin: 0 8px 8px 0
+    }
+
+    button:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 #013062
+    }
+
+    button[aria-pressed=true] {
+      background: #013062;
+      color: #fff
+    }
+
+    .row button {
+      width: 100%;
+      margin: 0
+    }
+
+    :focus-visible {
+      outline: 3px dashed #013062;
+      outline-offset: 2px
+    }
+
+    #ro div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px dashed rgba(1, 48, 98, .4);
+      padding: 3px 0;
+      font-size: 13px
+    }
+
+    #ro b {
+      font-size: 13px;
+      text-align: right
+    }
+
+    #fx {
+      font: 600 14px/1.5 Goldman, sans-serif;
+      background: #e6eeff;
+      padding: 10px 12px;
+      margin-top: 8px;
+      border-left: 4px solid #013062;
+      overflow-wrap: anywhere
+    }
+
+    @media(max-width:860px) {
+      main {
+        grid-template-columns: minmax(0, 1fr)
+      }
+    }
+
+    /* JEENIUS RESPONSIVE IMPROVEMENTS - Preserves all design tokens */
+    #fx {
+      font: 600 14px/1.65 Goldman, sans-serif;
+      background: #e6eeff;
+      padding: 10px 12px;
+      margin-top: 8px;
+      border-left: 4px solid #013062;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto
+    }
+
+    #ro b {
+      font-size: 13px;
+      text-align: right;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-width: 58%
+    }
+
+    #ro div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px dashed rgba(1, 48, 98, .4);
+      padding: 3px 0;
+      font-size: 13px
+    }
+
+    p {
+      max-width: 70ch;
+      overflow-wrap: break-word
+    }
+
+    h1 {
+      font-size: clamp(20px, 4.5vw, 34px);
+      letter-spacing: .02em;
+      overflow-wrap: break-word
+    }
+
+    canvas {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: block;
+      touch-action: none;
+      border: 1px solid #013062;
+      background: #fff;
+      max-width: 100%;
+      height: auto
+    }
+
+    .row label {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      align-items: baseline;
+      flex-wrap: wrap
+    }
+
+    @media(max-width:860px) {
+      main {
+        grid-template-columns: minmax(0, 1fr)
+      }
+
+      body {
+        padding: 12px 14px 24px
+      }
+
+      .ch {
+        padding: 12px
+      }
+
+      #ro b {
+        max-width: 52%;
+        font-size: 12px
+      }
+
+      #ro div {
+        font-size: 12px
+      }
+
+      #fx {
+        font-size: 13px;
+        line-height: 1.7
+      }
+
+      h1 {
+        font-size: clamp(18px, 5vw, 28px)
+      }
+
+      h2 {
+        font-size: 12px
+      }
+    }
+
+    @media(max-width:480px) {
+      body {
+        padding: 10px 10px 20px
+      }
+
+      h1 {
+        font-size: clamp(17px, 6vw, 24px)
+      }
+
+      #ro b {
+        max-width: 48%;
+        font-size: 11px
+      }
+
+      #ro div {
+        font-size: 11px;
+        gap: 6px
+      }
+
+      #fx {
+        font-size: 12px;
+        line-height: 1.75
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      * {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header class="sh w">
+      <div class="ch">
+        <div class="g">JEENIUS · CLASS 8 · MAHARASHTRA STATE BOARD · SHEET 13 OF 26</div>
+        <h1>Cell and Cell Organelles</h1>
+        
+      </div>
+    </header>
+    <section class="sh">
+      <div class="ch"><canvas id="cv" aria-label="Cell and Cell Organelles interactive animation"></canvas></div>
+    </section>
+    <aside class="sh">
+      <div class="ch">
+        <h2>CONTROLS</h2>
+        <div id="ctl"></div>
+        <div id="bt"></div>
+        <h2>LIVE READOUTS</h2>
+        <div id="ro"></div>
+      </div>
+    </aside>
+    <footer class="sh w">
+      <div class="ch"><span class="g">Note It !!</span>
+        <div id="fx"></div><div id="chg" aria-live="polite"></div>
+      </div>
+    </footer>
+  </main>
+  <script>
+    const N = '#013062', B = '#e6eeff', G = '#e9e9e9', W = '#fff', Q = new URLSearchParams(location.search), VW = 800, VH = 450;
+    const cl = (x, a, b) => Math.min(b, Math.max(a, x)), sin = Math.sin, cos = Math.cos, PI = Math.PI;
+    const cv = document.getElementById('cv'), c = cv.getContext('2d'), S = {}, M = {}, D = { "n": 13, "t": "Cell Organelles", "p": [{ "k": "ty", "l": "Cell type", "t": 1, "n": ["PLANT CELL", "ANIMAL CELL"], "v": 0 }, { "k": "o", "l": "Organelle", "n": ["Cell wall", "Cell membrane", "Cytoplasm", "Nucleus", "Mitochondrion", "Chloroplast", "Vacuole"], "a": 0, "b": 6, "s": 1, "v": 3 }] }, P = D.p;
+    function fit() { const r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.height * d; c.setTransform(cv.width / VW, 0, 0, cv.height / VH, 0, 0) }
+    addEventListener('resize', fit);
+    const L = (a, b, x, y, w = 1, d = 0, col = N, al = 1) => { c.globalAlpha = al; c.strokeStyle = col; c.lineWidth = w; c.setLineDash(d ? [d, d] : []); c.beginPath(); c.moveTo(a, b); c.lineTo(x, y); c.stroke(); c.setLineDash([]); c.globalAlpha = 1 };
+    const T = (s, x, y, z = 12, al = 'left', g = 0, col = N) => { c.fillStyle = col; c.font = z + 'px ' + (g ? 'Goldman' : 'Saira') + ',sans-serif'; c.textAlign = al; c.fillText(s, x, y) };
+    const R = (x, y, w, h, f, s, lw = 1) => { if (f) { c.fillStyle = f; c.fillRect(x, y, w, h) } if (s) { c.strokeStyle = s; c.lineWidth = lw; c.strokeRect(x, y, w, h) } };
+    const K = (x, y, r, f, s, lw = 1) => { c.beginPath(); c.arc(x, y, r, 0, 7); if (f) { c.fillStyle = f; c.fill() } if (s) { c.strokeStyle = s; c.lineWidth = lw; c.stroke() } };
+    const AR = (a, b, x, y, w = 1.5) => { if (Math.hypot(x - a, y - b) < 3) return; L(a, b, x, y, w); const t = Math.atan2(y - b, x - a); c.fillStyle = N; c.beginPath(); c.moveTo(x, y); c.lineTo(x - 9 * cos(t - .4), y - 9 * sin(t - .4)); c.lineTo(x - 9 * cos(t + .4), y - 9 * sin(t + .4)); c.fill() };
+    const DIM = (a, b, x, y, s) => { L(a, b, x, y, .8); L(a, b - 5, a, b + 5, .8); L(x, y - 5, x, y + 5, .8); T(s, (a + x) / 2, b - 7, 11, 'center', 1) };
+
+    const E = (x, y, rx, ry, rot, f, s, lw = 1) => { c.beginPath(); c.ellipse(x, y, Math.max(.1, rx), Math.max(.1, ry), rot || 0, 0, 7); if (f) { c.fillStyle = f; c.fill() } if (s) { c.strokeStyle = s; c.lineWidth = lw; c.stroke() } };
+    const PG = (pts, f, s, lw = 1, al = 1) => { c.globalAlpha = al; c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); if (f) { c.fillStyle = f; c.fill() } if (s) { c.strokeStyle = s; c.lineWidth = lw; c.stroke() } c.globalAlpha = 1 };
+    const WR = (s, x, y, w, z = 12, lh = 16, g = 0) => { c.font = z + 'px ' + (g ? 'Goldman' : 'Saira') + ',sans-serif'; let ln = '', yy = y; String(s).split(' ').forEach(wd => { const u = ln ? ln + ' ' + wd : wd; if (c.measureText(u).width > w && ln) { T(ln, x, yy, z, 'left', g); yy += lh; ln = wd } else ln = u }); if (ln) { T(ln, x, yy, z, 'left', g); yy += lh } return yy };
+    const ez = x => x * x * (3 - 2 * x);
+
+    const CX = 235, CY = 235;// CHECK: plant cell shows all 7 organelles, animal cell shows 5 (no cell wall, no chloroplast); nucleus is in both -> "PLANT AND ANIMAL"; plant 7 shown, animal 5 shown
+    const ON = ['Cell wall', 'Cell membrane', 'Cytoplasm', 'Nucleus', 'Mitochondrion', 'Chloroplast', 'Vacuole'];
+    const FN = ['Rigid outer layer of cellulose that gives the plant cell its shape and protection.', 'Thin living layer that controls which substances enter and leave the cell.', 'Jelly-like fluid in which the organelles float and many reactions take place.', 'Controls all cell activities and holds the chromosomes that carry DNA.', 'Releases energy from food by respiration, so it is called the powerhouse of the cell.', 'Contains chlorophyll and makes food by photosynthesis in sunlight.', 'Stores water, food and waste. One large vacuole in a plant cell, small ones in an animal cell.'];
+    const FI = ['PLANT CELL ONLY', 'PLANT AND ANIMAL', 'PLANT AND ANIMAL', 'PLANT AND ANIMAL', 'PLANT AND ANIMAL', 'PLANT CELL ONLY', 'PLANT AND ANIMAL'];
+    const PRS = [[1, 1, 1, 1, 1, 1, 1], [0, 1, 1, 1, 1, 0, 1]];
+    const NU = [[60, -35, 30], [0, -5, 36]], MI = [[[75, 50, .4], [-5, -50, -.3]], [[-80, 30, .5], [70, 45, -.4], [-40, -60, .2], [60, -65, -.6]]], CH = [[-105, -72], [0, -92], [112, 40], [-95, 85]], VA = [-45, 15, 62, 52], AV = [[-70, -20], [95, -5], [15, 70], [-30, 70]];
+    const blob = th => 1 + .05 * sin(3 * th + 1) + .03 * sin(5 * th), fr = x => x - Math.floor(x);
+    function pick(x, y, ty) {
+      const dx = x - CX, dy = y - CY, n = NU[ty];
+      if (Math.hypot(dx - n[0], dy - n[1]) < n[2]) return 3;
+      for (const m of MI[ty]) if (Math.hypot(dx - m[0], dy - m[1]) < 17) return 4;
+      if (!ty) {
+        for (const h of CH) if ((dx - h[0]) ** 2 / 676 + (dy - h[1]) ** 2 / 169 < 1) return 5;
+        if ((dx - VA[0]) ** 2 / VA[2] ** 2 + (dy - VA[1]) ** 2 / VA[3] ** 2 < 1) return 6;
+        const e = Math.min(150 - Math.abs(dx), 125 - Math.abs(dy)); return e < 0 ? -1 : e < 9 ? 0 : e < 18 ? 1 : 2
+      }
+      for (const a of AV) if (Math.hypot(dx - a[0], dy - a[1]) < 10) return 6;
+      const th = Math.atan2(dy / 125, dx / 150), r = Math.hypot(dx / 150, dy / 125), Rb = blob(th); return r > Rb + .05 ? -1 : r > Rb - .06 ? 1 : 2
+    }
+    const SIM = {
+      init(S, M) { },
+      drag(S, M, x, y, f) { if (!f) return; if (x >= 440) { const i = Math.floor((y - 106) / 26); if (i >= 0 && i < 7 && x < 780) S.o = i; return } const k = pick(x, y, S.ty); if (k >= 0) S.o = k },
+      draw(S, M, t, dt) {
+        const ty = S.ty, o = S.o, pr = PRS[ty][o], pl = !ty;
+        const ring = (x, y, rx, ry) => { c.setLineDash([5, 4]); E(x, y, rx + 8 + 2 * sin(t * 5), ry + 8 + 2 * sin(t * 5), 0, null, N, 1.5); c.setLineDash([]) };
+        if (pl) { R(CX - 150, CY - 125, 300, 250, o == 0 ? B : G, N, o == 0 ? 4 : 1.5); R(CX - 141, CY - 116, 282, 232, o == 2 ? B : W, N, o == 1 ? 5 : 2.5) }
+        else { c.beginPath(); for (let i = 0; i <= 72; i++) { const th = i / 72 * 2 * PI, r = blob(th); c.lineTo(CX + 150 * r * cos(th), CY + 125 * r * sin(th)) } c.closePath(); c.fillStyle = o == 2 ? B : W; c.fill(); c.strokeStyle = N; c.lineWidth = o == 1 ? 5 : 2.5; c.stroke() }
+        c.globalAlpha = .35; for (let i = 0; i < 70; i++) { const px = CX + (fr(sin(i * 12.9898) * 43758.5) - .5) * 270, py = CY + (fr(sin(i * 78.233) * 12345.6) - .5) * 220; if (pl || Math.hypot((px - CX) / 150, (py - CY) / 125) < .86) K(px, py, 1.4, N) } c.globalAlpha = 1;
+        if (pl) {
+          E(CX + VA[0], CY + VA[1], VA[2], VA[3], 0, o == 6 ? B : W, N, o == 6 ? 3 : 1.5); T('cell sap', CX + VA[0], CY + VA[1] + 4, 10, 'center'); if (o == 6) ring(CX + VA[0], CY + VA[1], VA[2], VA[3]);
+          CH.forEach(h => { const x = CX + h[0], y = CY + h[1]; E(x, y, 26, 13, 0, o == 5 ? B : G, N, o == 5 ? 3 : 1.5); for (let k = -1; k <= 1; k++)R(x + k * 13 - 4, y - 4, 8, 8, W, N, 1); if (o == 5) ring(x, y, 26, 13) })
+        }
+        else AV.forEach(a => { K(CX + a[0], CY + a[1], 9, o == 6 ? B : W, N, o == 6 ? 3 : 1.5); if (o == 6) ring(CX + a[0], CY + a[1], 9, 9) });
+        const n = NU[ty], nx = CX + n[0], ny = CY + n[1]; K(nx, ny, n[2], o == 3 ? B : W, N, o == 3 ? 3 : 2); K(nx + 6, ny - 4, n[2] * .3, N); for (let k = 0; k < 5; k++) { const a = k * 1.3; L(nx - n[2] * .6 * cos(a), ny + n[2] * .5 * sin(a), nx - n[2] * .2 * cos(a + .5), ny + n[2] * .2 * sin(a + .5), .8) } if (o == 3) ring(nx, ny, n[2], n[2]);
+        MI[ty].forEach(m => { const x = CX + m[0], y = CY + m[1], q = m[2], rp = (a, b) => [x + a * cos(q) - b * sin(q), y + a * sin(q) + b * cos(q)]; E(x, y, 18, 9, q, o == 4 ? B : W, N, o == 4 ? 3 : 1.5); for (let k = -1; k <= 1; k++) { const a = rp(k * 6, -6), b = rp(k * 6, 6); L(a[0], a[1], b[0], b[1], 1) } if (o == 4) ring(x, y, 18, 9) });
+        if (!pr) (() => { R(CX - 112, CY - 14, 224, 28, W, N, 2); T('NOT FOUND IN ANIMAL CELL', CX, CY + 5, 12, 'center', 1) })();
+        T(ON[o].toUpperCase(), 60, 66, 22, 'left', 1); T(ty ? 'ANIMAL CELL' : 'PLANT CELL', 780, 66, 14, 'right', 1);
+        const tx = 440, tw = 340; T('ORGANELLE', tx + 10, 96, 10, 'left', 1); T('PLANT', tx + 226, 96, 10, 'center', 1); T('ANIMAL', tx + 296, 96, 10, 'center', 1); L(tx, 102, tx + tw, 102, 1.2); L(tx + (ty ? 262 : 192), 99, tx + (ty ? 330 : 260), 99, 3);
+        for (let i = 0; i < 7; i++) {
+          const y = 106 + i * 26; if (i == o) R(tx, y, tw, 24, B, N, 2); T(ON[i], tx + 10, y + 16, 12, 'left', 1);
+          [[226, 0], [296, 1]].forEach(a => { const mx = tx + a[0]; if (i == 6) T(a[1] ? 'SMALL' : 'LARGE', mx, y + 16, 9, 'center'); else if (PRS[a[1]][i]) K(mx, y + 12, 5, N); else L(mx - 5, y + 12, mx + 5, y + 12, 1.5) })
+        }
+        T('FUNCTION', tx, 312, 10, 'left', 1); WR(FN[o], tx, 330, tw, 12, 16);
+        const cnt = pl ? 7 : 5;
+        return {
+          r: [['Cell type', pl ? 'Plant cell' : 'Animal cell'], ['Organelle', ON[o]], ['In this cell?', pr ? 'YES' : 'NO'], ['Found in', FI[o]], ['Organelles shown', cnt + ' of 7']],
+          f: (pl ? 'PLANT CELL' : 'ANIMAL CELL') + ' · ' + ON[o] + ': ' + FN[o] + (pr ? '' : '  [absent in animal cells]'), res: [['organelles shown', cnt, '']]
+        }
+      }
+    };
+
+    const S0 = {};
+    P.forEach(p => { if (p.t) { p.a = 0; p.b = 1 } let v = Q.get(p.k); v = (v === null || v === '' || isNaN(+v)) ? p.v : +v; S[p.k] = cl(v, p.a, p.b); S0[p.k] = S[p.k] });
+    const ctl = document.getElementById('ctl'), bt = document.getElementById('bt'), ro = document.getElementById('ro'), fx = document.getElementById('fx'), els = {};
+    const fv = (p, x) => p.n ? p.n[Math.round(x)] : (+x.toFixed(2)) + (p.u || '');
+    P.forEach(p => {
+      const d = document.createElement('div'); d.className = 'row';
+      d.innerHTML = '<label><span>' + p.l + '</span><b></b></label>' + (p.t ? '<button type="button" aria-pressed="false"></button>' : '<input type="range" min="' + p.a + '" max="' + p.b + '" step="' + p.s + '" aria-label="' + p.l + '">');
+      ctl.appendChild(d); const e = d.querySelector(p.t ? 'button' : 'input'), v = d.querySelector('b'); els[p.k] = [e, v, p];
+      if (p.t) e.onclick = () => { S[p.k] = 1 - S[p.k] }; else e.oninput = () => { S[p.k] = +e.value }
+    });
+    function sync() { for (const k in els) { const [e, v, p] = els[k], x = S[k], s = fv(p, x); if (p.t) { e.textContent = p.n ? p.n[x] : (x ? 'ON' : 'OFF'); e.setAttribute('aria-pressed', x ? 'true' : 'false'); v.textContent = '' } else { if (+e.value !== x) e.value = x; v.textContent = s } } }
+    (SIM.btns || []).concat([['RESET', () => { Object.assign(S, S0); SIM.init(S, M); base = null; clearTimeout(tm) }]]).forEach(a => { const b = document.createElement('button'); b.type = 'button'; b.textContent = a[0]; b.onclick = () => a[1](S, M); bt.appendChild(b) });
+    window.addEventListener("message", e => { if (e.data && e.data.type === "jeenius-params") { const q = e.data.params || {}; P.forEach(p => { if (q[p.k] !== undefined && !isNaN(+q[p.k])) S[p.k] = cl(+q[p.k], p.a, p.b) }); } });
+    let dn = 0; const xy = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * VW / r.width, (e.clientY - r.top) * VH / r.height] };
+    cv.onpointerdown = e => { dn = 1; try { cv.setPointerCapture(e.pointerId) } catch (_) { } SIM.drag && SIM.drag(S, M, ...xy(e), 1) };
+    cv.onpointermove = e => { dn && SIM.drag && SIM.drag(S, M, ...xy(e), 0) }; cv.onpointerup = cv.onpointercancel = () => { dn = 0 };
+    addEventListener('keydown', e => { SIM.key && SIM.key(S, e, M) });
+    
+let dispBase=null,dispRo=null,dispTm=0,dispSnap='';
+function roMap(){const m={};(cur.r||[]).forEach(a=>m[a[0]]=String(a[1]));return m}
+function showChg(){const el=document.getElementById('chg');if(!el||!cur)return;const sn=JSON.stringify(S);
+if(!dispBase){dispBase={...S};dispRo=roMap();bres0=(cur.res||[]).map(r=>r.slice());dispSnap=sn;return}
+if(sn===dispSnap)return;dispSnap=sn;clearTimeout(dispTm);
+dispTm=setTimeout(()=>{const ch=P.filter(p=>dispBase[p.k]!==S[p.k]);if(!ch.length)return;
+const now=roMap(),res=cur.res||[];let out=[];
+res.forEach((r,i)=>{const b=bres0&&bres0[i];if(b&&Math.abs(r[1]-b[1])>1e-6)out.push(r[0]+' '+(r[1]>b[1]?'rises':'falls')+' '+(+b[1].toFixed(2))+' → '+(+r[1].toFixed(2))+' '+r[2])});
+if(!out.length){for(const k in now){if(dispRo[k]!==undefined&&dispRo[k]!==now[k])out.push(k+': '+dispRo[k]+' → '+now[k])}out=out.slice(0,3)}
+el.innerHTML='';const a=document.createElement('span');a.textContent='IF '+ch.map(p=>p.l.toLowerCase()+' '+fv(p,dispBase[p.k])+' → '+fv(p,S[p.k])).join(', ');el.append(a);
+const b=document.createElement('span');b.textContent=out.length?'  ⇒  '+out.join('; '):'  ⇒  the result stays the same';el.append(b);
+dispBase={...S};dispRo=now;bres0=res.map(r=>r.slice())},350)}
+let bres0=null;
+let last = 0, tm = 0, base = null, bres = [], cur = {}, snap = '', lh = '', lf = '';
+    function rep() {
+      if (!base) return; const ch = P.filter(p => base[p.k] !== S[p.k]); if (!ch.length) return;
+      let s = 'student changed ' + ch.map(p => p.l.toLowerCase() + ' ' + fv(p, base[p.k]) + ' -> ' + fv(p, S[p.k])).join(', ');
+      (cur.res || []).forEach((r, i) => { const b = bres[i]; if (b && Math.abs(r[1] - b[1]) > 1e-6) s += '; ' + r[0] + ' ' + (r[1] > b[1] ? 'rose' : 'fell') + ' from ' + (+b[1].toFixed(2)) + ' ' + r[2] + ' to ' + (+r[1].toFixed(2)) + ' ' + r[2] });
+      base = { ...S }; bres = (cur.res || []).map(r => r.slice());
+      window.parent.postMessage({ type: "jeenius-event", summary: s }, "*")
+    }
+    function frame(ts) {
+      const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+      c.clearRect(0, 0, VW, VH); R(0, 0, VW, VH, W);
+      for (let x = 0; x <= VW; x += 25)L(x, 0, x, VH, .5, 0, N, x % 100 ? .07 : .16); for (let y = 0; y <= VH; y += 25)L(0, y, VW, y, .5, 0, N, y % 100 ? .07 : .16);
+      cur = SIM.draw(S, M, ts / 1000, dt) || {};
+      R(548, 404, 250, 44, W, N, 1.5); T('SHEET ' + D.n + ' / 26 · ' + D.t.toUpperCase(), 556, 423, 12, 'left', 1); T('JEENIUS · CLASS 8 · MAHARASHTRA BOARD', 556, 439, 9);
+      sync();showChg();
+      if (!base) { base = { ...S }; bres = (cur.res || []).map(r => r.slice()) }
+      const h = (cur.r || []).map(a => '<div><span>' + a[0] + '</span><b>' + a[1] + '</b></div>').join(''); if (h !== lh) { ro.innerHTML = h; lh = h }
+      if (cur.f !== lf) { fx.textContent = cur.f || ''; lf = cur.f }
+      const sn = JSON.stringify(S); if (sn !== snap) { snap = sn; clearTimeout(tm); tm = setTimeout(rep, 1500) }
+      requestAnimationFrame(frame)
+    }
+    fit(); SIM.init(S, M); requestAnimationFrame(frame);
+  </script>
+  
+
+</body>
+
+</html>

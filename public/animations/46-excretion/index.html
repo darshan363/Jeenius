@@ -1,0 +1,4 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>46-excretion</title></head><body><script src="../_shared/lab.js"></script><script>Lab((() => ({ title: 'Excretion: Kidneys and Water Balance',
+  ctrl: [{ k: 'g', label: 'Glasses of water per day', min: 1, max: 8, val: 2 }],
+  draw: v => R(150, 40, 100, 120, '#fff', '#0b3a75', 8) + '<rect x="152" y="' + (160 - 8 - v.g * 9) + '" width="96" height="' + (8 + v.g * 9) + '" fill="hsl(48,95%,' + (40 + v.g * 6) + '%)"/>' + T(200, 28, 'Urine sample (illustration)', 13) + T(200, 185, v.g + ' glasses of water', 13),
+  say: v => v.g <= 3 ? 'Little water: kidneys save water, so urine is less and darker.' : 'More water: kidneys remove extra water, so urine is more and paler. Kidneys filter waste from blood.' }))())</script></body></html>

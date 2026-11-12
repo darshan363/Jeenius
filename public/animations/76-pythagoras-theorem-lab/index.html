@@ -1,0 +1,277 @@
+ 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pythagoras Theorem Lab · Jeenius</title>
+    <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        :root {
+            --ink: #013062;
+            --paper: #ffffff;
+            --soft-blue: #e6eeff;
+            --page: #e9e9e9;
+        }
+        body {
+            margin: 0;
+            padding: 14px 20px 30px;
+            font: 15px/1.45 Saira, sans-serif;
+            color: var(--ink);
+            background: var(--page) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0v24' fill='none' stroke='%23013062' stroke-opacity='.13'/%3E%3C/svg%3E");
+        }
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            gap: 18px;
+            grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+            align-items: start;
+        }
+        .sh { filter: drop-shadow(5px 5px 0 var(--ink)); min-width: 0; }
+        .ch {
+            background: var(--paper);
+            padding: 14px;
+            clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+            min-width: 0;
+        }
+        .w { grid-column: 1 / -1; }
+        h1, h2, b, .g, button { font-family: Goldman, sans-serif; font-weight: 400; }
+        h1 {
+            font-size: clamp(22px, 4vw, 34px);
+            margin: 2px 0 6px;
+            letter-spacing: .02em;
+            overflow-wrap: break-word;
+        }
+        h2 { font-size: 13px; border-bottom: 1px solid var(--ink); margin: 8px 0; padding-bottom: 4px; }
+        .g { font-size: 11px; opacity: .78; }
+        p { max-width: 80ch; overflow-wrap: break-word; }
+        .note { background: var(--soft-blue); padding: 10px; border-left: 4px solid var(--ink); margin: 10px 0; }
+        label { display: block; font-weight: 600; margin: 10px 0 4px; }
+        input[type="range"] { width: 100%; accent-color: var(--ink); cursor: pointer; }
+        .canvas-wrap { width: 100%; min-width: 0; }
+        canvas { width: 100%; height: 440px; display: block; border: 1px solid var(--ink); background: var(--paper); }
+        .read {
+            background: var(--soft-blue);
+            padding: 10px 12px;
+            margin: 12px 0;
+            font: 600 14px/1.7 Goldman, sans-serif;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+        .muted { font-size: 12px; opacity: .85; }
+        @media (max-width: 860px) {
+            main { grid-template-columns: minmax(0, 1fr); }
+            body { padding: 12px 14px 24px; }
+            .ch { padding: 12px; }
+            canvas { height: 460px; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 10px 10px 20px; }
+            h1 { font-size: clamp(19px, 6vw, 25px); }
+            h2 { font-size: 12px; }
+            canvas { height: 470px; }
+            .read { font-size: 12px; line-height: 1.75; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+        }
+    .tx2{}#chg{font:600 14px/1.6 Goldman,sans-serif;background:#fff;padding:10px 12px;margin-top:8px;border-left:4px solid #609a83;overflow-wrap:anywhere}#chg:empty{display:none}.logic{margin-top:8px;font-size:13px}</style>
+</head>
+<body>
+    <main>
+        <header class="sh w">
+            <div class="ch">
+                <div class="g">JEENIUS · MATHEMATICS · INTERACTIVE LAB</div>
+                <h1>Pythagoras Theorem Lab</h1>
+            </div>
+        </header>
+
+        <section class="sh">
+            <div class="ch">
+                
+                <div class="canvas-wrap">
+                    <canvas id="cv" aria-label="Right triangle with a right-angle marker and squares on its sides"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sh">  
+            <div class="ch">
+                <h2>CONTROLS</h2>
+                <label for="a">Side a: <span id="av">3</span> cm</label>
+                <input id="a" type="range" min="1" max="10" value="3">
+                <label for="b">Side b: <span id="bv">4</span> cm</label>
+                <input id="b" type="range" min="1" max="10" value="4">
+
+                <div class="read" id="formula" aria-live="polite"></div>
+                <div class="note" id="explain">The longest side, opposite the right angle, is the hypotenuse.</div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        const aSlider = document.getElementById("a");
+        const bSlider = document.getElementById("b");
+        const cv = document.getElementById("cv");
+        const ctx = cv.getContext("2d");
+
+        function drawRightAngleMarker(vertexX, vertexY, sideScale) {
+            // The right angle is the lower-right vertex of this triangle.
+            // Draw the square marker inward, between the horizontal and vertical sides.
+            const mark = Math.max(5, Math.min(13, sideScale * 0.38));
+            ctx.beginPath();
+            ctx.moveTo(vertexX - mark, vertexY);
+            ctx.lineTo(vertexX - mark, vertexY - mark);
+            ctx.lineTo(vertexX, vertexY - mark);
+            ctx.strokeStyle = "#013062";
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+        }
+
+        function drawSquare(x, y, size, fill, label, fontSize) {
+            ctx.fillStyle = fill;
+            ctx.fillRect(x, y, size, size);
+            ctx.strokeStyle = "#013062";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, size, size);
+            ctx.fillStyle = "#013062";
+            ctx.font = `600 ${fontSize}px Saira, sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "alphabetic";
+            ctx.fillText(label, x + size / 2, y - 9);
+        }
+
+        function draw() {
+            const A = Number(aSlider.value);
+            const B = Number(bSlider.value);
+            const sum = A * A + B * B;
+            const C = Math.sqrt(sum);
+            const isWhole = Number.isInteger(C);
+            const cExact = isWhole ? String(C) : `√${sum}`;
+
+            document.getElementById("av").textContent = A;
+            document.getElementById("bv").textContent = B;
+            document.getElementById("formula").textContent =
+                `a² + b² = c²\n${A}² + ${B}² = ${sum}\nc = √${sum}${isWhole ? ` = ${C} cm` : ` ≈ ${C.toFixed(2)} cm`}`;
+            document.getElementById("explain").textContent =
+                `The square on side a has area ${A * A} cm² and the square on side b has area ${B * B} cm². Their total area is ${sum} cm², equal to c².`;
+
+            // Draw in CSS-pixel coordinates and use a high-density backing bitmap for sharpness.
+            const rect = cv.getBoundingClientRect();
+            const W = Math.max(280, rect.width);
+            const H = Math.max(400, rect.height);
+            const dpr = Math.max(1, window.devicePixelRatio || 1);
+            if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) {
+                cv.width = Math.round(W * dpr);
+                cv.height = Math.round(H * dpr);
+            }
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = "#013062";
+            ctx.strokeStyle = "#013062";
+            ctx.lineWidth = 2.5;
+            ctx.lineJoin = "round";
+            ctx.textBaseline = "alphabetic";
+
+            if (W < 520) {
+                // Mobile layout: triangle above, side-squares next to each other below.
+                const triangleHeight = 215;
+                const ox = 28;
+                const oy = triangleHeight - 30;
+                const triScale = Math.max(5, Math.min(23, (W - 92) / A, (triangleHeight - 65) / B));
+                const x = ox + A * triScale;
+                const y = oy - B * triScale;
+
+                ctx.fillStyle = "#e6eeff";
+                ctx.beginPath();
+                ctx.moveTo(ox, oy);
+                ctx.lineTo(x, oy);
+                ctx.lineTo(x, y);
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = "#013062";
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                ctx.fillStyle = "#013062";
+                ctx.font = "600 13px Saira, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(`a = ${A} cm`, (ox + x) / 2, oy + 21);
+                ctx.textAlign = "left";
+                ctx.fillText(`b = ${B} cm`, Math.min(x + 7, W - 88), (oy + y) / 2);
+                ctx.textAlign = "center";
+                ctx.font = "600 12px Saira, sans-serif";
+                ctx.fillText(`c = ${cExact}`, (ox + x) / 2 + 5, (oy + y) / 2 - 8);
+                drawRightAngleMarker(x, oy, triScale);
+
+                const squareY = H - 155;
+                const squareUnit = Math.min(13, (W - 54) / (A + B + 1.5));
+                const sizeA = A * squareUnit;
+                const sizeB = B * squareUnit;
+                const gap = 22;
+                const totalWidth = sizeA + gap + sizeB;
+                const startX = (W - totalWidth) / 2;
+                drawSquare(startX, squareY, sizeA, "#d7e4ff", `a² = ${A * A}`, 10);
+                drawSquare(startX + sizeA + gap, squareY, sizeB, "#c4d9ff", `b² = ${B * B}`, 10);
+
+                ctx.fillStyle = "#013062";
+                ctx.font = "600 12px Saira, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(`a² + b² = c²  →  ${sum}`, W / 2, H - 10);
+            } else {
+                // Desktop/tablet layout: triangle at left, squares stacked on the right.
+                const leftAreaW = W * 0.53;
+                const ox = 32;
+                const oy = H - 68;
+                const triScale = Math.max(5, Math.min(24, (leftAreaW - 82) / A, (H - 142) / B));
+                const x = ox + A * triScale;
+                const y = oy - B * triScale;
+
+                ctx.fillStyle = "#e6eeff";
+                ctx.beginPath();
+                ctx.moveTo(ox, oy);
+                ctx.lineTo(x, oy);
+                ctx.lineTo(x, y);
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = "#013062";
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                ctx.fillStyle = "#013062";
+                ctx.font = "600 14px Saira, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(`a = ${A} cm`, (ox + x) / 2, oy + 24);
+                ctx.textAlign = "left";
+                ctx.fillText(`b = ${B} cm`, Math.min(x + 8, leftAreaW - 76), (oy + y) / 2);
+                ctx.textAlign = "center";
+                ctx.font = "600 13px Saira, sans-serif";
+                ctx.fillText(`c = ${cExact}`, (ox + x) / 2 + 5, (oy + y) / 2 - 10);
+                drawRightAngleMarker(x, oy, triScale);
+
+                const squareX = W * 0.61;
+                const maxSquareWidth = W - squareX - 24;
+                const squareUnit = Math.min(18, maxSquareWidth / Math.max(A, B), (H - 150) / (A + B));
+                const sizeA = A * squareUnit;
+                const sizeB = B * squareUnit;
+                const squareY_A = 44;
+                const squareY_B = squareY_A + sizeA + 44;
+                drawSquare(squareX, squareY_A, sizeA, "#d7e4ff", `a² = ${A * A}`, 13);
+                drawSquare(squareX, squareY_B, sizeB, "#c4d9ff", `b² = ${B * B}`, 13);
+
+                ctx.fillStyle = "#013062";
+                ctx.font = "600 13px Saira, sans-serif";
+                ctx.textAlign = "left";
+                ctx.fillText(`a² + b² = c² = ${sum}`, squareX, Math.min(H - 10, squareY_B + sizeB + 24));
+            }
+        }
+
+        [aSlider, bSlider].forEach(slider => slider.addEventListener("input", draw));
+        window.addEventListener("resize", draw);
+        draw();
+    </script>
+</body>
+</html>

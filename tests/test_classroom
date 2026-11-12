@@ -1,0 +1,118 @@
+"""Classroom tests: student IDs, invites, homework, tests, permissions."""
+import http.cookiejar
+import json
+import os
+import sqlite3
+import tempfile
+import threading
+import unittest
+import urllib.error
+import urllib.request
+from http.server import ThreadingHTTPServer
+from pathlib import Path
+from unittest.mock import patch
+
+import server
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *a, **k):
+        return None
+
+
+class ClassroomTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.db = str(Path(cls.tmp.name) / 'class.sqlite3')
+        cls.env = patch.dict(os.environ, {'SQLITE_PATH': cls.db, 'DATABASE_URL': '', 'DEV_SHOW_OTP': '1',
+                                          'BREVO_API_KEY': '', 'SMTP_HOST': '', 'SMTP_PASSWORD': ''})
+        cls.env.start()
+        server.initialize_auth_db()
+        cls.httpd = ThreadingHTTPServer(('127.0.0.1', 0), server.JeeniusHandler)
+        cls.port = cls.httpd.server_address[1]
+        threading.Thread(target=cls.httpd.serve_forever, daemon=True).start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.httpd.shutdown(); cls.env.stop(); cls.tmp.cleanup()
+
+    def account(self, email, role, standard):
+        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()), _NoRedirect)
+
+        def call(path, data=None):
+            req = urllib.request.Request(f'http://127.0.0.1:{self.port}{path}', method='POST' if data is not None else 'GET',
+                                         data=json.dumps(data).encode() if data is not None else None, headers={'Content-Type': 'application/json'})
+            try:
+                r = opener.open(req); return r.status, json.loads(r.read() or b'{}')
+            except urllib.error.HTTPError as e:
+                try: return e.code, json.loads(e.read())
+                except ValueError: return e.code, {}
+        _, body = call('/api/auth/register', {'name': email.split('@')[0].title(), 'email': email, 'password': 'password123'})
+        call('/api/auth/verify-otp', {'email': email, 'code': body['dev_code']})
+        call('/api/account/profile', {'name': email.split('@')[0].title(), 'standard': standard, 'account_role': role})
+        call('/api/age/declare', {'age': 25, 'account_role': role})
+        conn = sqlite3.connect(self.db); conn.execute('UPDATE users SET admin_approved = 1 WHERE email = ?', (email,)); conn.commit(); conn.close()
+        return call
+
+    def test_full_classroom_flow(self):
+        teacher = self.account('teach@example.com', 'teacher', 'multiple')
+        stu = self.account('kiran@example.com', 'learner', '9')
+        other = self.account('other@example.com', 'learner', '8')
+        code = stu('/api/classroom')[1]['student_code']
+        self.assertRegex(code, r'^JNS-[A-Z2-9]{6}$')
+
+        # Students cannot invite, teachers cannot accept/submit.
+        self.assertEqual(stu('/api/classroom/invite', {'student_code': code})[0], 403)
+        self.assertEqual(teacher('/api/classroom/invite', {'student_code': 'JNS-ZZZZZZ'})[0], 404)
+        self.assertEqual(teacher('/api/classroom/invite', {'student_code': 'bad'})[0], 400)
+
+        # Invite (lower-case, no dash also works). A pending invite hides the student's name.
+        self.assertEqual(teacher('/api/classroom/invite', {'student_code': code.lower().replace('-', '')})[0], 201)
+        self.assertEqual(teacher('/api/classroom/invite', {'student_code': code})[0], 409)
+        pending = teacher('/api/classroom')[1]['students'][0]
+        self.assertEqual((pending['status'], pending['name']), ('pending', None))
+        # Cannot assign before the student accepts.
+        self.assertEqual(teacher('/api/classroom/assign', {'kind': 'homework', 'title': 'HW', 'body': 'Read', 'student_ids': 'all'})[0], 400)
+
+        invite = stu('/api/classroom')[1]['invites'][0]
+        self.assertEqual(other('/api/classroom/respond', {'link_id': invite['link_id'], 'accept': True})[0], 404)   # not their invite
+        self.assertEqual(stu('/api/classroom/respond', {'link_id': invite['link_id'], 'accept': True})[0], 200)
+
+        questions = [{'q': 'Unit of force?', 'options': ['Newton', 'Joule', 'Watt'], 'correct': 0},
+                     {'q': 'a = ?', 'options': ['F x m', 'F / m'], 'correct': 1}]
+        status, body = teacher('/api/classroom/assign', {'kind': 'test', 'title': 'Force quiz', 'due_date': '2026-12-01', 'student_ids': 'all', 'questions': questions})
+        self.assertEqual((status, body['assigned']), (201, 1))
+        self.assertEqual(teacher('/api/classroom/assign', {'kind': 'homework', 'title': 'HW', 'body': 'Read chapter 4', 'student_ids': 'all'})[0], 201)
+        self.assertEqual(teacher('/api/classroom/assign', {'kind': 'test', 'title': 'Bad', 'student_ids': 'all', 'questions': [{'q': 'x', 'options': ['a', 'b'], 'correct': 5}]})[0], 400)
+
+        work = stu('/api/classroom')[1]['assignments']
+        test = next(w for w in work if w['kind'] == 'test')
+        self.assertNotIn('correct', test['questions'][0])           # answers stay hidden until submitted
+        self.assertEqual(other('/api/classroom')[1]['assignments'], [])  # other student sees nothing
+        self.assertEqual(stu('/api/classroom/submit', {'assignment_id': test['id'], 'answers': [0]})[0], 400)
+        status, body = stu('/api/classroom/submit', {'assignment_id': test['id'], 'answers': [0, 0]})
+        self.assertEqual((status, body['score'], body['total']), (200, 1, 2))
+        self.assertEqual(stu('/api/classroom/submit', {'assignment_id': test['id'], 'answers': [0, 1]})[0], 409)   # one attempt only
+        reviewed = next(w for w in stu('/api/classroom')[1]['assignments'] if w['id'] == test['id'])
+        self.assertEqual(reviewed['questions'][1]['correct'], 1)
+
+        homework = next(w for w in work if w['kind'] == 'homework')
+        self.assertEqual(stu('/api/classroom/submit', {'assignment_id': homework['id'], 'answer_text': 'Done'})[0], 200)
+        detail = teacher('/api/classroom/assignment?id=' + test['id'])[1]
+        self.assertEqual((detail['students'][0]['name'], detail['students'][0]['score']), ('Kiran', 1))
+        self.assertEqual(stu('/api/classroom/assignment?id=' + test['id'])[0], 403)
+
+        # After the teacher removes the student, the work disappears for the student.
+        link = teacher('/api/classroom')[1]['students'][0]['link_id']
+        self.assertEqual(teacher('/api/classroom/remove', {'link_id': link})[0], 200)
+        self.assertEqual(stu('/api/classroom')[1]['assignments'], [])
+
+    def test_existing_learners_get_ids_and_class10_not_selectable(self):
+        stu = self.account('late@example.com', 'learner', '8')
+        self.assertTrue(stu('/api/classroom')[1]['student_code'])
+        self.assertEqual(stu('/api/account/profile', {'name': 'Late', 'standard': '10', 'account_role': 'learner'})[0], 400)
+
+
+if __name__ == '__main__':
+    unittest.main()

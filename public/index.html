@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#013062">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Jeenius · Learn with Geini</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Saira:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #013062;
+      --pale: #e6eeff;
+      --grey: #e9e9e9;
+      --white: #ffffff;
+      --line: #dce5f2;
+      --ink: #17375f;
+      --muted: #6b7f9c;
+      --panel: #f8faff;
+      --shadow: 0 7px 24px rgba(1, 48, 98, .055);
+      --goldman: "Goldman", "Trebuchet MS", sans-serif;
+      --saira: "Saira", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body.auth-checking .app { visibility: hidden; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      color: var(--ink);
+      background: var(--grey);
+      font-family: var(--saira);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; color: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: 3px solid #94b6ee;
+      outline-offset: 2px;
+    }
+    .app {
+      height: 100dvh;
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    /* Compact icon rail: keep only new, search, and maths course shortcuts. */
+    .side .rail-brand, .side #sideLabs, .side #sideHistory, .side #sideProfile, .side .rail-hint { display: none !important; }
+    .side {
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 9px;
+      min-height: 0;
+      z-index: 20;
+    }
+    .rail-brand {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      font-size: 30px;
+      line-height: 1;
+    }
+    .rail-brand:hover { background: #ffffff12; }
+    .rail-brand img { width: 42px; height: 44px; object-fit: contain; }
+    .wordmark-mark img { display: block; width: 35px; height: 38px; object-fit: contain; }
+    .av img { width: 92%; height: 92%; object-fit: contain; display: block; }
+    .rail-btn {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 46px;
+      flex: 0 0 auto;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      color: #ecf3ff;
+      background: transparent;
+      font-family: var(--saira);
+      font-size: 22px;
+      transition: background .16s ease, transform .16s ease;
+    }
+    .rail-btn:hover, .rail-btn.active {
+      background: #ffffff18;
+      border-color: #ffffff20;
+    }
+    .rail-btn:active { transform: scale(.97); }
+    .rail-bottom { margin-top: auto; }
+    .rail-hint {
+      color: #d0def2;
+      font-size: 10px;
+      line-height: 1.2;
+      text-align: center;
+      padding-top: 6px;
+    }
+
+    .workspace { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+    .topbar {
+      position: relative;
+      z-index: 15;
+      height: 72px;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.96);
+    }
+    .wordmark {
+      min-width: 220px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--navy);
+      font-family: var(--goldman);
+      font-size: 24px;
+      letter-spacing: -.035em;
+    }
+    .wordmark-mark { font-size: 30px; line-height: 1; }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 680px;
+      margin-left: auto;
+      min-width: 150px;
+    }
+    .search-box {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fbfcff;
+      padding: 0 14px;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .search-box:focus-within {
+      border-color: #9bb8e4;
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(230,238,255,.9);
+    }
+    .search-icon { font-size: 19px; color: var(--muted); line-height: 1; }
+    #q {
+      min-width: 0;
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font-size: 14px;
+    }
+    #q::placeholder { color: #8594aa; }
+    .search-results {
+      position: absolute;
+      top: 52px;
+      left: 0;
+      right: 0;
+      max-height: min(65vh, 490px);
+      overflow: auto;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--white);
+      box-shadow: 0 18px 50px rgba(1,48,98,.18);
+      z-index: 50;
+    }
+    .quota-meter {
+      position: absolute; right: 8px; top: calc(100% + 4px); z-index: 40;
+      border: 1px solid #d9e4f3; border-radius: 999px; padding: 3px 9px;
+      color: #466487; background: #fff; box-shadow: 0 2px 7px #0130620c;
+      font-size: 10px; line-height: 1.45; white-space: nowrap;
+    }
+    .quota-meter.quota-empty { color: #8c3b35; border-color: #f0c8c5; background: #fff7f6; }
+    .quota-notice {
+      position: absolute; z-index: 80; top: 53px; right: 0;
+      width: min(360px, calc(100vw - 100px)); display: flex; align-items: flex-start; gap: 11px;
+      padding: 14px 12px; border: 1px solid #d6e2f2; border-radius: 15px;
+      background: rgba(255,255,255,.98); color: var(--ink);
+      box-shadow: 0 16px 42px rgba(1,48,98,.2); backdrop-filter: blur(8px);
+    }
+    .quota-notice.pop-in { animation: quota-pop .22s ease-out both; }
+    @keyframes quota-pop { from { opacity: 0; transform: translateY(-7px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .quota-notice-icon {
+      width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center;
+      border: 1px solid #f0d8a7; border-radius: 11px; background: #fff7e4; color: #815b13; font-size: 17px;
+    }
+    .quota-notice-copy { min-width: 0; flex: 1; }
+    .quota-notice-copy strong { display: block; color: #123d6b; font-size: 13px; line-height: 1.35; }
+    .quota-notice-copy p { margin: 4px 0 5px; color: #5c6f88; font-size: 12px; line-height: 1.45; }
+    .quota-notice-copy span { display: block; color: #123d6b; font-size: 11px; font-weight: 800; }
+    .quota-notice-close { flex: 0 0 25px; width: 25px; height: 25px; display: grid; place-items: center; border: 0; border-radius: 8px; background: #f3f6fb; color: #506a88; font-size: 17px; }
+    .quota-notice-close:hover { background: #e6eeff; color: #013062; }
+    @media (max-width: 600px) {
+      .quota-notice { top: 49px; right: -3px; width: min(340px, calc(100vw - 82px)); padding: 12px 10px; }
+      .quota-meter { right: 5px; font-size: 9px; }
+    }
+    .result-heading {
+      padding: 9px 10px 5px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .result-option {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      border: 0;
+      border-radius: 11px;
+      padding: 10px;
+      background: transparent;
+      color: var(--ink);
+    }
+    .result-option:hover { background: var(--pale); }
+    .result-symbol {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--pale);
+      color: var(--navy);
+      font-size: 17px;
+    }
+    .result-copy { min-width: 0; flex: 1; }
+    .result-title { display: block; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+    .result-sub { display: block; margin-top: 1px; color: var(--muted); font-size: 11px; line-height: 1.35; }
+    .result-tag {
+      flex: 0 0 auto;
+      font-size: 10px;
+      color: var(--muted);
+      background: #f0f3f8;
+      border-radius: 20px;
+      padding: 3px 7px;
+    }
+    .ask-option { background: #f5f8ff; margin-top: 5px; }
+    .profile-button {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid #d7e3f4;
+      background: var(--pale);
+      color: var(--navy);
+      font-family: var(--goldman);
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .profile-button:hover { box-shadow: 0 0 0 4px #e6eeff; }
+
+    .panes {
+      display: grid;
+      grid-template-columns: minmax(340px, .88fr) minmax(420px, 1.12fr);
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
+      background: var(--grey);
+      gap: 10px;
+      padding: 10px;
+      overflow: hidden;
+    }
+    .main, .dock {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .main { position: relative; }
+    .mobile-pane-button { display: none; border: 1px solid #cbd9ed; border-radius: 9px; padding: 7px 10px; background: #f7faff; color: var(--navy); font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .mobile-pane-button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .head {
+      min-height: 75px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 20px;
+      border-bottom: 1px solid #edf1f7;
+    }
+    .av {
+      width: 43px;
+      height: 43px;
+      flex: 0 0 43px;
+      display: grid;
+      place-items: center;
+      background: var(--pale);
+      color: var(--navy);
+      border-radius: 50%;
+      font-size: 25px;
+      line-height: 1;
+    }
+    .head h1 {
+      margin: 0;
+      color: var(--navy);
+      font-family: var(--goldman);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -.02em;
+    }
+    .head p { margin: 1px 0 0; color: var(--muted); font-size: 12px; }
+    .online-dot {
+      width: 7px; height: 7px; display: inline-block;
+      border-radius: 50%; background: #4caa85; margin-right: 5px;
+    }
+    .log {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 20px clamp(14px, 2vw, 25px);
+      display: flex;
+      flex-direction: column;
+      gap: 19px;
+      scroll-behavior: smooth;
+    }
+    .row { display: flex; align-items: flex-start; gap: 10px; max-width: 100%; }
+    .row.u { justify-content: flex-end; }
+    .a .av { width: 32px; height: 32px; flex-basis: 32px; font-size: 19px; }
+    .msg {
+      max-width: min(680px, 88%);
+      min-width: 0;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+    }
+    .a .msg { padding: 2px 0; }
+    .u .msg {
+      max-width: min(82%, 560px);
+      padding: 10px 14px;
+      border-radius: 16px 16px 5px 16px;
+      background: var(--pale);
+      color: #0b315e;
+    }
+    .msg strong { font-weight: 700; color: #082e5b; }
+    .msg em { font-style: italic; }
+    .labbtn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 9px 14px;
+      border: 1px solid #9bb5dd;
+      background: var(--white);
+      border-radius: 11px;
+      font-family: var(--saira);
+      font-weight: 600;
+      color: var(--navy);
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .lab-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .labbtn { margin-top: 0; }
+    .labbtn:hover { background: var(--pale); border-color: var(--navy); }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 18px 4px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: var(--white);
+      border-radius: 20px;
+      padding: 7px 11px;
+      font-size: 12px;
+      color: #355579;
+      transition: border .15s ease, background .15s ease;
+    }
+    .chip:hover { background: var(--pale); border-color: #a8bfdf; }
+    .composer {
+      display: flex;
+      gap: 9px;
+      align-items: flex-end;
+      margin: 11px 15px 15px;
+      padding: 7px 8px 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fcfdff;
+      box-shadow: 0 2px 9px rgba(1,48,98,.035);
+    }
+    .composer:focus-within { border-color: #9bb8e4; box-shadow: 0 0 0 3px #e6eeff; }
+    textarea {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      resize: none;
+      outline: 0;
+      padding: 8px 0;
+      max-height: 120px;
+      color: var(--ink);
+      font-family: var(--saira);
+      line-height: 1.45;
+    }
+    textarea::placeholder { color: #8999af; }
+    .send {
+      width: 39px; height: 39px; flex: 0 0 39px;
+      border-radius: 12px;
+      border: 0;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 17px;
+      transition: opacity .15s ease, transform .15s ease;
+    }
+    .send:disabled { opacity: .32; cursor: default; }
+    .send:not(:disabled):hover { transform: translateY(-1px); }
+    .dots span {
+      display: inline-block; width: 6px; height: 6px; margin-right: 4px;
+      border-radius: 50%; background: #7890af; animation: typing 1.05s infinite ease-in-out;
+    }
+    .dots span:nth-child(2) { animation-delay: .13s; }
+    .dots span:nth-child(3) { animation-delay: .26s; }
+    @keyframes typing { 50% { transform: translateY(-4px); opacity: .55; } }
+
+    .dock { background: #fcfdff; }
+    .dh {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 75px;
+      padding: 13px 18px;
+      border-bottom: 1px solid #e9eef6;
+      background: var(--white);
+    }
+    .lab-mark {
+      width: 42px; height: 42px; display: grid; place-items: center;
+      flex: 0 0 42px; border-radius: 13px; background: var(--pale);
+      color: var(--navy); font-size: 20px;
+    }
+    .lab-heading { min-width: 0; flex: 1; }
+    .dh b {
+      display: block;
+      color: var(--navy);
+      font-family: var(--goldman);
+      font-size: 15px;
+      font-weight: 400;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    }
+    .lab-subtitle { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }
+    .dh button {
+      width: 34px; height: 34px; display: grid; place-items: center;
+      padding: 0; border: 1px solid var(--line); border-radius: 10px;
+      background: var(--white); color: var(--navy); font-size: 16px;
+    }
+    .dh button:hover { background: var(--pale); }
+    .frame { flex: 1; min-height: 0; border: 0; width: 100%; background: var(--grey); }
+    .empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 28px;
+      color: var(--muted);
+      background:
+        radial-gradient(circle at 50% 38%, rgba(230,238,255,.7), transparent 38%),
+        #fcfdff;
+    }
+    .empty-mark {
+      width: 66px; height: 66px; border-radius: 22px;
+      display: grid; place-items: center; margin-bottom: 17px;
+      color: var(--navy); background: var(--pale); font-size: 30px;
+    }
+    .empty h2 { margin: 0 0 7px; font-family: var(--goldman); font-weight: 400; font-size: 18px; color: var(--navy); }
+    .empty p { max-width: 310px; margin: 0; font-size: 13px; }
+    .empty-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 18px; }
+    .outline-btn {
+      padding: 8px 12px; border: 1px solid #cbd9ed; border-radius: 10px;
+      background: var(--white); color: var(--navy); font-size: 12px; font-weight: 600;
+    }
+    .outline-btn:hover { background: var(--pale); }
+    .note {
+      background: var(--pale);
+      color: #365579;
+      padding: 10px 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      border-top: 1px solid #dbe6f8;
+      min-height: 42px;
+    }
+    .tab {
+      position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+      background: var(--navy); color: var(--white);
+      border: 0; border-radius: 12px 0 0 12px;
+      padding: 13px 10px; font-weight: 600; z-index: 60;
+      box-shadow: 0 5px 18px #01306230;
+    }
+    .lab-collapsed { grid-template-columns: minmax(0, 1fr) !important; }
+    .dock.hide { display: none; }
+
+    dialog {
+      width: min(420px, calc(100vw - 28px));
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      color: var(--ink);
+      background: var(--white);
+      box-shadow: 0 28px 90px rgba(1,48,98,.24);
+    }
+    dialog::backdrop { background: rgba(3,24,49,.38); backdrop-filter: blur(3px); }
+    .profile-form { padding: 24px; }
+    .profile-form-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    .profile-form h2 { margin: 0; font-family: var(--goldman); color: var(--navy); font-weight: 400; font-size: 20px; }
+    .profile-form p { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+    .close-dialog {
+      border: 0; background: #f3f6fc; border-radius: 9px; width: 30px; height: 30px; color: var(--navy);
+    }
+    .field { display: block; margin: 15px 0; }
+    .field span { display: block; margin-bottom: 7px; color: #385878; font-size: 12px; font-weight: 700; }
+    .field input, .field select {
+      width: 100%; height: 43px; padding: 0 12px; border: 1px solid var(--line);
+      border-radius: 11px; color: var(--ink); background: #fcfdff;
+    }
+    .profile-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+    .primary-btn, .secondary-btn { padding: 9px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; }
+    .primary-btn { background: var(--navy); color: var(--white); border: 1px solid var(--navy); }
+    .secondary-btn { background: var(--white); color: var(--ink); border: 1px solid var(--line); }
+    .profile-footnote { margin-top: 15px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+
+    @media (max-width: 1120px) {
+      .topbar { gap: 14px; padding: 0 17px; }
+      .wordmark { min-width: 165px; }
+      .panes { grid-template-columns: minmax(310px, .9fr) minmax(360px, 1.1fr); }
+    }
+    @media (max-width: 900px) {
+      .app { height: auto; min-height: 100dvh; overflow: visible; }
+      .workspace { min-height: 100dvh; }
+      .panes { display: flex; flex-direction: column; overflow: visible; }
+      .main { height: 72vh; min-height: 530px; }
+      .dock { min-height: 640px; }
+      .frame { min-height: 490px; }
+      .empty { min-height: 480px; }
+      .topbar { position: sticky; top: 0; }
+      .side { position: sticky; top: 0; height: 100dvh; }
+    }
+    @media (max-width: 600px) {
+      .app { grid-template-columns: 58px minmax(0,1fr); }
+      .side { padding: 10px 5px; gap: 6px; }
+      .rail-brand, .rail-btn { width: 42px; }
+      .rail-btn { height: 42px; font-size: 20px; }
+      .topbar { height: 64px; padding: 0 10px; gap: 9px; }
+      .wordmark { min-width: 0; width: 42px; overflow: hidden; gap: 9px; font-size: 0; }
+      .wordmark-mark { font-size: 27px; }
+      .search-box { height: 41px; padding: 0 10px; gap: 7px; }
+      #q { font-size: 12px; }
+      .profile-button { width: 37px; height: 37px; flex-basis: 37px; }
+      .panes { padding: 7px; gap: 8px; }
+      .head { padding: 12px 14px; }
+      .log { padding: 16px 13px; }
+      .chips { padding: 0 12px 4px; }
+      .composer { margin: 9px 10px 11px; }
+      .dh { padding: 11px 12px; gap: 8px; }
+      .lab-mark { width: 36px; height: 36px; flex-basis: 36px; }
+      .lab-subtitle { max-width: 160px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+      .search-results { position: fixed; top: 62px; left: 66px; right: 8px; max-height: 65vh; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  
+    /* Math Quest course: styled to fit the JEENius navy + pale-blue workspace. */
+    body.math-course-mode .search-wrap { display: none; }
+    .math-course-workspace { flex: 1; min-height: 0; overflow: auto; padding: 18px; background: #edf1f6; }
+    .mq-wrap { max-width: 1500px; margin: 0 auto; }
+    .mq-header, .mq-panel { background: #fff; border: 1px solid #cbd7e7; border-radius: 14px; box-shadow: 0 5px 0 #013062; }
+    .mq-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 17px 20px; margin-bottom: 16px; }
+    .mq-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .mq-brand-mark { width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center; border-radius: 14px; background: #e6eeff; border: 1px solid #c8d9f3; color: #013062; font-size: 25px; font-weight: 800; }
+    .mq-eyebrow { margin: 0 0 2px; color: #58759b; text-transform: uppercase; letter-spacing: .12em; font-size: 10px; font-weight: 800; }
+    .mq-title { margin: 0; color: #013062; font-family: var(--goldman); font-size: clamp(20px, 2vw, 25px); font-weight: 400; }
+    .mq-subtitle { margin: 2px 0 0; color: #6b7f9c; font-size: 12px; }
+    .mq-head-actions { display: flex; align-items: center; justify-content: flex-end; gap: 9px; min-width: 0; }
+    .mq-search { width: clamp(150px, 19vw, 270px); display: flex; align-items: center; gap: 8px; border: 1px solid #dce5f2; border-radius: 11px; padding: 9px 11px; background: #fbfcff; color: #6b7f9c; }
+    .mq-search input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: #17375f; font-size: 12px; }
+    .mq-back-home, .mq-btn { min-height: 39px; padding: 9px 13px; border: 1px solid #b4c8e3; border-radius: 10px; background: #fff; color: #013062; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .mq-back-home:hover, .mq-btn:hover { background: #e6eeff; }
+    .mq-btn.primary { color: #fff; border-color: #013062; background: #013062; }
+    .mq-btn.primary:hover { background: #154d86; }
+    .mq-hero { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0,1.35fr) minmax(170px,.65fr); gap: 18px; align-items: center; min-height: 220px; padding: clamp(22px,3vw,33px); margin-bottom: 15px; color: #fff; border: 1px solid #123d71; border-radius: 15px; background: linear-gradient(118deg,#013062 0%,#15518d 62%,#5f87be 100%); box-shadow: 0 5px 0 #8daed5; }
+    .mq-hero:after { content: ""; position: absolute; width: 230px; height: 230px; right: 12%; top: -115px; border: 1px solid #ffffff25; border-radius: 50%; box-shadow: 0 0 0 25px #ffffff08, 0 0 0 53px #ffffff06; }
+    .mq-hero-copy, .mq-hero-art { position: relative; z-index: 1; }
+    .mq-hero-kicker { color: #d5e4ff; font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .mq-hero h2 { max-width: 650px; margin: 9px 0; font-family: var(--goldman); font-size: clamp(25px,3vw,36px); font-weight: 400; line-height: 1.14; letter-spacing: -.02em; }
+    .mq-hero h2 span { color: #ffe29a; }
+    .mq-hero p { max-width: 560px; margin: 0 0 17px; color: #e3edff; font-size: 13px; line-height: 1.55; }
+    .mq-hero-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .mq-hero .mq-btn { background: #fff; border-color: #fff; color: #013062; }
+    .mq-hero .mq-btn.outline { background: #ffffff15; border-color: #ffffff72; color: #fff; }
+    .mq-hero-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 19px; color: #e2ecff; font-size: 11px; }
+    .mq-hero-meta strong { color: #fff; font-size: 15px; margin-right: 4px; }
+    .mq-hero-art { justify-self: center; display: grid; place-items: center; width: 166px; height: 166px; border: 1px dashed #ffffff80; border-radius: 50%; }
+    .mq-hero-art:before { content: ""; position: absolute; inset: 15px; border: 1px solid #ffffff40; border-radius: 50%; }
+    .mq-math-tile { display: grid; place-items: center; width: 91px; height: 91px; border: 1px solid #fff; border-radius: 22px; background: #e6eeff; color: #013062; font-size: 29px; font-weight: 900; transform: rotate(-5deg); box-shadow: 0 14px 27px #001b3c50; }
+    .mq-progress-panel { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 22px; padding: 19px 22px; margin: 17px 0 14px; border: 1px solid #dce5f2; border-radius: 14px; background: #fff; box-shadow: 0 2px 0 #e6edf7; }
+    .mq-progress-copy { min-width: 0; }
+    .mq-progress-status { display: inline-flex; align-items: center; gap: 7px; color: #15518d; font-size: 10px; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
+    .mq-progress-status:before { content: ""; width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: #8daed5; }
+    .mq-progress-status.started:before { background: #2ca67a; }
+    .mq-progress-copy h2 { margin: 7px 0 4px; color: #013062; font-family: var(--goldman); font-size: clamp(17px,2vw,21px); font-weight: 400; }
+    .mq-progress-copy p { margin: 0; color: #6b7f9c; font-size: 12px; line-height: 1.55; }
+    .mq-progress-circle { --progress: 0; position: relative; isolation: isolate; display: grid; place-items: center; width: 104px; height: 104px; flex: 0 0 104px; border-radius: 50%; background: conic-gradient(#15518d var(--progress), #e8eff9 0); }
+    .mq-progress-circle:before { content: ""; position: absolute; z-index: 0; inset: 8px; border-radius: 50%; background: #fff; }
+    .mq-progress-value { position: relative; z-index: 1; }
+    .mq-progress-value { display: flex; flex-direction: column; align-items: center; color: #013062; line-height: 1.15; }
+    .mq-progress-value strong { font-size: 22px; font-weight: 800; letter-spacing: -.04em; }
+    .mq-progress-value span { margin-top: 4px; color: #6b7f9c; font-size: 9px; font-weight: 800; letter-spacing: .08em; }
+    .mq-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 0 0 26px; }
+    .mq-stat { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 14px 16px; background: #fff; border: 1px solid #dce5f2; border-radius: 12px; }
+    .mq-stat-icon { width: 39px; height: 39px; flex: 0 0 39px; display: grid; place-items: center; border: 1px solid #d5e3f7; border-radius: 11px; background: #e6eeff; color: #15518d; font-family: var(--goldman); font-size: 12px; font-weight: 700; }
+    .mq-stat small { display: block; color: #6b7f9c; font-size: 10px; font-weight: 800; letter-spacing: .04em; }
+    .mq-stat strong { display: block; margin-top: 1px; color: #013062; font-size: 20px; line-height: 1.25; }
+    .mq-section-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin: 27px 0 13px; }
+    .mq-section-head h2 { margin: 0; color: #013062; font-family: var(--goldman); font-size: 18px; font-weight: 400; }
+    .mq-section-head p { margin: 3px 0 0; color: #6b7f9c; font-size: 12px; }
+    .mq-link-btn { border: 0; background: transparent; color: #15518d; padding: 6px 0; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .mq-unit-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+    .mq-unit-card { min-width: 0; padding: 15px; text-align: left; border: 1px solid #dce5f2; border-radius: 13px; background: #fff; color: #17375f; box-shadow: 0 2px 0 #e6edf7; transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+    .mq-unit-card:hover { transform: translateY(-2px); border-color: var(--mq-accent); box-shadow: 0 5px 0 var(--mq-tint); }
+    .mq-unit-card.selected { border: 2px solid var(--mq-accent); padding: 14px; box-shadow: 0 3px 0 var(--mq-tint); }
+    .mq-unit-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .mq-unit-icon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 11px; background: var(--mq-tint); color: var(--mq-accent); font-family: var(--goldman); font-size: 12px; font-weight: 700; letter-spacing: .02em; }
+    .mq-unit-number { color: #7184a0; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+    .mq-unit-card h3 { margin: 12px 0 4px; color: #123d6b; font-size: 14px; font-weight: 800; }
+    .mq-unit-card p { min-height: 31px; margin: 0; color: #6b7f9c; font-size: 11px; line-height: 1.45; }
+    .mq-unit-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; color: #657c9b; font-size: 10px; font-weight: 700; }
+    .mq-track { height: 5px; margin-top: 9px; overflow: hidden; border-radius: 10px; background: #edf2fa; }
+    .mq-track span { display: block; height: 100%; border-radius: inherit; background: var(--mq-accent); transition: width .2s ease; }
+    .mq-chapter-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .mq-chapter-card { display: flex; align-items: center; gap: 11px; min-width: 0; width: 100%; padding: 12px; text-align: left; border: 1px solid #dce5f2; border-radius: 11px; background: #fff; color: #17375f; }
+    .mq-chapter-card:hover { border-color: #8eadd8; background: #f9fbff; }
+    .mq-chapter-card.done { background: #f1fbf7; border-color: #b8e3d1; }
+    .mq-chapter-number { width: 36px; height: 36px; flex: 0 0 36px; display: grid; place-items: center; border-radius: 10px; background: var(--mq-tint,#e6eeff); color: var(--mq-accent,#013062); font-size: 11px; font-weight: 900; }
+    .mq-chapter-copy { min-width: 0; flex: 1; }
+    .mq-chapter-copy strong { display: block; color: #143c68; font-size: 12px; line-height: 1.3; }
+    .mq-chapter-copy small { display: block; margin-top: 4px; color: #6b7f9c; font-size: 10px; }
+    .mq-chapter-arrow { color: #6b7f9c; font-size: 15px; }
+    .mq-empty { grid-column: 1/-1; padding: 24px; text-align: center; border: 1px dashed #c5d4e9; border-radius: 12px; background: #fff; color: #6b7f9c; font-size: 13px; }
+    .mq-lesson { max-width: 1200px; margin: 0 auto; }
+    .mq-back { margin: 0 0 13px; padding: 7px 0; border: 0; background: transparent; color: #56759b; font-size: 12px; font-weight: 800; }
+    .mq-lesson-hero { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0,1fr) 175px; align-items: center; gap: 16px; padding: 22px; border: 1px solid #c5d7f0; border-radius: 14px; background: #e6eeff; color: #17375f; }
+    .mq-lesson-kicker { color: #15518d; font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .mq-lesson-hero h2 { margin: 9px 0 7px; color: #013062; font-family: var(--goldman); font-size: clamp(23px,2.6vw,32px); font-weight: 400; line-height: 1.2; }
+    .mq-lesson-hero p { max-width: 700px; margin: 0; color: #4f6888; font-size: 12px; line-height: 1.5; }
+    .mq-formula-visual { display: grid; place-items: center; min-height: 105px; padding: 13px; border: 1px solid #dce5f2; border-radius: 17px; background: #fff; box-shadow: 0 5px 0 #cadcf4; color: #013062; font-size: 20px; font-weight: 900; text-align: center; overflow-wrap: anywhere; }
+    .mq-lesson-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+    .mq-pill { display: inline-flex; padding: 5px 8px; border: 1px solid #c4d6ef; border-radius: 7px; background: #f8faff; color: #25517f; font-size: 10px; font-weight: 800; }
+    .mq-lesson-points { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; margin: 14px 0 24px; }
+    .mq-panel { min-width: 0; padding: 18px; box-shadow: none; }
+    .mq-panel-kicker { display: flex; align-items: center; gap: 7px; color: #6b7f9c; font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .mq-panel h3 { margin: 12px 0 8px; color: #013062; font-size: 16px; }
+    .mq-panel p { margin: 0; color: #637895; font-size: 12px; line-height: 1.65; }
+    .mq-rule { display: inline-block; margin-top: 12px; padding: 8px 11px; border: 1px solid #cbdcf2; border-radius: 9px; background: #edf4ff; color: #013062; font-size: 13px; font-weight: 900; }
+    .mq-example { margin-top: 13px; padding: 12px 14px; border: 1px solid #cbdcf2; border-radius: 10px; background: #f2f7ff; color: #123d68; font-size: 13px; font-weight: 800; line-height: 1.55; }
+    .mq-example small { display: block; margin-bottom: 4px; color: #6b7f9c; font-size: 9px; font-weight: 900; letter-spacing: .1em; }
+    .mq-practice-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 23px 0 12px; }
+    .mq-practice-head h3 { margin: 0; color: #013062; font-family: var(--goldman); font-size: 20px; font-weight: 400; }
+    .mq-practice-head p { margin: 4px 0 0; color: #6b7f9c; font-size: 11px; }
+    .mq-question-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+    .mq-question { min-width: 0; padding: 16px; border: 1px solid #cbd7e7; border-radius: 13px; background: #fff; box-shadow: 0 3px 0 #e5edf8; }
+    .mq-question-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; color: #6b7f9c; font-size: 10px; font-weight: 900; letter-spacing: .08em; }
+    .mq-question-mark { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: #e6eeff; color: #013062; font-size: 11px; }
+    .mq-question h4 { margin: 0 0 13px; color: #17375f; font-size: 14px; line-height: 1.5; }
+    .mq-options { display: grid; gap: 8px; }
+    .mq-option { display: flex; align-items: center; gap: 9px; width: 100%; padding: 9px 10px; text-align: left; border: 1px solid #dce5f2; border-radius: 9px; background: #fbfcff; color: #17375f; font-size: 12px; font-weight: 700; }
+    .mq-option:hover:not(:disabled) { border-color: #91acd2; background: #edf4ff; }
+    .mq-option:disabled { cursor: default; }
+    .mq-option.correct { border-color: #86cbb0; background: #e7f8f0; color: #135a42; }
+    .mq-option.incorrect { border-color: #e9a9b5; background: #fff0f2; color: #8f2942; }
+    .mq-option-letter { width: 24px; height: 24px; flex: 0 0 24px; display: grid; place-items: center; border-radius: 7px; background: #e6eeff; color: #174778; font-size: 10px; }
+    .mq-feedback { display: none; margin-top: 10px; padding: 10px; border-radius: 9px; font-size: 11px; line-height: 1.5; }
+    .mq-feedback.show { display: block; }
+    .mq-feedback.good { background: #e7f8f0; color: #135a42; }
+    .mq-feedback.try { background: #fff6e5; color: #805715; }
+    .mq-lesson-footer { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 17px; padding-top: 15px; border-top: 1px solid #dce5f2; }
+    .mq-lesson-status { flex: 1 1 100%; color: #6b7f9c; font-size: 11px; }
+    .mq-lesson-footer .mq-btn:disabled { opacity: .42; cursor: not-allowed; }
+    .mq-footnote { padding: 18px 0 5px; color: #7286a0; font-size: 10px; text-align: center; }
+    @media (max-width: 1000px) { .mq-unit-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .mq-header { align-items: flex-start; flex-direction: column; } .mq-head-actions { width: 100%; justify-content: space-between; } .mq-search { flex: 1; width: auto; } }
+    @media (max-width: 900px) { .math-course-workspace { min-height: 100dvh; overflow: visible; padding: 10px; } .mq-hero { grid-template-columns: 1fr; } .mq-hero-art { position: absolute; right: 10px; bottom: -24px; opacity: .22; } .mq-hero-copy { z-index: 2; } .mq-hero p { max-width: 75%; } .mq-lesson-hero { grid-template-columns: minmax(0,1fr) 130px; } }
+    @media (max-width: 600px) { .mq-header { padding: 13px; } .mq-head-actions { align-items: stretch; flex-direction: column; } .mq-search { min-height: 40px; width: 100%; } .mq-back-home { width: 100%; } .mq-hero { padding: 20px 17px; } .mq-hero h2 { font-size: 27px; } .mq-hero p { max-width: 88%; } .mq-hero-art { right: -30px; bottom: -43px; transform: scale(.82); } .mq-progress-panel { grid-template-columns: minmax(0,1fr) 82px; gap: 11px; padding: 15px 13px; } .mq-progress-circle { width: 78px; height: 78px; flex-basis: 78px; } .mq-progress-circle:before { inset: 6px; } .mq-progress-value strong { font-size: 18px; } .mq-progress-copy h2 { font-size: 16px; } .mq-progress-copy p { font-size: 11px; } .mq-stats { gap: 7px; } .mq-stat { align-items: flex-start; flex-direction: column; gap: 7px; padding: 10px; } .mq-stat strong { font-size: 17px; } .mq-stat small { font-size: 9px; } .mq-unit-grid, .mq-chapter-grid, .mq-lesson-points, .mq-question-grid { grid-template-columns: minmax(0,1fr); } .mq-unit-card { padding: 13px; } .mq-unit-card.selected { padding: 12px; } .mq-lesson-hero { grid-template-columns: minmax(0,1fr); padding: 17px; } .mq-lesson-hero h2 { max-width: 100%; font-size: 25px; } .mq-lesson-hero p { max-width: 100%; } .mq-formula-visual { min-height: 80px; } .mq-panel { padding: 15px; } .mq-practice-head { align-items: flex-start; flex-direction: column; } .mq-lesson-footer .mq-btn { flex: 1 1 auto; } }
+        width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    border-radius: 11px;
+    font-size: 18px;
+  }
+
+  .dh b {
+    font-size: 14px;
+  }
+
+  .lab-subtitle {
+    font-size: 10px;
+  }
+
+  .dh button {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .frame {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .empty {
+    padding: 20px 14px;
+  }
+
+  .empty h2 {
+    font-size: 17px;
+  }
+
+  .outline-btn,
+  .labbtn {
+    min-height: 40px;
+  }
+
+  .note {
+    padding: 9px 12px;
+    font-size: 11px;
+  }
+
+  /* Keep the existing Motion Lab toggle above, not underneath, bottom navigation. */
+  .tab {
+    top: auto;
+    right: 7px;
+    bottom: calc(72px + env(safe-area-inset-bottom));
+    transform: none;
+    padding: 10px 8px;
+    border-radius: 12px;
+  }
+
+  .profile-form {
+    padding: 20px;
+  }
+
+  .profile-actions {
+    flex-wrap: wrap;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    min-height: 42px;
+  }
+
+  /* Preserve the single-panel layout when the existing collapse state is active. */
+  .lab-collapsed {
+    grid-template-rows: max(390px, 62dvh);
+  }
+}
+
+/* Very narrow phones: reduce outer spacing without shrinking interactive targets. */
+@media (max-width: 359px) {
+  .topbar {
+    gap: 8px 9px;
+    padding-inline: 10px;
+  }
+
+  .wordmark {
+    font-size: 19px;
+  }
+
+  .wordmark-mark img {
+    width: 28px;
+    height: 31px;
+  }
+
+  .panes {
+    gap: 8px;
+    padding-inline: 6px;
+  }
+
+  .head {
+    padding-inline: 10px;
+  }
+
+  .log {
+    padding-inline: 10px;
+  }
+
+  .composer {
+    margin-inline: 7px;
+  }
+}
+
+
+    /* Mobile student experience: bottom navigation + horizontally switchable chat/animation panels. */
+    @media (max-width: 600px) {
+      html, body { width: 100%; height: 100%; overflow: hidden; }
+      .app { height: 100dvh; min-height: 0; overflow: hidden; display: grid; grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,1fr); }
+      .workspace { width: 100%; height: calc(100dvh - 66px - env(safe-area-inset-bottom)); min-height: 0; overflow: hidden; }
+      .side { position: fixed; left: 0; right: 0; top: auto; bottom: 0; width: 100%; height: calc(66px + env(safe-area-inset-bottom)); min-height: 0; padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 5px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; box-shadow: 0 -6px 22px #01306220; border-radius: 15px 15px 0 0; }
+      .side::-webkit-scrollbar { display: none; }
+      .side { scrollbar-width: none; }
+      .side .rail-brand, .side #sideLabs, .side #sideHistory, .side #sideProfile { display: grid !important; }
+      .side .rail-hint { display: none !important; }
+      .side .rail-bottom { display: contents; margin: 0; }
+      .rail-brand, .rail-btn { width: 42px; min-width: 42px; height: 44px; min-height: 44px; flex: 0 0 42px; margin: 0; border-radius: 12px; }
+      .rail-brand { padding: 2px; }
+      .rail-brand img { width: 36px; height: 38px; }
+      .topbar { position: relative; top: auto; flex: 0 0 64px; height: 64px; min-height: 64px; padding: 0 9px; gap: 8px; }
+      .wordmark { min-width: 42px; width: 42px; flex: 0 0 42px; overflow: hidden; gap: 5px; font-size: 0; }
+      .wordmark-mark { font-size: 27px; }
+      .wordmark-mark img { width: 31px; height: 34px; }
+      .search-wrap { min-width: 0; max-width: none; flex: 1 1 auto; }
+      .search-box { width: 100%; min-width: 0; }
+      #q { min-width: 0; }
+      .profile-button { width: 36px; height: 36px; flex: 0 0 36px; }
+      .panes { display: grid; grid-template-columns: 100% 100%; grid-template-rows: minmax(0,1fr); flex: 1 1 auto; width: 100%; min-width: 0; min-height: 0; height: 0; gap: 8px; padding: 8px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+      .panes::-webkit-scrollbar { display: none; }
+      .panes { scrollbar-width: none; }
+      .main, .dock { width: 100%; height: 100%; min-width: 0; min-height: 0; scroll-snap-align: start; scroll-snap-stop: always; border-radius: 15px; }
+      .main { display: flex; }
+      .head { min-height: 68px; flex: 0 0 auto; display: flex; flex-wrap: wrap; gap: 9px; padding: 10px 12px; }
+      .head .av { width: 37px; height: 37px; flex-basis: 37px; }
+      .head > div:not(.av) { flex: 1; min-width: 0; }
+      .head h1 { font-size: 16px; }
+      .head p { font-size: 10px; }
+      .mobile-pane-button { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; }
+      #mobileShowAnimations { flex: 1 0 100%; }
+      .log { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 12px 10px; }
+      .chips { flex: 0 0 auto; max-height: 66px; overflow-x: auto; padding: 0 10px 4px; }
+      .composer { flex: 0 0 auto; margin: 7px 8px 9px; }
+      .dh { flex: 0 0 auto; min-height: 59px; padding: 8px 9px; gap: 7px; }
+      .lab-mark { width: 32px; height: 32px; flex: 0 0 32px; }
+      .lab-heading { min-width: 0; flex: 1 1 auto; }
+      .lab-heading b { display: block; max-width: 130px; font-size: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+      .lab-subtitle { display: none; }
+      .dh #slide { display: none; }
+      .dh #full { width: 34px; min-width: 34px; height: 34px; flex: 0 0 34px; }
+      #mobileShowChat { flex: 0 0 auto; }
+      .frame { display: block; width: 100%; max-width: 100%; min-width: 0; min-height: 0; height: 0; flex: 1 1 auto; }
+      .empty { flex: 1 1 auto; min-height: 0; padding: 18px 13px; }
+      .empty-mark { width: 52px; height: 52px; border-radius: 17px; margin-bottom: 11px; }
+      .empty h2 { font-size: 17px; }
+      .empty p { font-size: 12px; }
+      .empty-actions { gap: 7px; }
+      .outline-btn { min-height: 38px; }
+      .note { flex: 0 0 auto; min-height: 35px; padding: 7px 10px; font-size: 10px; }
+      .tab { bottom: calc(72px + env(safe-area-inset-bottom)); }
+      .panes.lab-collapsed { grid-template-columns: 100% 100% !important; }
+      .panes.lab-collapsed .dock { display: flex; }
+      .math-course-workspace { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 9px; }
+    }
+      @media (max-width: 600px) {
+      .chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .chips::-webkit-scrollbar { display: none; }
+      .chip { flex: 0 0 auto; white-space: nowrap; }
+    }
+      .dh .mobile-pane-button { display: none; width: auto; height: 34px; padding: 0 12px; }
+    @media (max-width: 600px) { .dh .mobile-pane-button { display: inline-flex; align-items: center; justify-content: center; } }
+  </style>
+</head>
+<body class="auth-checking">
+  <!-- Session routing depends on the backend endpoint /api/auth/me. The server must also protect private routes. -->
+  <script>
+    (async function checkJeeniusSession() {
+      const path = window.location.pathname + window.location.search + window.location.hash;
+      const authUrl = '/auth.html?next=' + encodeURIComponent(path || '/');
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 8000);
+      let redirectToLogin = false;
+      try {
+        const response = await fetch('/api/auth/me', {
+          method: 'GET',
+          credentials: 'same-origin',
+          headers: { 'Accept': 'application/json' },
+          signal: controller.signal,
+          cache: 'no-store'
+        });
+        if (response.status === 401) {
+          redirectToLogin = true;
+        } else if (response.ok) {
+          const data = await response.json();
+          window.JEENIUS_SESSION = data;
+          window.dispatchEvent(new CustomEvent('jeenius-session-ready', { detail: data }));
+          if (data.authenticated === false || !data.user) redirectToLogin = true;
+        }
+      } catch (_) {
+        // A slow session check must not leave the whole app hidden forever.
+        window.JEENIUS_SESSION_ERROR = true;
+      } finally {
+        window.clearTimeout(timeoutId);
+        if (redirectToLogin) {
+          window.location.replace(authUrl);
+        } else {
+          document.body.classList.remove('auth-checking');
+        }
+      }
+    })();
+  </script>
+
+
+    
+  <div class="app">
+    <aside class="side" aria-label="Main navigation">
+      <a class="rail-brand" href="/" title="Jeenius home" aria-label="Jeenius home"><img src="/brand/geini-happy.png" alt=""></a>
+      <button class="rail-btn" id="new" title="New chat" aria-label="New chat">＋</button>
+      <button class="rail-btn" id="sideSearch" title="Search chats and labs" aria-label="Search chats and labs">⌕</button>
+      <button class="rail-btn" id="sideLabs" title="Browse science labs" aria-label="Browse science labs">⚗</button>
+      <button class="rail-btn" id="sideHistory" title="Recent chats" aria-label="Recent chats">☷</button>
+      <button class="rail-btn" id="sideMathCourse" title="Math Quest · Class 8–9" aria-label="Math Quest maths course">π</button>
+<div class="rail-bottom">
+        <button class="rail-btn" id="sideProfile" title="Your profile" aria-label="Your profile">☺</button>
+        <div class="rail-hint">Class 8–9</div>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div class="wordmark"><span>Jeenius</span><span class="wordmark-mark"><img src="/brand/geini-happy.png" alt="Geini"></span></div>
+        <div class="search-wrap">
+          <div class="search-box">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="q" type="search" autocomplete="off" placeholder="Search topics, labs, or ask Geini…" aria-label="Search chats, labs or ask Geini">
+          </div>
+          <div id="searchResults" class="search-results" hidden role="listbox" aria-label="Search results"></div>
+          <div id="quotaMeter" class="quota-meter" hidden role="status" aria-live="polite"></div>
+          <div id="quotaNotice" class="quota-notice" hidden role="alert" aria-live="assertive">
+            <div class="quota-notice-icon" aria-hidden="true">⌛</div>
+            <div class="quota-notice-copy">
+              <strong>Daily limit reached</strong>
+              <p id="quotaNoticeMessage">You've used all your assigned AI responses for today.</p>
+              <span id="quotaResetLabel">Resets at 12:00 AM IST.</span>
+            </div>
+            <button class="quota-notice-close" id="quotaNoticeClose" type="button" aria-label="Dismiss daily limit notice">×</button>
+          </div>
+        </div>
+        <button class="profile-button" id="profileOpen" title="Your profile" aria-label="Open your profile"><span id="profileAvatar">☺</span></button>
+      </header>
+
+      <div class="panes" id="panes">
+        <main class="main">
+          <div class="head">
+            <div class="av" aria-hidden="true"><img src="/brand/geini-happy.png" alt=""></div>
+            <div>
+              <h1>GEINI</h1>
+              <p><span class="online-dot"></span>your science buddy · ask me anything</p>
+            </div>
+            <button class="mobile-pane-button" id="mobileShowAnimations" type="button" aria-pressed="false">Animations →</button>
+          </div>
+          <div class="log" id="log" aria-live="polite"></div>
+          <div class="chips" id="chips"></div>
+          <form class="composer" id="f">
+            <textarea id="t" rows="1" placeholder="Ask Geini anything…" aria-label="Message Geini"></textarea>
+            <button class="send" id="s" type="submit" disabled aria-label="Send message">➤</button>
+          </form>
+        </main>
+
+        <section class="dock" id="dock" aria-label="Science lab workspace">
+          <div class="dh">
+            <div class="lab-mark" aria-hidden="true">⚗</div>
+            <div class="lab-heading">
+              <b id="dt">Animation Workspace</b>
+              <span id="labSubtitle" class="lab-subtitle">Your interactive animation space</span>
+            </div>
+            <button class="mobile-pane-button" id="mobileShowChat" type="button" aria-pressed="true">← Chat</button>
+            <button id="full" title="Open full screen" aria-label="Open lab full screen">⛶</button>
+            <button id="slide" title="Hide lab panel" aria-label="Hide lab panel">↗</button>
+          </div>
+          <div class="empty" id="de">
+            <div class="empty-mark" aria-hidden="true">✦</div>
+            <h2>Your animations, ready when you are</h2>
+            <p>Choose an animation from search, or ask Geini about a topic. Relevant interactive animations open here.</p>
+            <div class="empty-actions">
+              <button class="outline-btn" id="emptyLabs">Explore animations</button>
+              <button class="outline-btn" id="emptyAsk">Ask Geini for an idea</button>
+            </div>
+          </div>
+          <iframe class="frame" id="fr" title="Interactive science lab" hidden></iframe>
+          <div class="note" id="note" hidden></div>
+        </section>
+      </div>
+
+      <section class="math-course-workspace" id="mathCourseWorkspace" hidden aria-label="Math Quest course">
+        <div class="mq-wrap">
+          <header class="mq-header">
+            <div class="mq-brand"><span class="mq-brand-mark" aria-hidden="true">π</span><div><p class="mq-eyebrow">JEENIUS LEARNING PATH</p><h1 class="mq-title">Math Quest</h1><p class="mq-subtitle">Class 8–9 · 9 units · 40 short chapters</p></div></div>
+            <div class="mq-head-actions"><label class="mq-search"><span aria-hidden="true">⌕</span><input id="mqSearch" type="search" placeholder="Find a chapter…" aria-label="Search maths chapters"></label><button class="mq-back-home" id="mqBackHome" type="button">← Back to Geini</button></div>
+          </header>
+          <div id="mqContent"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+
+  <button class="tab" id="tab" hidden>Show science lab</button>
+
+  <dialog id="profileDialog" aria-labelledby="profileTitle">
+    <form class="profile-form" id="profileForm" method="dialog">
+      <div class="profile-form-head">
+        <div>
+          <h2 id="profileTitle">A little about you</h2>
+          <p>Geini can make explanations feel more personal.</p>
+        </div>
+        <button class="close-dialog" type="button" id="closeProfile" aria-label="Close profile">×</button>
+      </div>
+      <label class="field">
+        <span>What should Geini call you?</span>
+        <input id="profileName" name="name" type="text" maxlength="50" placeholder="Your name" autocomplete="given-name" required>
+      </label>
+      <label class="field">
+        <span>I use Jeenius as</span>
+        <select id="profileRole" name="role" required disabled title="Your role is fixed after sign-up">
+          <option value="learner">A learner</option>
+          <option value="teacher">A teacher</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Class / standard</span>
+        <select id="profileStandard" name="standard" required>
+          <option value="" disabled>Select your class</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          
+          <option value="multiple">Teacher · multiple classes</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Gender</span>
+        <select id="profileGender" name="gender" required>
+          <option value="" disabled>Select an option</option>
+          <option value="girl">Girl / female</option>
+          <option value="boy">Boy / male</option>
+          <option value="non-binary">Non-binary</option>
+          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
+      </label>
+      <div class="profile-actions">
+        <button class="secondary-btn" type="button" id="cancelProfile">Cancel</button>
+        <button class="primary-btn" type="submit">Save profile</button>
+      </div>
+      <div class="profile-footnote">Your name and class are saved to your JEENIUS account so Geini can tailor its replies. Gender preference is saved in this browser.</div>
+    </form>
+  </dialog>
+  <script>
+    const $ = id => document.getElementById(id);
+    const KEY = 'jeenius_chats_v2';
+    const PROFILE_KEY = 'jeenius_profile_v1';
+    let LABS = [], chats = [], cur = null, busy = false, lab = null;
+    let profile = null, searchMode = 'all';
+
+    const load = () => {
+      try { chats = JSON.parse(localStorage.getItem(KEY) || '[]'); }
+      catch { chats = []; }
+      try { profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null'); }
+      catch { profile = null; }
+      if (!profile || typeof profile !== 'object') profile = null;
+      updateProfileButton();
+    };
+    const save = () => localStorage.setItem(KEY, JSON.stringify(chats.filter(c => c.msgs.length).slice(0, 40)));
+    const newChat = () => {
+      cur = { id: Date.now(), title: 'New chat', msgs: [] };
+      chats.unshift(cur);
+      save();
+      render();
+      $('t').focus();
+    };
+    let showNewAccountWelcome = new URLSearchParams(window.location.search).get('welcome') === '1';
+    const welcomeText = () => {
+      if (showNewAccountWelcome) {
+        showNewAccountWelcome = false;
+        try { window.history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (_) {}
+        return 'Welcome to Jeenius! Your account is ready. 😊 Main Geini hu. Science ya Maths ka koi doubt hai?';
+      }
+      const name = profile?.name ? profile.name.trim() : '';
+      return name
+        ? `Hey ${name}! Main Geini hu 😊 Kya samjhein aaj? Science, Maths ya koi lab explore karna hai?`
+        : 'Hey! Main Geini hu 😊 Science ya Maths ka koi doubt hai? Ya search se koi lab kholo, aur experiment karke dekhte hain.';
+    };
+
+    function updateProfileButton() {
+      const name = String(profile?.name || '').trim();
+      $('profileAvatar').textContent = name ? name.charAt(0).toUpperCase() : '☺';
+      $('profileOpen').title = name ? `Your profile · ${name}` : 'Set up your profile';
+      $('sideProfile').title = name ? `Your profile · ${name}` : 'Set up your profile';
+    }
+
+    let quotaState = null;
+
+    function hideQuotaNotice() {
+      const box = $('quotaNotice');
+      if (!box) return;
+      box.hidden = true;
+      box.classList.remove('pop-in');
+    }
+
+    function showQuotaNotice(data = {}) {
+      const quota = data.quota || quotaState || {};
+      const limit = Number(quota.limit ?? 20);
+      $('quotaNoticeMessage').textContent = `You've used all ${limit} responses for today.`;
+      $('quotaResetLabel').textContent = `Resets at ${quota.reset_label || '12:00 AM IST'}.`;
+      const box = $('quotaNotice');
+      box.hidden = false;
+      box.classList.remove('pop-in');
+      requestAnimationFrame(() => box.classList.add('pop-in'));
+    }
+
+    function updateQuota(quota) {
+      if (!quota || typeof quota !== 'object') return;
+      quotaState = quota;
+      const limit = Number(quota.limit ?? 20);
+      const remaining = Math.max(0, Math.min(limit, Number(quota.remaining ?? limit)));
+      const meter = $('quotaMeter');
+      meter.textContent = `${remaining} of ${limit} AI responses left today`;
+      meter.classList.toggle('quota-empty', remaining === 0);
+      meter.hidden = false;
+      if (remaining === 0) showQuotaNotice({ quota });
+      else hideQuotaNotice();
+    }
+
+    window.addEventListener('jeenius-session-ready', event => {
+      if (event.detail && event.detail.quota) updateQuota(event.detail.quota);
+    });
+    if (window.JEENIUS_SESSION && window.JEENIUS_SESSION.quota) updateQuota(window.JEENIUS_SESSION.quota);
+    $('quotaNoticeClose').addEventListener('click', hideQuotaNotice);
+
+    function render() {
+      if (!cur) return;
+      $('log').innerHTML = '';
+      bubble('a', welcomeText());
+      cur.msgs.forEach(m => bubble(m.role === 'user' ? 'u' : 'a', m.content, Array.isArray(m.labs) && m.labs.length ? m.labs : m.lab));
+      $('chips').style.display = cur.msgs.length ? 'none' : 'flex';
+      $('log').scrollTop = $('log').scrollHeight;
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[ch]);
+    }
+    function formatGeiniMessage(text) {
+      let formatted = escapeHTML(text || '');
+      formatted = formatted.replace(/\$([^\$]+)\$/g, '<em>$1</em>');
+      formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      formatted = formatted.replace(/\n/g, '<br>');
+      return formatted;
+    }
+
+    function bubble(r, text, labIds) {
+      const row = document.createElement('div'); row.className = 'row ' + r;
+      if (r === 'a') {
+        const avatar = document.createElement('div'); avatar.className = 'av'; avatar.setAttribute('aria-hidden', 'true'); const img = document.createElement('img'); img.src = '/brand/geini-happy.png'; img.alt = ''; avatar.append(img);
+        row.append(avatar);
+      }
+      const m = document.createElement('div'); m.className = 'msg';
+      m.innerHTML = formatGeiniMessage(text);
+
+      // Accept both the new array format and the old single-ID format.
+      const requestedIds = Array.isArray(labIds) ? labIds : (labIds ? [labIds] : []);
+      const uniqueIds = [...new Set(requestedIds.map(id => String(id).trim()).filter(Boolean))];
+      const matchingLabs = uniqueIds
+        .map(id => LABS.find(x => x.id === id && x.available))
+        .filter(Boolean);
+
+      if (matchingLabs.length) {
+        const actions = document.createElement('div');
+        actions.className = 'lab-actions';
+        matchingLabs.forEach(l => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'labbtn';
+          b.textContent = '⚗ Open ' + l.title + ' →';
+          b.onclick = () => openLab(l.id);
+          actions.append(b);
+        });
+        m.append(document.createElement('br'), actions);
+      }
+
+      row.append(m); $('log').append(row); return row;
+    }
+
+    function parse(text) {
+      const raw = String(text || '');
+      const matches = [...raw.matchAll(/\[\[open:([\w-]+)\]\]/g)];
+      const labs = [...new Set(matches.map(match => match[1]))]
+        .filter(id => LABS.some(lab => lab.id === id && lab.available));
+      return {
+        text: raw.replace(/\[\[open:[\w-]+\]\]/g, '').trim(),
+        labs,
+        lab: labs[0] || null // Backward compatibility with older single-lab code.
+      };
+    }
+
+    async function ask(payload) {
+      try {
+        const endpoint = payload && typeof payload.event === 'string' && payload.event.trim()
+          ? '/api/animation-observation'
+          : '/api/genie';
+        const r = await fetch(endpoint, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'content-type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ ...payload, profile: profile ? {
+            name: String(profile.name || '').slice(0, 50),
+            gender: String(profile.gender || '').slice(0, 30)
+          } : null })
+        });
+        const data = await r.json().catch(() => ({}));
+        if (r.status === 401) {
+          const path = window.location.pathname + window.location.search + window.location.hash;
+          window.location.replace('/auth.html?next=' + encodeURIComponent(path || '/'));
+          return { text: 'Your session expired. Redirecting to sign in…', error: 'auth_required' };
+        }
+        if (r.status === 429 && data.error === 'daily_limit_reached') {
+          if (data.quota) quotaState = data.quota;
+          showQuotaNotice(data);
+          return { text: '', error: 'daily_limit_reached', quota: data.quota };
+        }
+        if (data.quota) updateQuota(data.quota);
+        if (!r.ok) {
+          return { text: data.message || 'Geini could not complete that request. Please try again.', error: data.error || 'request_failed', quota: data.quota };
+        }
+        return { ...parse(data.reply || 'Hmm, try asking that another way?'), quota: data.quota };
+      } catch {
+        return { text: 'Server se connection toot gaya 😅 Please check your connection and try again.', error: 'network_error' };
+      }
+    }
+
+    async function send(text) {
+      text = String(text || '').trim();
+      if (!text || busy || !cur) return;
+      busy = true; $('s').disabled = true;
+      const targetChat = cur;
+      const hist = targetChat.msgs.map(m => ({ role: m.role, content: m.content }));
+      const userMessage = { role: 'user', content: text };
+      targetChat.msgs.push(userMessage);
+      if (targetChat.title === 'New chat') targetChat.title = text.slice(0, 32);
+      $('t').value = ''; $('t').style.height = 'auto';
+      render(); save();
+      const tr = bubble('a', '');
+      tr.querySelector('.msg').innerHTML = '<span class="dots" aria-label="Geini is thinking"><span></span><span></span><span></span></span>';
+      $('log').scrollTop = $('log').scrollHeight;
+      const o = await ask({ message: text, history: hist });
+      if (o.error === 'daily_limit_reached') {
+        const lastIndex = targetChat.msgs.lastIndexOf(userMessage);
+        if (lastIndex >= 0) targetChat.msgs.splice(lastIndex, 1);
+        if (!$('t').value.trim()) {
+          $('t').value = text;
+          $('t').style.height = 'auto';
+          $('t').style.height = Math.min($('t').scrollHeight, 120) + 'px';
+        }
+        busy = false;
+        $('s').disabled = !$('t').value.trim();
+        save(); render();
+        showQuotaNotice({ quota: o.quota });
+        return;
+      }
+      const requestedLabs = Array.isArray(o.labs) ? o.labs : (o.lab ? [o.lab] : []);
+      const validLabs = [...new Set(requestedLabs)]
+        .filter(id => LABS.some(x => x.id === id && x.available));
+
+      if (o.error !== 'auth_required') {
+        targetChat.msgs.push({
+          role: 'assistant',
+          content: o.text,
+          labs: validLabs,
+          lab: validLabs[0] || undefined // Keep older saved-chat readers compatible.
+        });
+      }
+      busy = false;
+      $('s').disabled = !$('t').value.trim();
+      save(); render();
+
+      // Only auto-open the highest-priority match. The other matches remain
+      // available as separate buttons in Geini's message.
+      if (validLabs.length) openLab(validLabs[0], true);
+    }
+
+    function openLab(id) {
+      const selected = LABS.find(x => x.id === id);
+      if (!selected) return;
+      if (!selected.available) {
+        send(`The interactive lab for "${selected.title}" is not available yet. Please explain the topic at Maharashtra State Board Class 8–9 level instead.`);
+        return;
+      }
+      lab = selected;
+      $('dt').textContent = selected.title;
+      $('labSubtitle').textContent = `Class ${selected.class} · ${({PHY:'Physics',CHE:'Chemistry',BIO:'Biology',ENV:'Environment',MAT:'Maths'})[selected.subject] || selected.subject}`;
+      $('de').hidden = true;
+      $('fr').hidden = false;
+      const target = '/animations/' + encodeURIComponent(id) + '/index.html';
+      if ($('fr').getAttribute('src') !== target) $('fr').src = target;
+      else if (!$('fr').contentWindow) $('fr').src = target;
+      $('note').hidden = true;
+      $('note').textContent = '';
+      slide(false);
+    }
+
+    function isMobileSplit() { return window.matchMedia && window.matchMedia('(max-width: 600px)').matches; }
+    function mobileShowPane(which) {
+      if (!isMobileSplit()) return;
+      const pane = $('panes');
+      pane.scrollTo({ left: which === 'dock' ? Math.max(0, pane.clientWidth - 8) : 0, behavior: 'smooth' });
+      $('mobileShowAnimations')?.setAttribute('aria-pressed', which === 'dock' ? 'true' : 'false');
+      $('mobileShowChat')?.setAttribute('aria-pressed', which === 'chat' ? 'true' : 'false');
+    }
+    function slide(hide) {
+      if (isMobileSplit()) {
+        $('dock').classList.remove('hide');
+        $('panes').classList.remove('lab-collapsed');
+        $('tab').hidden = true;
+        mobileShowPane(hide ? 'chat' : 'dock');
+        return;
+      }
+      $('dock').classList.toggle('hide', hide);
+      $('panes').classList.toggle('lab-collapsed', hide);
+      $('tab').hidden = !hide;
+      $('slide').textContent = hide ? '↙' : '↗';
+      $('slide').title = hide ? 'Show lab panel' : 'Hide lab panel';
+      $('slide').setAttribute('aria-label', hide ? 'Show lab panel' : 'Hide lab panel');
+    }
+    $('slide').onclick = () => slide(true);
+    $('tab').onclick = () => slide(false);
+    $('mobileShowAnimations')?.addEventListener('click', () => mobileShowPane('dock'));
+    $('mobileShowChat')?.addEventListener('click', () => mobileShowPane('chat'));
+    $('panes').addEventListener('scroll', () => {
+      if (!isMobileSplit()) return;
+      const viewingDock = $('panes').scrollLeft > $('panes').clientWidth / 2;
+      $('mobileShowAnimations')?.setAttribute('aria-pressed', viewingDock ? 'true' : 'false');
+      $('mobileShowChat')?.setAttribute('aria-pressed', viewingDock ? 'false' : 'true');
+    }, { passive: true });
+    $('full').onclick = () => {
+      if (!$('fr').hidden) $('fr').requestFullscreen?.();
+      else $('dock').requestFullscreen?.();
+    };
+
+    let lastEv = 0, evT;
+    addEventListener('message', e => {
+      if (e.source !== $('fr').contentWindow || !e.data || e.data.type !== 'jeenius-event') return;
+      const summary = String(e.data.summary || '').slice(0, 300);
+      clearTimeout(evT);
+      evT = setTimeout(async () => {
+        lastEv = Date.now();
+        $('note').hidden = false;
+        $('note').textContent = 'Geini is looking at what changed…';
+        const o = await ask({ event: summary, history: [] });
+        $('note').textContent = o.text;
+      }, Math.max(0, 15000 - (Date.now() - lastEv)));
+    });
+
+    function sectionHeading(text) {
+      const h = document.createElement('div'); h.className = 'result-heading'; h.textContent = text;
+      $('searchResults').append(h);
+    }
+    function addSearchResult({ icon, title, subtitle, tag, onClick, askOption = false }) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'result-option' + (askOption ? ' ask-option' : '');
+      b.setAttribute('role', 'option');
+      const symbol = document.createElement('span'); symbol.className = 'result-symbol'; symbol.textContent = icon;
+      const copy = document.createElement('span'); copy.className = 'result-copy';
+      const titleEl = document.createElement('span'); titleEl.className = 'result-title'; titleEl.textContent = title;
+      const subEl = document.createElement('span'); subEl.className = 'result-sub'; subEl.textContent = subtitle || '';
+      copy.append(titleEl, subEl); b.append(symbol, copy);
+      if (tag) { const label = document.createElement('span'); label.className = 'result-tag'; label.textContent = tag; b.append(label); }
+      b.onclick = onClick;
+      $('searchResults').append(b);
+    }
+    function hideSearchResults() { $('searchResults').hidden = true; }
+
+    function renderSearchResults(force = false) {
+      const results = $('searchResults');
+      if (!force && document.activeElement !== $('q')) { results.hidden = true; return; }
+      const term = $('q').value.trim().toLowerCase();
+      results.innerHTML = '';
+      let total = 0;
+      const matchingChats = chats.filter(c => c.msgs.length && c.title.toLowerCase().includes(term));
+      const matchingLabs = LABS.filter(l => {
+        const searchable = `${l.title} ${l.subject || ''} ${l.class || ''} class ${l.tryThis || ''}`.toLowerCase();
+        if (searchMode === 'labs') return !term || searchable.includes(term);
+        return term && searchable.includes(term);
+      });
+      const recentChats = chats.filter(c => c.msgs.length).slice(0, 4);
+
+      if (searchMode === 'history') {
+        sectionHeading('Recent chats');
+        (term ? matchingChats : recentChats).slice(0, 7).forEach(c => {
+          total++;
+          addSearchResult({ icon: '◌', title: c.title, subtitle: `${c.msgs.length} messages · chat history`, tag: c === cur ? 'Open' : '', onClick: () => { cur = c; hideSearchResults(); $('q').value = ''; render(); } });
+        });
+      } else {
+        if (!term && searchMode !== 'labs' && recentChats.length) {
+          sectionHeading('Pick up where you left off');
+          recentChats.forEach(c => {
+            total++;
+            addSearchResult({ icon: '◌', title: c.title, subtitle: 'Recent chat', tag: c === cur ? 'Open' : '', onClick: () => { cur = c; hideSearchResults(); $('q').value = ''; render(); } });
+          });
+        } else if (matchingChats.length) {
+          sectionHeading('Chats');
+          matchingChats.slice(0, 4).forEach(c => {
+            total++;
+            addSearchResult({ icon: '◌', title: c.title, subtitle: `${c.msgs.length} messages`, tag: c === cur ? 'Open' : '', onClick: () => { cur = c; hideSearchResults(); $('q').value = ''; render(); } });
+          });
+        }
+
+        if (searchMode === 'labs' || matchingLabs.length) {
+          sectionHeading('Science labs');
+          matchingLabs.slice(0, 8).forEach(l => {
+            total++;
+            const available = !!l.available;
+            addSearchResult({
+              icon: ({PHY:'⚛',CHE:'◉',BIO:'❋',ENV:'♧',MAT:'∑'})[l.subject] || '⚗',
+              title: l.title,
+              subtitle: available ? `Class ${l.class} · ${l.tryThis || 'Interactive lab'}` : `Class ${l.class} · Lab unavailable yet; ask Geini instead`,
+              tag: available ? 'Open lab' : 'Ask Geini',
+              onClick: () => {
+                hideSearchResults(); $('q').value = ''; searchMode = 'all';
+                if (available) openLab(l.id);
+                else send(`The interactive lab for "${l.title}" is not available yet. Please explain the topic at Maharashtra State Board Class 8–9 level instead.`);
+              }
+            });
+          });
+        }
+      }
+
+      if (term) {
+        if (!total) {
+          sectionHeading('No exact match');
+          const noMatch = document.createElement('div'); noMatch.className = 'result-sub'; noMatch.style.padding = '5px 10px 9px';
+          noMatch.textContent = 'No matching chat or lab yet. Geini can still help with the topic.';
+          results.append(noMatch);
+        }
+        const query = $('q').value.trim();
+        addSearchResult({
+          icon: '🧞',
+          title: `Ask Geini about “${query}”`,
+          subtitle: 'Get a Class 8–9 explanation if no lab matches.',
+          tag: 'Ask',
+          askOption: true,
+          onClick: () => {
+            hideSearchResults(); $('q').value = ''; searchMode = 'all';
+            send(`Can you help me understand ${query} at Maharashtra State Board Class 8–9 level?`);
+          }
+        });
+        total++;
+      } else if (!total && searchMode === 'history') {
+        const empty = document.createElement('div'); empty.className = 'result-sub'; empty.style.padding = '8px 10px 12px';
+        empty.textContent = 'Your chats will appear here as you use Geini.';
+        results.append(empty);
+      } else if (!term && searchMode === 'labs' && !matchingLabs.length) {
+        const empty = document.createElement('div'); empty.className = 'result-sub'; empty.style.padding = '8px 10px 12px';
+        empty.textContent = 'No labs match this search. Type a topic above and ask Geini instead.';
+        results.append(empty);
+      }
+      results.hidden = false;
+    }
+
+    $('q').addEventListener('focus', () => renderSearchResults(true));
+    $('q').addEventListener('input', () => { searchMode = 'all'; renderSearchResults(true); });
+    $('q').addEventListener('keydown', e => {
+      if (e.key === 'Escape') hideSearchResults();
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = $('q').value.trim();
+        if (val) {
+          const match = LABS.find(l => `${l.title} ${l.subject || ''} ${l.class || ''}`.toLowerCase().includes(val.toLowerCase()) && l.available);
+          hideSearchResults();
+          if (match) { $('q').value = ''; openLab(match.id); }
+          else { $('q').value = ''; send(`Can you help me understand ${val} at Maharashtra State Board Class 8–9 level?`); }
+        }
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!document.querySelector('.search-wrap').contains(e.target)) hideSearchResults();
+    });
+    $('sideSearch').onclick = () => { searchMode = 'all'; $('q').focus(); renderSearchResults(true); };
+    $('sideLabs').onclick = () => { searchMode = 'labs'; $('q').focus(); $('q').value = ''; renderSearchResults(true); };
+    $('sideHistory').onclick = () => { searchMode = 'history'; $('q').focus(); $('q').value = ''; renderSearchResults(true); };
+    $('emptyLabs').onclick = () => { searchMode = 'labs'; $('q').focus(); $('q').value = ''; renderSearchResults(true); };
+    $('emptyAsk').onclick = () => { $('t').focus(); $('t').value = 'Suggest a science experiment for me'; $('s').disabled = false; };
+    $('new').onclick = () => {
+      hideSearchResults();
+      leaveMathCourse();
+      $('panes').hidden = false;
+      if (cur && !cur.msgs.length) { $('t').value = ''; $('t').focus(); return; }
+      newChat();
+    };
+
+    function syncProfileRole() {
+      const teacher = $('profileRole').value === 'teacher';
+      const multiple = $('profileStandard').querySelector('option[value="multiple"]');
+      // The role is locked; only the class can be edited here.
+      multiple.disabled = !teacher;
+      if (!teacher && $('profileStandard').value === 'multiple') $('profileStandard').value = '';
+      if (teacher && !$('profileStandard').value) $('profileStandard').value = 'multiple';
+    }
+    function openProfile() {
+      const user = window.JEENIUS_SESSION?.user || {};
+      $('profileName').value = user.name || profile?.name || '';
+      $('profileStandard').value = String(user.standard || profile?.standard || '');
+      $('profileRole').value = user.account_role === 'teacher' ? 'teacher' : 'learner';
+      syncProfileRole();
+      $('profileGender').value = profile?.gender || '';
+      $('profileDialog').showModal();
+      setTimeout(() => $('profileName').focus(), 0);
+    }
+    $('profileRole').addEventListener('change', syncProfileRole);
+    $('profileOpen').onclick = openProfile;
+    $('sideProfile').onclick = openProfile;
+    $('closeProfile').onclick = () => $('profileDialog').close();
+    $('cancelProfile').onclick = () => $('profileDialog').close();
+    $('profileDialog').addEventListener('click', e => { if (e.target === $('profileDialog')) $('profileDialog').close(); });
+    $('profileForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = $('profileName').value.trim().replace(/\s+/g, ' ').slice(0, 100);
+      const standard = $('profileStandard').value;
+      const gender = $('profileGender').value;
+      const user = window.JEENIUS_SESSION?.user || {};
+      const role = $('profileRole').value === 'teacher' ? 'teacher' : 'learner';
+      if (!name || !standard || !gender || (role === 'learner' && standard === 'multiple')) return;
+      const saveButton = $('profileForm').querySelector('button[type="submit"]');
+      saveButton.disabled = true;
+      const previousLabel = saveButton.textContent;
+      saveButton.textContent = 'Saving…';
+      try {
+        const response = await fetch('/api/account/profile', {
+          method: 'POST', cache: 'no-store', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, standard, account_role: role })
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || 'Could not save your profile.');
+        window.JEENIUS_SESSION = { ...(window.JEENIUS_SESSION || {}), user: data.user || { ...user, name, standard, account_role: role } };
+        profile = { ...(profile || {}), name, standard, gender };
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+        updateProfileButton();
+        $('profileDialog').close();
+        render();
+      } catch (error) {
+        alert(error.message || 'Could not save your profile. Please try again.');
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = previousLabel;
+      }
+    });
+
+    // --- Math Quest: self-contained Class 8–9 practice course. ---
+    function leaveMathCourse() {
+      $('mathCourseWorkspace').hidden = true;
+      document.body.classList.remove('math-course-mode');
+      $('sideMathCourse').classList.remove('active');
+    }
+
+    function enterMathCourse() {
+      hideSearchResults();
+      document.body.classList.add('math-course-mode');
+      $('panes').hidden = true;
+      $('mathCourseWorkspace').hidden = false;
+      $('sideMathCourse').classList.add('active');
+      if (window.JEENiusMathQuest) window.JEENiusMathQuest.render();
+    }
+
+    $('sideMathCourse').addEventListener('click', enterMathCourse);
+
+    (function initMathQuest() {
+      const units = [
+ {id:1,title:'Number Sense',short:'Numbers that make sense',color:'#7865ed',tint:'#efedff',desc:'Make negatives, fractions & decimals feel easy.'},
+ {id:2,title:'Ratios & Percent',short:'Compare like a pro',color:'#ed6da5',tint:'#ffedf5',desc:'Scale, compare, discount and calculate.'},
+ {id:3,title:'Algebra Basics',short:'Letters have a job',color:'#e89a32',tint:'#fff3df',desc:'Turn patterns into clean expressions.'},
+ {id:4,title:'Equations',short:'Find the mystery number',color:'#35b996',tint:'#e4fbf3',desc:'Balance both sides and solve for x.'},
+ {id:5,title:'Powers & Patterns',short:'Spot the rule',color:'#5baff3',tint:'#e8f6ff',desc:'Exponents, roots and number patterns.'},
+ {id:6,title:'Geometry',short:'Shapes have secrets',color:'#a16ce8',tint:'#f3eaff',desc:'Angles, triangles, polygons and circles.'},
+ {id:7,title:'Mensuration',short:'Measure the real world',color:'#ec805d',tint:'#fff0e9',desc:'Perimeter, area, volume and surface area.'},
+ {id:8,title:'Graphs & Coordinates',short:'See maths on a map',color:'#4e9bdf',tint:'#e9f4ff',desc:'Plot points and understand straight lines.'},
+ {id:9,title:'Data & Probability',short:'Make sense of data',color:'#d6a927',tint:'#fff8d9',desc:'Averages, charts and chance.'}
+];
+const lessons = [
+{id:1,u:1,title:'Number line & absolute value',tag:'Distance from zero',visual:'−5 · 0 · +5',concept:'A number line shows order. Absolute value is the distance from zero, so it is never negative.',rule:'|−a| = a',example:'|−7| = 7  ·  |4| = 4',qs:[{q:'What is |−9|?',o:['−9','9','0'],a:1,e:'Absolute value measures distance from zero. The distance is 9.'},{q:'Distance from −2 to +5?',o:['3 units','7 units','−7 units'],a:1,e:'Count from −2 to 0 (2) and 0 to 5 (5): 2 + 5 = 7.'}]},
+{id:2,u:1,title:'Integers & signed operations',tag:'Positive + negative',visual:'−6 + 9 = 3',concept:'Adding a positive number moves right. Adding a negative number moves left on the number line.',rule:'Same signs: add · Different signs: subtract',example:'−8 + 3 = −5  ·  6 − 10 = −4',qs:[{q:'Calculate −6 + 10.',o:['−16','−4','4'],a:2,e:'The signs differ, so subtract 10 − 6 = 4. Keep the sign of the larger magnitude.'},{q:'Calculate 7 − 12.',o:['5','−5','−19'],a:1,e:'7 − 12 = 7 + (−12) = −5.'}]},
+{id:3,u:1,title:'Rational numbers',tag:'Fractions on the line',visual:'¾  >  ⅝',concept:'A rational number can be written as a fraction p/q, where q is not zero. Compare using a common denominator.',rule:'Same denominator → compare numerators',example:'¾ = 6/8, so ¾ > ⅝',qs:[{q:'Which is greater?',o:['3/4','5/8','They are equal'],a:0,e:'3/4 = 6/8, and 6/8 is greater than 5/8.'},{q:'Calculate −2/3 + 1/6.',o:['−1/2','−3/6','1/2'],a:0,e:'−2/3 = −4/6. Then −4/6 + 1/6 = −3/6 = −1/2.'}]},
+{id:4,u:1,title:'Fractions ↔ decimals',tag:'Two ways to show a part',visual:'⅗ = 0.6',concept:'A fraction becomes a decimal when you divide the numerator by the denominator. Decimal places show tenths, hundredths and more.',rule:'Fraction → numerator ÷ denominator',example:'3 ÷ 5 = 0.6  ·  0.25 = 25/100 = 1/4',qs:[{q:'Write 3/5 as a decimal.',o:['0.3','0.6','1.5'],a:1,e:'3 ÷ 5 = 0.6.'},{q:'Which fraction equals 0.25?',o:['1/2','1/5','1/4'],a:2,e:'0.25 = 25/100. Simplify by dividing by 25 to get 1/4.'}]},
+{id:5,u:2,title:'Ratios',tag:'Compare two quantities',visual:'12 : 18 = 2 : 3',concept:'A ratio compares quantities in the same order. Simplify it by dividing every part by the same factor.',rule:'a : b  →  (a ÷ k) : (b ÷ k)',example:'12 : 18 → divide both by 6 → 2 : 3',qs:[{q:'Simplify 15 : 25.',o:['3 : 5','5 : 3','5 : 10'],a:0,e:'Divide both numbers by 5. The simplest ratio is 3 : 5.'},{q:'Scale 4 : 7 so the first number is 20.',o:['20 : 23','20 : 35','20 : 28'],a:1,e:'4 × 5 = 20, so multiply 7 by 5 as well: 35.'}]},
+{id:6,u:2,title:'Proportion & unit rate',tag:'Same rate, different size',visual:'180 km ÷ 3 h',concept:'Proportions are equal ratios. A unit rate tells you the amount for one unit, like rupees per item or kilometres per hour.',rule:'Unit rate = total amount ÷ number of units',example:'180 km in 3 h → 60 km/h',qs:[{q:'A car travels 180 km in 3 hours. Average speed?',o:['60 km/h','90 km/h','540 km/h'],a:0,e:'Speed = distance ÷ time = 180 ÷ 3 = 60 km/h.'},{q:'5 notebooks cost ₹75. Cost per notebook?',o:['₹10','₹15','₹25'],a:1,e:'₹75 ÷ 5 = ₹15 each.'}]},
+{id:7,u:2,title:'Percentages',tag:'Out of one hundred',visual:'25% = ¼',concept:'Percent means “out of 100”. Convert a percent to a decimal by dividing by 100.',rule:'x% = x/100',example:'25% of 80 = 0.25 × 80 = 20',qs:[{q:'Find 25% of 80.',o:['15','20','25'],a:1,e:'25% = 1/4. One-fourth of 80 is 20.'},{q:'Write 15% as a decimal.',o:['1.5','0.015','0.15'],a:2,e:'15 ÷ 100 = 0.15.'}]},
+{id:8,u:2,title:'Discount, profit & tax',tag:'Percent in everyday life',visual:'₹500 − 20%',concept:'Discount lowers a marked price. Profit is selling price minus cost price. Always apply the percentage to the correct original amount.',rule:'Discount = marked price × discount %',example:'20% off ₹500 → pay ₹400',qs:[{q:'A ₹500 bag has a 20% discount. Sale price?',o:['₹100','₹400','₹480'],a:1,e:'20% of ₹500 is ₹100. ₹500 − ₹100 = ₹400.'},{q:'A toy costs ₹80 and sells for ₹100. Profit?',o:['₹20','₹80','25% loss'],a:0,e:'Profit = selling price − cost price = ₹100 − ₹80 = ₹20.'}]},
+{id:9,u:3,title:'Variables & expressions',tag:'Letters stand for numbers',visual:'x + 3',concept:'A variable is a symbol for a number. An expression combines numbers, variables and operations without an equals sign.',rule:'“3 more than x” = x + 3',example:'4a means 4 × a, not 4 + a',qs:[{q:'“5 less than n” means…',o:['5 − n','n − 5','5n'],a:1,e:'Start with n, then take away 5: n − 5.'},{q:'If a = 3, what is 4a?',o:['7','12','43'],a:1,e:'4a means 4 × a, so 4 × 3 = 12.'}]},
+{id:10,u:3,title:'Combine like terms',tag:'Collect matching pieces',visual:'3x + 4x = 7x',concept:'Like terms have the same variable part. Add or subtract their coefficients, while keeping the variable.',rule:'3x + 4x = (3 + 4)x = 7x',example:'5a + 2 − 3a = 2a + 2',qs:[{q:'Simplify 6y + 2y.',o:['8y','8y²','12y'],a:0,e:'Add the coefficients: 6 + 2 = 8. Keep y.'},{q:'Simplify 5a + 2 − 3a.',o:['2a + 2','8a + 2','2a − 2'],a:0,e:'5a − 3a = 2a. The +2 remains.'}]},
+{id:11,u:3,title:'Distributive property',tag:'Multiply every term',visual:'3(x + 4)',concept:'Multiply the number outside the brackets by every term inside. Watch the signs, especially when the outside factor is negative.',rule:'a(b + c) = ab + ac',example:'3(x + 4) = 3x + 12',qs:[{q:'Expand 2(x + 5).',o:['2x + 5','2x + 10','x + 10'],a:1,e:'Multiply both terms by 2: 2×x + 2×5 = 2x + 10.'},{q:'Expand −2(4y − 3).',o:['−8y − 6','−8y + 6','8y − 6'],a:1,e:'−2 × 4y = −8y and −2 × (−3) = +6.'}]},
+{id:12,u:3,title:'Evaluate expressions',tag:'Substitute and calculate',visual:'2x + 5  |  x=4',concept:'Substitute the given value for each variable, then follow the order of operations: brackets, powers, multiplication/division, addition/subtraction.',rule:'Replace the letter first',example:'2x + 5 when x = 4 → 8 + 5 = 13',qs:[{q:'Find 2x + 5 when x = 4.',o:['13','18','9'],a:0,e:'Substitute x = 4: 2(4) + 5 = 8 + 5 = 13.'},{q:'Find a² − 1 when a = 3.',o:['5','8','17'],a:1,e:'3² − 1 = 9 − 1 = 8.'}]},
+{id:13,u:3,title:'Algebraic identities',tag:'Patterns that always work',visual:'(a+b)²',concept:'An identity is true for every value of its variables. Learn the patterns so you can expand or factor expressions quickly.',rule:'(a + b)² = a² + 2ab + b²',example:'(x + 3)² = x² + 6x + 9',qs:[{q:'Expand (x + 3)².',o:['x² + 9','x² + 6x + 9','x² + 3x + 9'],a:1,e:'Use a² + 2ab + b²: x² + 2(x)(3) + 9 = x² + 6x + 9.'},{q:'Which equals (a + b)(a − b)?',o:['a² − b²','a² + b²','a² − 2ab + b²'],a:0,e:'This difference-of-squares identity is a² − b².'}]},
+{id:14,u:4,title:'One-step equations',tag:'Keep the balance',visual:'x + 7 = 12',concept:'An equation is like a balanced scale. Whatever operation you do to one side, do to the other side too.',rule:'Undo the operation around x',example:'x + 7 = 12 → subtract 7 → x = 5',qs:[{q:'Solve x + 7 = 12.',o:['x = 19','x = 5','x = −5'],a:1,e:'Subtract 7 from both sides: x = 12 − 7 = 5.'},{q:'Solve y − 4 = 9.',o:['y = 5','y = 13','y = −13'],a:1,e:'Add 4 to both sides: y = 9 + 4 = 13.'}]},
+{id:15,u:4,title:'Two-step equations',tag:'Undo in reverse order',visual:'3x + 4 = 22',concept:'To isolate x, reverse the operations in the opposite order. Undo addition/subtraction first, then multiplication/division.',rule:'3x + 4 = 22 → 3x = 18 → x = 6',example:'Check: 3(6) + 4 = 22 ✓',qs:[{q:'Solve 3x = 21.',o:['x = 7','x = 18','x = 63'],a:0,e:'Divide both sides by 3: x = 21 ÷ 3 = 7.'},{q:'Solve x/4 = 6.',o:['x = 1.5','x = 10','x = 24'],a:2,e:'Multiply both sides by 4: x = 6 × 4 = 24.'}]},
+{id:16,u:4,title:'Equations with brackets',tag:'Expand, then solve',visual:'3(x + 2) = 21',concept:'First expand the brackets using distribution. Then collect terms and isolate the variable.',rule:'3(x + 2) = 21 → 3x + 6 = 21',example:'3x = 15 → x = 5',qs:[{q:'Solve 2x + 3 = 11.',o:['x = 4','x = 7','x = 14'],a:0,e:'Subtract 3: 2x = 8. Divide by 2: x = 4.'},{q:'Solve 3(x + 2) = 21.',o:['x = 9','x = 5','x = 7'],a:1,e:'Divide by 3: x + 2 = 7. Subtract 2: x = 5.'}]},
+{id:17,u:4,title:'Inequalities',tag:'A range, not just one number',visual:'x > 3',concept:'Inequalities compare values using <, >, ≤ or ≥. When multiplying or dividing by a negative number, flip the inequality sign.',rule:'−2x > 8  →  x < −4',example:'x + 2 ≤ 7 → x ≤ 5',qs:[{q:'Solve x + 5 < 9.',o:['x < 4','x > 4','x < 14'],a:0,e:'Subtract 5 from both sides: x < 4.'},{q:'Solve −2x > 8.',o:['x > −4','x < −4','x > 4'],a:1,e:'Divide by −2 and flip the sign: x < −4.'}]},
+{id:18,u:4,title:'Turn words into equations',tag:'Translate the story',visual:'2x + 5 = 19',concept:'Choose a variable for the unknown, turn the words into operations, then solve. Read the answer back in the original situation.',rule:'“Twice x, plus five, is 19” → 2x + 5 = 19',example:'2x + 5 = 19 → x = 7',qs:[{q:'Twice a number plus 5 is 19. The number is…',o:['7','12','24'],a:0,e:'2x + 5 = 19. Subtract 5, then divide by 2: x = 7.'},{q:'A rectangle has length x+3, width x and perimeter 26. Find the width.',o:['4','5','6'],a:1,e:'2(x + 3) + 2x = 26 → 4x + 6 = 26 → x = 5.'}]},
+{id:19,u:5,title:'Exponent rules',tag:'Repeated multiplication',visual:'2³ × 2⁴ = 2⁷',concept:'An exponent counts how many times a base is multiplied. For the same base, add exponents when multiplying and subtract them when dividing.',rule:'aᵐ × aⁿ = aᵐ⁺ⁿ  ·  aᵐ ÷ aⁿ = aᵐ⁻ⁿ',example:'2³ × 2⁴ = 2⁷ = 128',qs:[{q:'Simplify 2³ × 2⁴.',o:['2¹²','2⁷','4⁷'],a:1,e:'Same base: add exponents 3 + 4 = 7.'},{q:'Simplify 3⁵ ÷ 3².',o:['3³','3⁷','1³'],a:0,e:'Same base: subtract exponents 5 − 2 = 3.'}]},
+{id:20,u:5,title:'Squares, cubes & roots',tag:'Powers in reverse',visual:'9² = 81',concept:'A square is a number multiplied by itself. A square root reverses squaring; a cube root reverses multiplying three equal factors.',rule:'√81 = 9  ·  ∛64 = 4',example:'9 × 9 = 81  ·  4 × 4 × 4 = 64',qs:[{q:'What is √81?',o:['8','9','27'],a:1,e:'9 × 9 = 81, so √81 = 9.'},{q:'What is ∛64?',o:['4','8','16'],a:0,e:'4 × 4 × 4 = 64, so the cube root is 4.'}]},
+{id:21,u:5,title:'Scientific notation',tag:'Big & tiny numbers',visual:'4.5 × 10⁶',concept:'Write a number as a value from 1 up to (but not including) 10, multiplied by a power of 10.',rule:'a × 10ⁿ where 1 ≤ a < 10',example:'4,500,000 = 4.5 × 10⁶',qs:[{q:'Write 4,500,000 in scientific notation.',o:['45 × 10⁵','4.5 × 10⁶','0.45 × 10⁷'],a:1,e:'Move the decimal 6 places left: 4.5 × 10⁶.'},{q:'Write 0.00032 in scientific notation.',o:['3.2 × 10⁻⁴','32 × 10⁻⁴','3.2 × 10⁴'],a:0,e:'Move the decimal 4 places right to get 3.2, so the exponent is −4.'}]},
+{id:22,u:5,title:'Number sequences',tag:'Find the pattern',visual:'5, 8, 11, 14…',concept:'Look for the change between terms. An arithmetic sequence adds the same amount each time.',rule:'Term = first term + (position − 1) × step',example:'5, 8, 11… adds 3 each time',qs:[{q:'What comes next: 5, 8, 11, …?',o:['12','13','14'],a:2,e:'Add 3 each time: 11 + 3 = 14.'},{q:'What is the nth term of 4, 7, 10, 13…?',o:['3n + 1','4n + 3','n + 3'],a:0,e:'The step is 3, so start with 3n. When n=1, term=4, giving 3n + 1.'}]},
+{id:23,u:6,title:'Angle pairs',tag:'Angles add up',visual:'180° − 125°',concept:'Angles on a straight line add to 180°. Angles around a point add to 360°. Vertically opposite angles are equal.',rule:'Straight line = 180°',example:'One angle is 125° → its linear pair is 55°',qs:[{q:'A straight-line angle is 125°. The other angle is…',o:['45°','55°','65°'],a:1,e:'Angles on a straight line add to 180°: 180 − 125 = 55°.'},{q:'An angle is 42°. Its vertically opposite angle is…',o:['42°','138°','318°'],a:0,e:'Vertically opposite angles are always equal.'}]},
+{id:24,u:6,title:'Parallel lines & transversals',tag:'Spot matching angles',visual:'∠ = 68°',concept:'When a transversal crosses parallel lines, corresponding and alternate interior angles are equal. Co-interior angles add to 180°.',rule:'Alternate angles equal · Co-interior = 180°',example:'Co-interior with 115° → 65°',qs:[{q:'An alternate interior angle is 68°. Its partner is…',o:['22°','68°','112°'],a:1,e:'Alternate interior angles are equal when the lines are parallel.'},{q:'A co-interior angle is 115°. The other is…',o:['65°','75°','115°'],a:0,e:'180° − 115° = 65°.'}]},
+{id:25,u:6,title:'Triangles',tag:'Three sides, 180° inside',visual:'50° + 60° + ?',concept:'The three interior angles of a triangle add to 180°. In an isosceles triangle, the two base angles are equal.',rule:'Missing angle = 180° − known angles',example:'50° + 60° + x = 180° → x = 70°',qs:[{q:'Two angles are 50° and 60°. Find the third.',o:['60°','70°','80°'],a:1,e:'180 − 50 − 60 = 70°.'},{q:'An isosceles triangle has a 40° vertex angle. Each base angle is…',o:['40°','70°','140°'],a:1,e:'The base angles share 180 − 40 = 140°, so each is 70°.'}]},
+{id:26,u:6,title:'Quadrilaterals & polygons',tag:'Count sides, know the rules',visual:'Hexagon = 720°',concept:'A quadrilateral has four sides and interior angles totaling 360°. For an n-sided polygon, the interior-angle sum is (n − 2) × 180°.',rule:'Interior sum = (n − 2) × 180°',example:'Hexagon: (6 − 2) × 180° = 720°',qs:[{q:'What is the interior-angle sum of a hexagon?',o:['540°','720°','900°'],a:1,e:'(6 − 2) × 180° = 4 × 180° = 720°.'},{q:'Each angle in a square is…',o:['45°','90°','180°'],a:1,e:'A square has four right angles, each measuring 90°.'}]},
+{id:27,u:6,title:'Circle basics',tag:'Radius, diameter, centre',visual:'d = 2r',concept:'The radius runs from the centre to the edge. The diameter goes across the circle through the centre and is twice the radius.',rule:'Diameter = 2 × radius',example:'Radius 7 cm → diameter 14 cm',qs:[{q:'A circle has diameter 12 cm. Radius?',o:['6 cm','12 cm','24 cm'],a:0,e:'Radius is half of diameter: 12 ÷ 2 = 6 cm.'},{q:'A circle has radius 5 cm. Diameter?',o:['2.5 cm','10 cm','25 cm'],a:1,e:'Diameter = 2 × 5 = 10 cm.'}]},
+{id:28,u:7,title:'Perimeter & composite shapes',tag:'Walk around the edge',visual:'P = 2l + 2w',concept:'Perimeter is the total distance around the outside. Add every outer side once, even for shapes made from smaller pieces.',rule:'Rectangle: P = 2(l + w)',example:'Length 8, width 5 → P = 2(8 + 5) = 26',qs:[{q:'A rectangle is 8 cm by 5 cm. Perimeter?',o:['13 cm','26 cm','40 cm'],a:1,e:'P = 2(8 + 5) = 26 cm.'},{q:'A square has side 4 cm. Perimeter?',o:['8 cm','12 cm','16 cm'],a:2,e:'Four equal sides: 4 × 4 = 16 cm.'}]},
+{id:29,u:7,title:'Area of 2D shapes',tag:'Cover the surface',visual:'A = ½ × b × h',concept:'Area measures the space inside a flat shape. Use perpendicular height, not the sloping side, for triangles and parallelograms.',rule:'Triangle: ½bh · Parallelogram: bh',example:'Triangle b=10, h=6 → A = 30 square units',qs:[{q:'A triangle has base 10 cm and height 6 cm. Area?',o:['16 cm²','30 cm²','60 cm²'],a:1,e:'Area = ½ × 10 × 6 = 30 cm².'},{q:'A parallelogram has base 9 cm and height 4 cm. Area?',o:['13 cm²','26 cm²','36 cm²'],a:2,e:'Area = base × perpendicular height = 9 × 4 = 36 cm².'}]},
+{id:30,u:7,title:'Circle circumference & area',tag:'Around vs inside',visual:'C = 2πr',concept:'Circumference measures around a circle. Area measures the space inside. Use π ≈ 22/7 or 3.14 when needed.',rule:'C = 2πr  ·  A = πr²',example:'r = 7 cm → C = 44 cm, A = 154 cm² (π=22/7)',qs:[{q:'Find the circumference when r = 7 cm. Use π = 22/7.',o:['22 cm','44 cm','154 cm'],a:1,e:'C = 2πr = 2 × 22/7 × 7 = 44 cm.'},{q:'Find the area when r = 3 cm.',o:['6π cm²','9π cm²','3π cm²'],a:1,e:'A = πr² = π × 3² = 9π cm².'}]},
+{id:31,u:7,title:'Surface area & volume',tag:'Inside space vs outside skin',visual:'V = l × w × h',concept:'Volume measures 3D space inside an object. Surface area totals the outside faces. Volume uses cubic units; area uses square units.',rule:'Cuboid: V = lwh',example:'2 × 3 × 4 → volume = 24 units³',qs:[{q:'A cuboid is 2 × 3 × 4 cm. Volume?',o:['9 cm³','24 cm³','24 cm²'],a:1,e:'V = length × width × height = 2 × 3 × 4 = 24 cm³.'},{q:'A cube has side 3 cm. Total surface area?',o:['9 cm²','27 cm²','54 cm²'],a:2,e:'Six faces, each 3 × 3 = 9 cm². Total = 6 × 9 = 54 cm².'}]},
+{id:32,u:8,title:'The coordinate plane',tag:'Find the address of a point',visual:'(x, y)',concept:'Coordinates are written (x, y). Move horizontally first along x, then vertically along y. The axes divide the plane into four quadrants.',rule:'Right = +x · Up = +y',example:'(−2, 3) sits in Quadrant II',qs:[{q:'Which quadrant contains (−2, 3)?',o:['I','II','IV'],a:1,e:'Negative x and positive y place the point in Quadrant II.'},{q:'Which quadrant contains (4, −1)?',o:['II','III','IV'],a:2,e:'Positive x and negative y place it in Quadrant IV.'}]},
+{id:33,u:8,title:'Tables & ordered pairs',tag:'Turn a rule into points',visual:'y = 2x',concept:'A table shows how one variable changes with another. Substitute each x-value into the rule to find y, then write (x, y).',rule:'For y = 2x, double x',example:'x = 3 → y = 6 → point (3, 6)',qs:[{q:'If y = 2x and x = 3, find y.',o:['5','6','9'],a:1,e:'y = 2 × 3 = 6.'},{q:'If y = x + 4 and x = 2, find y.',o:['2','4','6'],a:2,e:'y = 2 + 4 = 6.'}]},
+{id:34,u:8,title:'Straight-line graphs',tag:'Connect the pattern',visual:'y = x + 2',concept:'A linear rule makes a straight-line graph. Find a few points from a table, plot them, then connect them with a ruler.',rule:'For y = mx + c, c is the y-intercept',example:'y = x + 2 crosses the y-axis at (0, 2)',qs:[{q:'For y = 3x, what is y when x = 4?',o:['7','12','16'],a:1,e:'y = 3 × 4 = 12.'},{q:'For y = x + 2, where does the line cross the y-axis?',o:['(2, 0)','(0, 2)','(0, −2)'],a:1,e:'At the y-axis, x = 0. Then y = 0 + 2 = 2.'}]},
+{id:35,u:8,title:'Slope & rate of change',tag:'How steep is the line?',visual:'rise ÷ run',concept:'Slope tells how much y changes for each 1-unit change in x. A positive slope rises left to right; a negative slope falls.',rule:'Slope = (change in y) ÷ (change in x)',example:'From (1,2) to (3,6): slope = 4/2 = 2',qs:[{q:'Find the slope between (1, 2) and (3, 6).',o:['1','2','4'],a:1,e:'Change in y = 6 − 2 = 4. Change in x = 3 − 1 = 2. Slope = 4/2 = 2.'},{q:'A line rises 4 and runs 2. Its slope is…',o:['½','2','6'],a:1,e:'Slope = rise ÷ run = 4 ÷ 2 = 2.'}]},
+{id:36,u:8,title:'Symmetry & transformations',tag:'Flip, turn, slide',visual:'(3, 2) → (−3, 2)',concept:'A reflection flips a shape across a line. Reflecting across the y-axis changes the sign of x but keeps y the same.',rule:'Across y-axis: (x, y) → (−x, y)',example:'(3, 2) reflected in y-axis → (−3, 2)',qs:[{q:'A square has how many lines of symmetry?',o:['2','3','4'],a:2,e:'A square has 4 lines of symmetry: 2 diagonals and 2 lines through opposite side midpoints.'},{q:'Reflect (3, 2) across the y-axis.',o:['(−3, 2)','(3, −2)','(−3, −2)'],a:0,e:'Only x changes sign: (3, 2) becomes (−3, 2).'}]},
+{id:37,u:9,title:'Mean, median & mode',tag:'Three kinds of average',visual:'4, 6, 8 → mean 6',concept:'Mean = total divided by count. Median = middle after sorting. Mode = most frequent value.',rule:'Mean = sum ÷ number of values',example:'4, 6, 8 → mean = 18 ÷ 3 = 6',qs:[{q:'Find the mean of 4, 6, 8.',o:['6','7','18'],a:0,e:'(4 + 6 + 8) ÷ 3 = 18 ÷ 3 = 6.'},{q:'Find the median of 2, 5, 9.',o:['2','5','9'],a:1,e:'The numbers are sorted. The middle value is 5.'}]},
+{id:38,u:9,title:'Range & reading charts',tag:'How spread out is it?',visual:'Range = max − min',concept:'Range measures the spread from the smallest to largest value. On a chart, check labels and scale before comparing values.',rule:'Range = largest − smallest',example:'3, 7, 9, 12 → range = 12 − 3 = 9',qs:[{q:'Find the range of 3, 7, 9, 12.',o:['6','9','12'],a:1,e:'Largest minus smallest = 12 − 3 = 9.'},{q:'A chart shows A=4, B=7, C=5. Which is largest?',o:['A','B','C'],a:1,e:'B has 7, the highest value in the chart.'}]},
+{id:39,u:9,title:'Probability basics',tag:'Measure the chance',visual:'P(event) = wanted / total',concept:'For equally likely outcomes, probability is favourable outcomes divided by total possible outcomes. It ranges from 0 (impossible) to 1 (certain).',rule:'P(event) = favourable outcomes ÷ total outcomes',example:'Fair coin: P(heads) = 1/2',qs:[{q:'What is the probability of heads on a fair coin?',o:['1/4','1/2','1'],a:1,e:'There is 1 heads outcome out of 2 equally likely outcomes: 1/2.'},{q:'A bag has 3 red and 2 blue balls. P(blue)?',o:['2/3','2/5','3/5'],a:1,e:'2 blue balls out of 5 total means probability = 2/5.'}]},
+{id:40,u:9,title:'Mixed-maths challenge',tag:'Put the pieces together',visual:'Think · Solve · Check',concept:'Use what you know. First identify the topic, then choose a rule, calculate carefully and check that your answer makes sense.',rule:'Read → Choose a rule → Solve → Check',example:'A percentage question may become a multiplication: 20% of 150 = 0.2 × 150',qs:[{q:'Find 20% of 150.',o:['20','30','50'],a:1,e:'20% = 0.2. Then 0.2 × 150 = 30.'},{q:'Solve 2x + 6 = 20.',o:['x = 7','x = 13','x = 8'],a:0,e:'Subtract 6: 2x = 14. Divide by 2: x = 7.'}]}
+];
+      const totalQuestions = lessons.reduce((sum, l) => sum + l.qs.length, 0);
+      const progressKey = 'jeenius_math_quest_done_v1';
+      const startedKey = 'jeenius_math_quest_started_v1';
+      let completed = new Set();
+      try {
+        const loaded = JSON.parse(localStorage.getItem(progressKey) || '[]');
+        completed = new Set(Array.isArray(loaded) ? loaded.filter(id => lessons.some(l => l.id === Number(id))).map(Number) : []);
+      } catch { completed = new Set(); }
+      let courseStarted = false;
+      try { courseStarted = localStorage.getItem(startedKey) === 'true' || completed.size > 0; } catch { courseStarted = completed.size > 0; }
+      let selectedUnit = 0;
+      let currentLessonId = null;
+      let searchQuery = '';
+      let showAllChapters = false;
+      let answers = {};
+
+      const content = $('mqContent');
+      const searchInput = $('mqSearch');
+      const byUnit = id => units.find(u => u.id === id);
+      const byLesson = id => lessons.find(l => l.id === id);
+      const percent = () => Math.round(completed.size / lessons.length * 100);
+      const htmlSafe = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+      function saveProgress() {
+        try { localStorage.setItem(progressKey, JSON.stringify([...completed])); } catch {}
+      }
+      function startCourse() {
+        courseStarted = true;
+        try { localStorage.setItem(startedKey, 'true'); } catch {}
+      }
+      function unitLessons(unitId) { return lessons.filter(l => !unitId || l.u === unitId); }
+      function chapterCard(l) {
+        const u = byUnit(l.u);
+        return `<button type="button" class="mq-chapter-card ${completed.has(l.id) ? 'done' : ''}" data-mq-lesson="${l.id}" style="--mq-accent:${u.color};--mq-tint:${u.tint}"><span class="mq-chapter-number">${completed.has(l.id) ? '✓' : String(l.id).padStart(2,'0')}</span><span class="mq-chapter-copy"><strong>${l.title}</strong><small>${u.title} · ${l.tag}</small></span><span class="mq-chapter-arrow">${completed.has(l.id) ? '✓' : '→'}</span></button>`;
+      }
+      function renderProgress() {
+        const done = completed.size;
+        const progress = percent();
+        return `<section class="mq-progress-panel" aria-label="Course progress overview"><div class="mq-progress-copy"><span class="mq-progress-status ${courseStarted ? 'started' : ''}">${courseStarted ? 'Learning in progress' : 'Ready when you are'}</span><h2>Your learning progress</h2><p>${done} of ${lessons.length} chapters completed. ${done === lessons.length ? 'You have completed the full learning path.' : courseStarted ? 'Pick up where you left off, one chapter at a time.' : 'Start learning to begin building your progress.'}</p></div><div class="mq-progress-circle" role="progressbar" aria-label="Course completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}" style="--progress:${progress}%"><div class="mq-progress-value"><strong>${progress}%</strong><span>COMPLETE</span></div></div></section>`;
+      }
+      function renderStats() {
+        return `<div class="mq-stats"><div class="mq-stat"><span class="mq-stat-icon">01</span><div><small>LEARNING UNITS</small><strong>9</strong></div></div><div class="mq-stat"><span class="mq-stat-icon">02</span><div><small>SHORT CHAPTERS</small><strong>40</strong></div></div><div class="mq-stat"><span class="mq-stat-icon">03</span><div><small>PRACTICE QUESTIONS</small><strong>${totalQuestions}</strong></div></div></div>`;
+      }
+      function renderDashboard() {
+        const filtered = lessons.filter(l => !searchQuery || (l.title + ' ' + l.tag + ' ' + byUnit(l.u).title).toLowerCase().includes(searchQuery.toLowerCase()));
+        const searchSection = searchQuery
+          ? `<div class="mq-section-head mq-search-results-head"><div><h2>Search results</h2><p>${filtered.length} matching chapter${filtered.length === 1 ? '' : 's'}</p></div></div><div class="mq-chapter-grid">${filtered.length ? filtered.map(chapterCard).join('') : `<div class="mq-empty">No chapter matches “${htmlSafe(searchQuery)}”. Try another keyword.</div>`}</div>`
+          : '';
+        return `<section class="mq-hero"><div class="mq-hero-copy"><div class="mq-hero-kicker">A FRIENDLIER WAY TO LEARN MATHS</div><h2>Maths that finally <span>clicks.</span></h2><p>Short visual lessons, one worked example, and two quick questions per chapter. Built for Class 8–9 students who are ready to go beyond the basics.</p><div class="mq-hero-actions"><button type="button" class="mq-btn" id="mqContinue">${courseStarted || completed.size ? 'Continue learning' : 'Start learning'} →</button></div><div class="mq-hero-meta"><span><strong>9</strong> units</span><span><strong>40</strong> chapters</span><span><strong>${totalQuestions}</strong> practice questions</span></div></div><div class="mq-hero-art" aria-hidden="true"><div class="mq-math-tile">x² + π</div></div></section>
+          ${renderProgress()}
+          ${renderStats()}
+          ${searchSection}
+          <div class="mq-footnote">JEENIUS · Learn one idea, practise twice, build confidence.</div>`;
+      }
+      function questionCard(l, q, qi) {
+        const saved = answers[`${l.id}-${qi}`];
+        return `<article class="mq-question"><div class="mq-question-top"><span>QUESTION 0${qi + 1}</span><span class="mq-question-mark">${qi + 1}</span></div><h4>${q.q}</h4><div class="mq-options">${q.o.map((opt, oi) => `<button type="button" class="mq-option ${saved !== undefined && oi === q.a ? 'correct' : ''} ${saved === oi && oi !== q.a ? 'incorrect' : ''}" data-mq-qid="${l.id}-${qi}" data-mq-option="${oi}" ${saved !== undefined ? 'disabled' : ''}><span class="mq-option-letter">${String.fromCharCode(65 + oi)}</span><span>${opt}</span></button>`).join('')}</div><div class="mq-feedback ${saved !== undefined ? 'show' : ''} ${saved === q.a ? 'good' : 'try'}">${saved === q.a ? '✓ Correct! ' : saved !== undefined ? 'Not quite. ' : ''}${saved !== undefined ? q.e : ''}</div></article>`;
+      }
+      function renderLesson(l) {
+        const u = byUnit(l.u);
+        const index = lessons.findIndex(item => item.id === l.id);
+        return `<div class="mq-lesson"><button type="button" class="mq-back" id="mqBackMap">← Back to course map</button><section class="mq-lesson-hero"><div><div class="mq-lesson-kicker">UNIT ${String(u.id).padStart(2,'0')} · ${u.title}</div><h2>${l.title}</h2><p>${l.tag}. One clear idea, one worked example, and two short questions to lock it in.</p><div class="mq-lesson-meta"><span class="mq-pill">CHAPTER ${String(l.id).padStart(2,'0')} / 40</span><span class="mq-pill">2 practice questions</span>${completed.has(l.id) ? '<span class="mq-pill">✓ Completed</span>' : ''}</div></div><div class="mq-formula-visual">${l.visual}</div></section>
+          <div class="mq-lesson-points"><article class="mq-panel"><div class="mq-panel-kicker">THE BIG IDEA</div><h3>Remember this</h3><p>${l.concept}</p><div class="mq-rule">${l.rule}</div></article><article class="mq-panel"><div class="mq-panel-kicker">QUICK EXAMPLE</div><h3>See it once</h3><p>Follow the pattern, then use the same idea in the questions below.</p><div class="mq-example"><small>WORKED OUT</small>${l.example}</div></article></div>
+          <div class="mq-practice-head"><div><h3>Now you try</h3><p>Choose an answer to get instant feedback.</p></div><span class="mq-pill">2 QUICK QUESTIONS</span></div><div class="mq-question-grid">${l.qs.map((q,qi) => questionCard(l,q,qi)).join('')}</div>
+          <div class="mq-lesson-footer"><div class="mq-lesson-status" id="mqLessonStatus">${completed.has(l.id) ? '✓ Chapter completed' : 'Practise both questions, then mark this chapter complete.'}</div><button type="button" class="mq-btn" id="mqPrevLesson" ${index === 0 ? 'disabled' : ''}>← Previous</button><button type="button" class="mq-btn primary" id="mqCompleteLesson">${completed.has(l.id) ? 'Completed ✓' : 'Mark complete ✓'}</button><button type="button" class="mq-btn" id="mqNextLesson" ${index === lessons.length - 1 ? 'disabled' : ''}>Next chapter →</button></div></div>`;
+      }
+      function render() {
+        content.innerHTML = currentLessonId ? renderLesson(byLesson(currentLessonId)) : renderDashboard();
+        if (!currentLessonId) bindDashboard();
+        else bindLesson();
+      }
+      function bindDashboard() {
+        $('mqContinue')?.addEventListener('click', () => { startCourse(); openLesson(lessons.find(l => !completed.has(l.id))?.id || lessons[lessons.length - 1].id); });
+        content.querySelectorAll('[data-mq-lesson]').forEach(button => button.addEventListener('click', () => openLesson(Number(button.dataset.mqLesson))));
+      }
+      function bindLesson() {
+        $('mqBackMap')?.addEventListener('click', () => { currentLessonId = null; answers = {}; render(); });
+        content.querySelectorAll('[data-mq-qid]').forEach(button => button.addEventListener('click', () => answerQuestion(button)));
+        $('mqCompleteLesson')?.addEventListener('click', () => {
+          if (!currentLessonId) return;
+          startCourse();
+          if (!completed.has(currentLessonId)) { completed.add(currentLessonId); saveProgress(); }
+          render();
+        });
+        $('mqPrevLesson')?.addEventListener('click', () => { const i = lessons.findIndex(l => l.id === currentLessonId); if (i > 0) openLesson(lessons[i-1].id); });
+        $('mqNextLesson')?.addEventListener('click', () => { const i = lessons.findIndex(l => l.id === currentLessonId); if (i < lessons.length - 1) openLesson(lessons[i+1].id); });
+      }
+      function openLesson(id) { currentLessonId = id; answers = {}; render(); $('mathCourseWorkspace').scrollTo({top:0,behavior:'smooth'}); }
+      function answerQuestion(button) {
+        const [lessonId, qi] = button.dataset.mqQid.split('-').map(Number);
+        const lesson = byLesson(lessonId), q = lesson.qs[qi], choice = Number(button.dataset.mqOption);
+        answers[`${lessonId}-${qi}`] = choice;
+        const card = button.closest('.mq-question');
+        card.querySelectorAll('.mq-option').forEach(option => {
+          option.disabled = true;
+          const optionIndex = Number(option.dataset.mqOption);
+          if (optionIndex === q.a) option.classList.add('correct');
+          if (optionIndex === choice && choice !== q.a) option.classList.add('incorrect');
+        });
+        const feedback = card.querySelector('.mq-feedback');
+        feedback.classList.add('show', choice === q.a ? 'good' : 'try');
+        feedback.textContent = (choice === q.a ? '✓ Correct! ' : 'Not quite. ') + q.e;
+        const status = $('mqLessonStatus');
+        if (status && !completed.has(lesson.id)) status.textContent = 'Practice attempted. Mark the chapter complete when ready.';
+      }
+      searchInput.addEventListener('input', event => {
+        searchQuery = event.target.value.trim();
+        currentLessonId = null;
+        showAllChapters = Boolean(searchQuery);
+        render();
+      });
+      $('mqBackHome').addEventListener('click', () => {
+        leaveMathCourse();
+        $('panes').hidden = false;
+        $('t').focus();
+      });
+      render();
+      window.JEENiusMathQuest = { render };
+    })();
+
+
+    $('f').onsubmit = e => { e.preventDefault(); send($('t').value); };
+    $('t').oninput = () => {
+      $('s').disabled = !$('t').value.trim() || busy;
+      $('t').style.height = 'auto';
+      $('t').style.height = Math.min($('t').scrollHeight, 120) + 'px';
+    };
+    $('t').onkeydown = e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send($('t').value); }
+    };
+    $('t').oninput();
+    ['Mujhe motion samjha', 'Newton ka 2nd law kya hai?', 'Pythagoras kaise yaad rakhu?'].forEach(text => {
+      const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = text;
+      b.onclick = () => send(text); $('chips').append(b);
+    });
+
+    fetch('/api/animations/catalog?fresh=' + Date.now(), { cache: 'no-store', credentials: 'same-origin' }).then(r => {
+      if (!r.ok) throw new Error('Could not load labs');
+      return r.json();
+    }).then(json => {
+      LABS = Array.isArray(json) ? json : [];
+      load();
+      chats = chats.filter(c => c && Array.isArray(c.msgs) && c.msgs.length);
+      cur = chats[0] || { id: Date.now(), title: 'New chat', msgs: [] };
+      if (!chats.length) chats.unshift(cur);
+      render();
+      renderSearchResults();
+    }).catch(() => {
+      $('log').innerHTML = '<div class="row a"><div class="av"><img src="/brand/geini-happy.png" alt=""></div><div class="msg">Labs load nahi ho paaye. Please server restart karke refresh karo.</div></div>';
+    });
+  </script>
+  
+</body>
+</html>
